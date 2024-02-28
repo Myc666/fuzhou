@@ -43,19 +43,10 @@
           </el-select>
         </el-form-item>
         <el-form-item label="图片" prop="nameEn">
-          <!-- <input type="file" name="" id="" @change="httpRequest">  -->
-          <el-upload
-            action="#"
-            ref="pictureUpload"
-            :disabled="(formatData.files.length + fileList.length ) >= 3"
-            accept="image/jpeg,image/jpg,image/png"
-            :before-upload="beforeUpload"
-            list-type="picture-card"
-            :file-list="fileList"
-            :http-request="httpRequest"
-          >
-            <i slot="default" class="el-icon-plus"></i>
-
+          <!-- <input type="file" name="" id="" @change="httpRequest"> -->
+          <el-upload action="#" ref="pictureUpload" accept="image/jpeg,image/jpg,image/png" :before-upload="beforeUpload" list-type="picture-card" :disabled="formatData.files.length >= 3" :http-request="httpRequest">
+            <i slot="default" class="el-icon-plus" ></i>
+            
             <div slot="file" slot-scope="{ file }">
               <img
                 class="el-upload-list__item-thumbnail"
@@ -69,7 +60,7 @@
                 >
                   <i class="el-icon-zoom-in"></i>
                 </span> -->
-
+                
                 <span
                   v-if="!disabled"
                   class="el-upload-list__item-delete"
@@ -87,22 +78,17 @@
               title="实例"
               width="400"
               trigger="hover"
-              content=""
-            >
-              <div style="font-size: 12px; color: rgba(0, 0, 0, 0.4)">
-                1.为确保人脸识别的准确性，请提交3张仅单人的照片：一张正脸和两张侧脸（视角不超45度）；<br />
+              content="">
+              <div style="font-size: 12px;color: rgba(0, 0, 0, 0.4);">
+                1.为确保人脸识别的准确性，请提交3张仅单人的照片：一张正脸和两张侧脸（视角不超45度）；<br>
                 2.请确保照片清晰、光线适宜，避免图片为夜景、员工佩戴墨镜或口罩。
               </div>
               <div>
-                <img width="100%" src="@/assets/shili.jpg" alt="" />
+                <img width="100%" src="@/assets/shili.jpg" alt="">
               </div>
-              <el-button
-                slot="reference"
-                type="text"
-                @click="dialogVisible = true"
-                >查看示例</el-button
-              >
+              <el-button slot="reference" type="text" @click="dialogVisible = true">查看示例</el-button>
             </el-popover>
+            
           </div>
           <!-- <div class="iptcontent">
             <el-button
@@ -191,8 +177,7 @@ export default {
         groupId: [{ required: true, message: "请选择", trigger: "blur" }],
       },
       graps: [],
-      dialogVisible:false,
-      fileList:[]
+      dialogVisible:false
     };
   },
   computed: {
@@ -231,33 +216,6 @@ export default {
       if (this.currentItme.id) {
         const { data, count } = await detail({ id: this.currentItme.id });
         this.formatData = data;
-        //fileList
-        // this.formatData.files = [{
-        //   createdAt :  1705399293000,
-        //   deleted :  0,
-        //   id :  "1747197386253451266",
-        //   url :  "http://39.164.53.248:33021/face/image/avatar?userId=1747197386073096193",
-        //   isAvatar :  0,
-        //   userId :  "1747197386073096193"
-        // }]
-        this.formatData.files = []
-        this.fileList = data.faceImages.map(item=>{
-          return {
-            ...item,
-            url: this.$common.handlePublicUrl(`/face/image/getImage?imageId=${item.id}`)
-          }
-        })
-
-        
-
-        // let obj = {
-        //   createdAt :  1705399293000,
-        //   deleted :  0,
-        //   id :  "1747197386253451266",
-        //   url :  "http://39.164.53.248:33021/face/image/avatar?userId=1747197386073096193",
-        //   isAvatar :  0,
-        //   userId :  "1747197386073096193"
-        // }
       }
     },
     closeDialog() {
@@ -286,41 +244,18 @@ export default {
       fd.append("tel", this.formatData.tel);
       fd.append("remark", this.formatData.remark);
       fd.append("groupId", this.formatData.groupId);
-      
       if (this.formatData.id) {
         fd.append("id", this.formatData.id);
       }
 
-      // if(this.formatData.files.length >= 3){
-      //   fd.append("filesStr", '');
-      // } else {
-      //   console.log(this.fileList,"raw")
-
-        
-
-      //   // fd.append("filesStr", this.fileList.map(item=>{
-      //   //   return item.imgUrl
-      //   // }));
-        
-      // }
-
-      this.fileList.forEach((item, index) => {
-          if(item){
-            fd.append("filesStr", item.imgUrl);
-          }
-        });
-
+      //fd.append('files',this.formatData.files)
       if (this.formatData.files) {
         this.formatData.files.forEach((item, index) => {
-          if(item){
-            fd.append("files", item);
-          }
+          fd.append("files", item);
         });
       }
-      //fd.append('files',this.formatData.files)
-      
 
-      //console.log(this.formatData);
+      console.log(this.formatData);
       const { code, data } = await save(fd);
       if (code == 0) {
         this.$message.success("添加成功");
@@ -332,44 +267,30 @@ export default {
       if (!isLt) {
         this.$message.error('上传文件大小不能超过 5MB!')
         return false
-      } 
+      } else if(this.formatData.files>=3){
+        this.$message.error('上传文件不能超过三张')
+        return false
+      }
     },
     changes(val) {
       this.formatData.nameEn = val.replace(/[^a-zA-Z]/g, "");
     },
-    httpRequest(){
+    httpRequest(files){
       console.log(this.$refs.pictureUpload.uploadFiles)
-
-      this.formatData.files = this.$refs.pictureUpload.uploadFiles.filter(item=>item.raw).map(item=>{
+      this.formatData.files =  this.$refs.pictureUpload.uploadFiles.map(item=>{
         return item.raw
       })
       this.$forceUpdate()
-      
-      console.log(this.formatData.files)
+      console.log(this.$refs.pictureUpload.uploadFiles)
     },
     handleRemove(file) {
-      console.log(file)
-      if(file.raw){
-        const uploadFiles = this.$refs.pictureUpload.uploadFiles
-        console.log(uploadFiles)
-        if(uploadFiles.length){
-          for (let i = 0; i < uploadFiles.length; i++) {
-            if (uploadFiles[i]['url'] === file.url) {
-              uploadFiles.splice(i, 1)
-            }
-          }
+      const uploadFiles = this.$refs.pictureUpload.uploadFiles
+      console.log(uploadFiles)
+      for (let i = 0; i < uploadFiles.length; i++) {
+        if (uploadFiles[i]['url'] === file.url) {
+          uploadFiles.splice(i, 1)
         }
-        //this.formatData.files = this.formatData.files.filter(item=> item && item.id != file.raw.id )
-        this.httpRequest()
-      } else {
-        this.fileList = this.fileList.filter(item=> item.id != file.id)
-        
       }
-      console.log(this.fileList,'files11')
-      console.log(this.formatData.files,'files11')
-      
-      this.$forceUpdate();
-      
     },
     handleUploadFile(value) {
       const files = value.target.files || {};
@@ -385,8 +306,6 @@ export default {
       // }
       //console.log(Object.values(files))
       this.formatData.files = Object.values(files);
-      console.log(this.fileList,'files22')
-      console.log(this.formatData.files,'files22')
       this.$forceUpdate();
     },
     handleAddImg() {

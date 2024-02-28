@@ -43,6 +43,9 @@
                 </div>
                 <div class="alg-tip">{{ items.marks }}</div>
                 <div class="alg-btn-flex">
+                  <div class="alg-btn" @click.stop="upgradeFun(items)" v-if="items.hasLocalFile" style="margin-right: 10px;">
+                    盒子升级
+                  </div>
                   <div class="alg-btn" @click.stop="editData(items)" :style="{marginRight: items.hasLocalFile?'10px':''}">
                     {{items.hasLocalFile?'编辑':'下载'}}
                   </div>
@@ -69,17 +72,26 @@
       v-if="listAlarmLevelVisible"
       @close="(listAlarmLevelVisible = false)"
     />
+    <el-dialog
+      title="盒子升级"
+      :visible.sync="dialogVisible"
+      width="80%"
+      >
+      <AlgorithmUpgrade v-if="dialogVisible" :id="rowId" :algorithmName="algorithmName" @close="handleClose"/>
+    </el-dialog>
   </div>
 </template>
 <script>
 import { getListData,getTagListData,deleteFile} from "@/api/applicationMonitoring/modelTesting";
 import {deleteData} from "@/api/applicationMonitoring/algorithmManagement";
 import AddAlgorithm from "@/components/applicationMonitoring/modelTesting/addAlgorithm";
+import AlgorithmUpgrade from "@/components/applicationMonitoring/modelTesting/algorithmUpgrade";
 import ListAlarmLevel from "@/components/applicationMonitoring/algorithmManagement/listAlarmLevel";
 export default {
   components:{
     AddAlgorithm,
-    ListAlarmLevel
+    ListAlarmLevel,
+    AlgorithmUpgrade
   },
   data() {
     return {
@@ -95,6 +107,9 @@ export default {
       hasLocalFile:false,
       VUE_APP_API_BASE_URL,
       type:1,
+      dialogVisible:false,
+      rowId:'',
+      algorithmName:'',
     };
   },
   created() {
@@ -203,6 +218,17 @@ export default {
     },
     addAlarmLevelData() {
       this.listAlarmLevelVisible = true;
+    },
+    // 算法升级
+    upgradeFun(items){
+      this.rowId = items.id;
+      this.algorithmName = items.name;
+      this.dialogVisible = true;
+    },
+    handleClose(){
+      this.dialogVisible = false;
+      this.getListData();
+      this.getTagListData()
     }
   },
 };

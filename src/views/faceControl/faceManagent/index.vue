@@ -10,65 +10,60 @@
       :selections.sync="selectedRowKeys"
     >
       <div slot="header" class="head-container">
-        <span class="headitem">
-          <span class="headname">姓名</span>
-          <el-input
-          style="width: 100px"
-          v-model="formatData.name"
-          placeholder=""
-        ></el-input>
-        </span>
-        <span class="headitem">
-          <span class="headname">手机号</span>
-          <el-input
-            style="width: 100px"
-            v-model="formatData.tel"
-            placeholder=""
-          ></el-input>
-      </span>
-      <span class="headitem">
-        <span class="headname">分组</span>
-        <el-select v-model="formatData.groupId" placeholder="请选择分组">
-          <el-option
-            v-for="item in listGroup"
-            v-if="item.id"
-            :key="item.id"
-            :label="item.name"
-            :value="item.id"
-          >
-          </el-option>
-        </el-select>
-      </span>
-        
-        <el-button class="pr10" type="primary" @click="getTable()"
-          >搜索</el-button
-        >
-        <el-button @click="reset()">重置</el-button>
-        <!-- <el-form label-position="left">
+        <el-row>
+          <el-form label-position="left">
+            <el-col :span="4">
               <el-form-item label="姓名">
-                
+                <el-input
+                  style="width: 100px"
+                  v-model="formatData.name"
+                  placeholder=""
+                ></el-input>
               </el-form-item>
+            </el-col>
+            <el-col :span="4">
               <el-form-item label="手机号">
-                
+                <el-input
+                  style="width: 100px"
+                  v-model="formatData.tel"
+                  placeholder=""
+                ></el-input>
               </el-form-item>
+            </el-col>
+            <el-col :span="5">
               <el-form-item label="分组">
-                
+                <el-select v-model="formatData.groupId" placeholder="请选择分组">
+                  <el-option
+                    v-for="item in listGroup"
+                    v-if="item.id"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id">
+                  </el-option>
+                </el-select>
               </el-form-item>
-              
-          </el-form> -->
+            </el-col>
+            <el-col :span="4">
+              <el-button class="pr10" type="primary" @click="getTable()"
+                >搜索</el-button
+              >
+              <el-button @click="reset()">重置</el-button>
+            </el-col>
+          </el-form>
+        </el-row>
         <div>
           <el-button class="pr10" type="primary" @click="addData()"
-            >新增人脸</el-button
-          >
-          <el-button
-            class="pr10"
-            type="primary"
-            @click="grapDetailVisible = true"
-            >分组管理</el-button
-          >
-          <el-button class="pr10" @click="uploadVisible = true"
-            >批量上传</el-button
-          >
+              >新增人脸</el-button
+            >
+            <el-button
+              class="pr10"
+              type="primary"
+              @click="grapDetailVisible = true"
+              >分组管理</el-button
+            >
+            <el-button class="pr10" @click="uploadVisible = true"
+              >批量上传</el-button
+            >
         </div>
       </div>
       <div slot="operate" slot-scope="{ row }">
@@ -82,13 +77,10 @@
         >
       </div>
       <template slot="index" slot-scope="{ $index }">
-        {{ $index + 1 }}
+        {{  $index + 1 }}
       </template>
       <template slot="avatar" slot-scope="{ row }">
-        <el-image
-          style="height: 100px"
-          :src="$common.handlePublicUrl(`/face/image/avatar?userId=${row.id}`)"
-        ></el-image>
+        <el-image style="height: 100px;" :src="$common.handlePublicUrl(`/face/image/avatar?userId=${row.id}`)" ></el-image>
       </template>
     </Tables>
     <detail
@@ -113,7 +105,7 @@
 <script>
 import Tables from "@/components/Table/index.vue";
 import detail from "./components/detail.vue";
-import { listPage, delect, listPageDGroup } from "./api";
+import { listPage, delect,listPageDGroup } from "./api";
 import { getMyDate } from "@/utils/common.js";
 import grapDetailVue from "./components/grapDetail.vue";
 import upload from "./components/upload.vue";
@@ -137,16 +129,16 @@ export default {
       loading: false,
       dataSource: [],
       columns: Object.freeze([
-        {
-          key: "avatar",
-          title: "序号",
-          align: "center",
+      {
+          key: 'avatar',
+          title: '序号',
+          align: 'center',
           slot: "index",
         },
         {
-          key: "avatar",
-          title: "头像",
-          align: "center",
+          key: 'avatar',
+          title: '头像',
+          align: 'center',
           slot: "avatar",
         },
         {
@@ -164,9 +156,9 @@ export default {
           title: "备注",
           align: "center",
           render(h, { value }) {
-            let str = value;
-            if (value == "undefined") {
-              str = "";
+            let str = value
+            if(value == 'undefined') {
+              str = ''
             }
             return h("span", [str]);
           },
@@ -193,23 +185,24 @@ export default {
       uploadVisible: false,
       currentState: "",
       currentItme: {},
-      listGroup: [],
+      listGroup:[]
     };
   },
   components: {
     Tables,
     detail,
     grapDetailVue,
-    upload,
+    upload
   },
   created() {
     this.getTable();
-    this.listPageDGroup();
+    this.listPageDGroup()
   },
   methods: {
-    async listPageDGroup() {
-      const { data, count } = await listPageDGroup();
-      this.listGroup = data;
+    async listPageDGroup(){
+      const { data,count } = await listPageDGroup()
+      this.listGroup = data
+
     },
     pageChange(page, pageSize) {
       this.pagination.currentPage = page;
@@ -298,13 +291,5 @@ export default {
 }
 ::v-deep .el-form-item {
   margin-bottom: 0px;
-}
-.headname{
-  font-size: 14px;
-  color: #666;
-  padding-right: 10px;
-}
-.headitem{
-  padding-right: 64px;
 }
 </style>

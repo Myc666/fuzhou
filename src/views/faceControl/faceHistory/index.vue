@@ -2,10 +2,10 @@
   <div>
     <div class="flex">
       <div class="flex-tree">
-        <!-- <el-radio-group v-model="nodeLabel"> -->
-          <!-- <span  style="padding-left:23px;display: block;height: 35px;line-height: 35px;"  @click="handleNodeClick('')">
+        <el-radio-group v-model="nodeLabel">
+          <span  style="padding-left:23px;display: block;height: 35px;line-height: 35px;"  @click="handleNodeClick('')">
             <el-radio label="0">全部</el-radio>
-          </span> -->
+          </span>
           
           <el-tree
             :data="treeData"
@@ -14,14 +14,14 @@
           >
             <span class="custom-tree-node" slot-scope="{ node, data }">
               <span @click="handleNodeClick(data.id)"> 
-                {{ node.label }}
+                <el-radio :label="node.id">{{ node.label }}</el-radio>
               </span>
               <!-- <span style="margin-left: 10px;" @click="openTreeMenu(data)">
                 <i class="el-icon-setting"></i>
               </span> -->
             </span>
           </el-tree>
-        <!-- </el-radio-group> -->
+        </el-radio-group>
       </div>
       <div class="flex-right">
 
@@ -358,8 +358,7 @@ export default {
    },
    async cameraListPage() {
       const { data } = await cameraListData();
-
-      this.treeData = [{name:'总计',id:''},...data];
+      this.treeData = data;
       // if (this.treeData.length) {
       //   //this.formatData.cameraId = this.cameras[0].id;
       //   this.changeCamera();

@@ -1,8 +1,15 @@
 <template>
     <div class="log-info">
-        <div v-for="(item,index) in logList" :key="index">
-        {{ item }}
-        </div>
+        <el-tabs v-model="activeName"  @tab-click="handleClick">
+            <el-tab-pane label="jave日志" name="first">
+                <div v-for="(item,index) in logList" :key="index">
+                    {{ item }}
+                </div>
+            </el-tab-pane>
+            <el-tab-pane label="盒子日志" name="second">
+                <div style="text-align: center;">暂无数据</div>
+            </el-tab-pane>
+        </el-tabs>
     </div>
 </template>
 <script>
@@ -11,6 +18,7 @@ export default {
     data() {
         return {
             logList:[],
+            activeName:'first'
         };
     },
     created() {
@@ -29,6 +37,19 @@ export default {
             const res = await javaLog();
             this.logList = res.data
         },
+        handleClick(tab) {
+            clearInterval(this.timer)
+            this.timer = "";
+            if(tab.name == "first"){
+                this.getLog();
+                let that = this;
+                this.timer = setInterval(function () {
+                    that.getLog();
+                }, 10000);
+            }else{
+
+            }
+        }
     },
 };
 </script>
@@ -45,4 +66,3 @@ export default {
     }
 }
 </style>
-  

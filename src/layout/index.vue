@@ -25,13 +25,13 @@
     <el-container>
       <el-header>
         <div class="userInfo">
-          <!-- <span class="alarmSwitch">报警弹窗 <el-switch v-model="$store.state.alarmSwitch"> </el-switch></span> -->
           <div class="scan">
             <span class="el-icon" @mouseenter="onHover"  @mouseleave="hideMessage">扫码登录</span>
             <div class="scan-cont" v-if="isImg">
               <img :src="VUE_APP_API_BASE_URL + '/appLoginQRCode?phone='+userInfo.nickname+'&password='+userInfo.password" style="width: 100px;height: 100px;"/>
             </div>
           </div>
+          <!-- <span class="alarmSwitch">报警弹窗 <el-switch v-model="$store.state.alarmSwitch"> </el-switch></span> -->
           <span class="el-icon" @click="downFile()">使用手册下载<i class="el-icon-download"></i></span>
           <el-image
             style="width: 30px; height: 30px;border-radius: 50%;"
@@ -48,8 +48,6 @@
             </el-dropdown-menu>
           </el-dropdown>
           <i class="el-icon-s-unfold" @click="changePath"></i>
-          <img src="@/assets/images/3D.png" v-if="!isShow" style="width: 15px; margin: 0px 10px;cursor: pointer;" @click="go3D"/>
-          <i class="el-icon-right" v-if="isShow" style="color: #FFFFFF;" @click="goBigScreen3D"></i>
         </div>
       </el-header>
       <el-main
@@ -99,7 +97,6 @@ export default {
         password: localStorage.getItem('pw')?localStorage.getItem('pw'):"66$",
       },
       avatar: require("@/assets/images/man.png"),
-      isShow:false,
       isImg:false,
     };
   },
@@ -156,32 +153,15 @@ export default {
     if (!window.vuplex) {
       window.vuplex = new VuplexPolyfill();
     }
-    let url = window.location.href;
-    if(url.indexOf('XYHWeb')!=-1){
-      this.isShow = true;
-    }else{
-      this.isShow = false;
-    }
   },
   methods: {
-     // 鼠标悬浮
-     onHover(){
+    // 鼠标悬浮
+    onHover(){
       this.isImg = true;
     },
     // 鼠标离开
     hideMessage() {
       this.isImg = false;
-    },
-    // 返回3D大屏
-    goBigScreen3D(){
-      if (window.vuplex) {
-        this.sendMessageToCSharp();
-      } else {
-        window.addEventListener('vuplexready', this.sendMessageToCSharp());
-      }
-    },
-    sendMessageToCSharp() {
-        window.vuplex.postMessage({ funcname: 'UnityReturnScene', datas: '' });
     },
     changePath() {
       this.$router.push('/bigScreen');
@@ -226,10 +206,6 @@ export default {
         document.body.removeChild(link)
       })
 
-    },
-    // 跳转3D
-    go3D(){
-      window.open('http://39.164.53.248:33029/XYHWeb/',"_blank")
     }
   },
 };
@@ -287,7 +263,7 @@ export default {
       .el-icon-s-unfold{
         color: #fff;
         font-size: 22px;
-        // margin-right: 30px;
+        margin-right: 30px;
         cursor: pointer;
       }
       .el-icon-download{

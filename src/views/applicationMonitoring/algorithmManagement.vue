@@ -70,8 +70,6 @@
               >删除</el-button
             >
           </template>
-
-          
         </el-table-column>
       </el-table>
     </div>
@@ -155,7 +153,8 @@ export default {
       this.$router.push({
         path: '/algorithmManagement/algorithmArrangeUpdata',
         query: {
-          id: item.id
+          id: item.id,
+          name:item.name
         }
       })
     },

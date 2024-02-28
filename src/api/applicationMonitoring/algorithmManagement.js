@@ -212,12 +212,3 @@ export function reDownloadSingleFile(params) {
     params
   })
 }
-
-// 启用此版本
-export function startFile(params) {
-  return request({
-    url: '/algorithm/startFile',
-    method: 'post',
-    params
-  })
-}

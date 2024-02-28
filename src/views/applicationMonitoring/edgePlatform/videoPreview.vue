@@ -236,7 +236,7 @@ export default {
     this.setPlayType(1)
   },
   methods: {
-    async setPlayType(type){
+    async setPlayType(){
       const {code} = await setPlayType({playType: this.playType})
       if(code == 0){
         this.getListPageActives()

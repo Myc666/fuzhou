@@ -61,12 +61,3 @@ export function pushData(params) {
     params
   })
 }
-
-// 保存定时任务清除告警信息天数
-export function saveclearReportDayConfig(params) {
-  return request({
-    url: '/config/saveClearReportDayConfig',
-    method: 'post',
-    params
-  })
-}

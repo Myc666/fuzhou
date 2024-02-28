@@ -70,11 +70,6 @@
           <el-table :data="tableData" border style="width: 100%">
             <el-table-column align="center" prop="name" label="文件名称">
             </el-table-column>
-            <el-table-column align="center" prop="thisVersion" label="状态" v-if="hasLocalFile">
-              <template slot-scope="scope">
-                {{ scope.row.thisVersion?'启用中':'已下载' }}
-              </template>
-            </el-table-column>
             <el-table-column align="center" prop="md5Str" label="MD5核对结果" v-if="hasLocalFile">
             </el-table-column>
             <el-table-column align="center" prop="size" label="文件大小">
@@ -90,9 +85,6 @@
             <el-table-column align="center" label="操作" width="80">
               <template slot-scope="scope">
                 <el-button type="text" v-if="scope.row.md5Str!='一致'" @click="downs(scope.row.md5Str,scope.row.name,scope.$index)">{{scope.row.md5Str=='下载中'?'重新下载':'下载'}}</el-button>
-                <div v-else>
-                  <el-button type="text" @click="startFun(scope.row.name)">{{isShowBtn?'切换此版本':'启用此版本'}}</el-button>
-                </div>
               </template>
             </el-table-column>
           </el-table>
@@ -114,8 +106,7 @@
     downloadCheck,
     downloadSingleFile,
     checkNameEn,
-    reDownloadSingleFile,
-    startFile
+    reDownloadSingleFile
   } from "@/api/applicationMonitoring/algorithmManagement";
   export default {
     props: {
@@ -168,7 +159,6 @@
         listData:[],
         timerObj:null,
         isExist:false,
-        isShowBtn:false,
       };
     },
     async created() {
@@ -222,6 +212,8 @@
   
       // 搜索
       async searchFun(funType){
+        clearInterval(this.timerObj);
+        this.timerObj=null;
         if(!this.params.nameEn){
           this.$message.error('请输入算法英文')
           return;
@@ -246,11 +238,7 @@
         if(res.data.length==0){
           this.$message('未搜索到算法文件')
         }
-        let Arr = [];
         res.data.forEach((item,index)=>{
-          if(item.thisVersion){
-            Arr.push(item);
-          }
           item.process=this.handleProcess(item.localLength,item.length)
           clearInterval(item.timerObj);
           item.timerObj="";
@@ -261,12 +249,6 @@
             },3000);
           }
         })
-        if(Arr.length>0){
-          this.isShowBtn = true;
-        }else{
-          this.isShowBtn = false;
-        }
-        
         this.tableData = res.data;
       },
        downs(md5Str,name,index){
@@ -371,17 +353,6 @@
         }
         checkNameEn(obj).then(res=>{
           this.isExist = res.data
-        })
-      },
-      // 启用算法
-      startFun(name){
-        let obj ={
-          id:this.params.id,
-          fileName:name,
-        }
-        startFile(obj).then(res=>{
-          this.searchFun(1)
-          this.$message.success('启用成功')
         })
       }
     },
