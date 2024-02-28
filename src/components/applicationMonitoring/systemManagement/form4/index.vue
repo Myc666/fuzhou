@@ -1,0 +1,89 @@
+<template>
+    <div>
+        <el-form ref="form4" :model="form4" label-width="180px">
+        <el-form-item label="二维码">
+            <el-upload
+            action=""
+            :http-request="handleUploadImg"
+            :show-file-list="false"
+            accept=".jpg,.jpeg,.png,.gif"
+            style="display: inline"
+            >
+                <img
+                    v-if="form4.screenLogoUrl"
+                    :src="VUE_APP_API_BASE_URL + form4.screenLogoUrl"
+                    class="img"
+                />
+                <!-- <el-button type="primary" icon="el-icon-plus" v-else>上传LOGO</el-button> -->
+                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            </el-upload>
+        </el-form-item>
+        <el-form-item>
+            <el-button type="primary" @click="SubmitForm('form4')">提交</el-button>
+        </el-form-item>
+    </el-form>
+    </div>
+</template>
+<script>
+import { upload,saveAfterSalesConfig,getAfterSales } from "@/api/applicationMonitoring/systemManagement";
+export default {
+    data() {
+        return {
+            VUE_APP_API_BASE_URL,
+            form4:{
+                screenLogoUrl:'',
+            },
+            url:''
+        };
+    },
+    created() {
+        this.getData();
+    },
+    methods: {
+        // 获取数据
+        async getData(){
+            const res = await getAfterSales({tag:'afterSalesQRCodes'});
+            if(res.code==0){
+                this.url = res.data
+                this.form4.screenLogoUrl = "/config/upload/stream?file=" + res.data;
+            }
+        },
+        // 上传
+        async handleUploadImg(files) {
+            const file = files.file ? files.file : files[0];
+            // 渲染上传文件
+            let formData = new FormData();
+            formData.append("file", file);
+            const data = await upload(formData);
+            this.url = data.data;
+            this.form4.screenLogoUrl = "/config/upload/stream?file=" + data.data;
+        },
+        // 保存
+        async SubmitForm(){
+            if(!this.url){
+                this.$message.waring("请上传");
+                return;
+            }
+            await saveAfterSalesConfig({afterSalesQRCodes:this.url})
+            this.$message.success("保存成功");
+            this.$store.commit('setAfterSalesUrl', this.url);
+        }
+    },
+};
+</script>
+<style scoped lang="scss">
+.img{
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+}
+.avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 150px;
+    height: 150px;
+    line-height: 150px;
+    text-align: center;
+    border: 1px dashed #d9d9d9;
+  }
+</style>

@@ -1,4 +1,4 @@
-# camera-cx-vue
+# camera-ai-vue
 
 
 
@@ -15,14 +15,14 @@ Already a pro? Just edit this README.md and make it your own. Want to make it ea
 
 ```
 cd existing_repo
-git remote add origin http://gitlab.yihecode.cn/aiplatform/camera-cx-vue.git
+git remote add origin http://gitlab.yihecode.cn/zhoumingxing/camera-ai-vue.git
 git branch -M main
 git push -uf origin main
 ```
 
 ## Integrate with your tools
 
-- [ ] [Set up project integrations](http://gitlab.yihecode.cn/aiplatform/camera-cx-vue/-/settings/integrations)
+- [ ] [Set up project integrations](http://gitlab.yihecode.cn/zhoumingxing/camera-ai-vue/-/settings/integrations)
 
 ## Collaborate with your team
 
