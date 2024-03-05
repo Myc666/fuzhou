@@ -187,7 +187,7 @@ export default {
       // })
 
       Axios({
-        url: handlePublicUrl('/account/download?fileName=AI平台操作手册1.0.pdf'),
+        url: handlePublicUrl('/account/download?fileName=AI视觉监控产品使用手册.zip'),
         method:'get',  //默认get方法，可以不写
         responseType:'blob',  //或者是blob
         headers:{
@@ -200,7 +200,7 @@ export default {
         const url = window.URL.createObjectURL(new Blob([res.data]));  
         const link = document.createElement('a');  
         link.href = url;  
-        link.setAttribute('download', 'AI平台操作手册1.0.pdf'); // 设置下载文件的名称和扩展名  
+        link.setAttribute('download', 'AI视觉监控产品使用手册.zip'); // 设置下载文件的名称和扩展名  
         document.body.appendChild(link);  
         link.click();
         document.body.removeChild(link)
