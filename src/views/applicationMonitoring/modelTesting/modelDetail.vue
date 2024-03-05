@@ -12,12 +12,12 @@
                 </div>
                 <div class="tip-cont">{{ params.description }}</div>
                 <div class="button-flex">
-                    <div class="btn-sty" @click="modelFun">
+                    <!-- <div class="btn-sty" @click="modelFun">
                         <span class="el-icon-magic-stick"></span>
                         <span style="padding-left: 5px;">{{ isShow?'模型使用':'查看算法边界' }}</span>
-                    </div>
+                    </div> -->
                     <el-tooltip content="请扫码屏幕右侧二维码" placement="top-start">
-                        <div class="btn-sty" style="margin-left: 16px;">
+                        <div class="btn-sty">
                             <span class="el-icon-phone-outline"></span>
                             <span style="padding-left: 5px;">联系我们</span>
                         </div>
@@ -49,7 +49,9 @@
                 </div>
             </div>
         </div>
-        <div class="illustrate" v-if="isShow">
+        <Upload v-if="params.nameEn" :nameEn="params.nameEn" :id="params.id"></Upload>
+        <!-- v-if="isShow" -->
+        <div class="illustrate">
             <div v-if="JSON.stringify(detailMap) != '{}'">
                 <div class="effective">
                     <div class="title">有效的拍摄方式</div>
@@ -77,7 +79,7 @@
             </div>
             <el-empty v-else></el-empty>
         </div>
-        <Upload v-else :nameEn="params.nameEn" :id="params.id"></Upload>
+        <!-- <Upload v-else :nameEn="params.nameEn" :id="params.id"></Upload> -->
     </div>
 </template>
 <script>
@@ -101,7 +103,7 @@ export default {
             tagNameList:[],
             isBase:false,
             isOptimize:false,
-            isShow:true,
+            // isShow:true,
             VUE_APP_API_BASE_URL,
             id:'',
             tagList:[],
@@ -157,9 +159,9 @@ export default {
             this.isBase = false;
             this.isOptimize = false;
         },
-        modelFun(){
-            this.isShow=!this.isShow;
-        },
+        // modelFun(){
+        //     this.isShow=!this.isShow;
+        // },
         
     },
     components: {

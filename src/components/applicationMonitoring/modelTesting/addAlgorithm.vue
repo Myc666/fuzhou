@@ -211,9 +211,7 @@
       },
   
       // 搜索
-      async searchFun(funType){
-        clearInterval(this.timerObj);
-        this.timerObj=null;
+      async searchFun(){
         if(!this.params.nameEn){
           this.$message.error('请输入算法英文')
           return;
@@ -222,7 +220,7 @@
           this.$message.error('请选择硬件平台')
           return;
         }
-        if(this.tableData.length>0&&funType!=1){
+        if(this.tableData.length>0){
           this.tableData.forEach(item=>{
             if(item.timerObj){
               clearInterval(item.timerObj);
@@ -240,9 +238,7 @@
         }
         res.data.forEach((item,index)=>{
           item.process=this.handleProcess(item.localLength,item.length)
-          clearInterval(item.timerObj);
-          item.timerObj="";
-          if(item.md5Str=='下载中'&&funType!=1){
+          if(item.md5Str=='下载中'){
             let that = this;
             item.timerObj = setInterval(function () {
                 that.inspectFun(item.name,index);
@@ -278,30 +274,22 @@
       },
       // 重新下载
       reDownload(name,index){
-        clearInterval(this.tableData[index].timerObj);
-        this.tableData[index].timerObj="";
         reDownloadSingleFile({
           suanfa:this.params.nameEn,
           platform:this.params.platform,
           fileName: name
         }).then(res=>{
-          //console.log(1111);
           if(res.code == 0) {
-            let that = this;
-            this.tableData[index].timerObj = setInterval(function () {
-                that.inspectFun(name,index);
-            }, 3000);
+            this.searchFun();
           }
         }).catch(res=>{
         })
       },
       // 检查
       inspectFun(fileName,index){
-         downloadCheck({suanfa:fileName}).then(res=>{
+        downloadCheck({suanfa:fileName}).then(res=>{
           if(res.data.msg!='下载中'){
-            clearInterval(this.tableData[index].timerObj);
-            this.tableData[index].timerObj="";
-            this.searchFun(1);
+            this.searchFun();
           }else{
             this.tableData[index].md5Str = res.data.msg;
             let tatal= this.tableData[index].length;
@@ -309,11 +297,9 @@
           }
          }).catch(res=>{
           if(res.msg!='下载中'||res!='下载中'){
-            clearInterval(this.tableData[index].timerObj);
-            this.tableData[index].timerObj="";
-            this.searchFun(1);
+            this.searchFun();
           }
-         })
+        })
         
       },
       // 关闭回调

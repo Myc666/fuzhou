@@ -1,7 +1,7 @@
 <template>
   <div class="wrap">
     <div class="flex-left">
-      <el-card class="box-card">
+      <!-- <el-card class="box-card">
         <div
           slot="header"
           style="
@@ -21,7 +21,7 @@
             >{{ item.name }}:{{ item.staticsFlagVal }}</span
           >
         </div>
-      </el-card>
+      </el-card> -->
       <el-card class="box-card">
         <div
           slot="header"
@@ -32,11 +32,14 @@
           "
         >
           <span>视频路数</span>
-          <el-radio-group v-model="params.limit">
-            <el-radio-button label="1">一屏</el-radio-button>
-            <el-radio-button label="4">四屏</el-radio-button>
-            <el-radio-button label="6">六屏</el-radio-button>
-          </el-radio-group>
+          <div>
+            <el-button type="primary" style="margin-right: 20px;" @click="detailFun">查看当日</el-button>
+            <el-radio-group v-model="params.limit">
+              <el-radio-button label="1">一屏</el-radio-button>
+              <el-radio-button label="4">四屏</el-radio-button>
+              <el-radio-button label="6">六屏</el-radio-button>
+            </el-radio-group>
+          </div>
         </div>
         <div class="video-box" :class="'video' + params.limit">
           <div
@@ -471,7 +474,7 @@ export default {
       }
     }
     .scrollbar-wrapper {
-      height: calc(100vh - 230px);
+      height: calc(100vh - 265px);
       overflow: hidden !important;
     }
     .list {

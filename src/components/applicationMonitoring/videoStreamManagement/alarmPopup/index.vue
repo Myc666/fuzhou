@@ -77,7 +77,7 @@ export default {
               if(item.position[3] * 0.5 >this.imgHeight){
                   item.position[3] = this.imgHeight/0.5
                 }
-                let leftNum = (item.position[0] * ratio)*0.5-10
+                let leftNum = (item.position[0] * ratio)*0.5
                 this.pointList.push({
                   ...item,
                   left: leftNum > 0 ? leftNum + "px" : "0px",
@@ -109,8 +109,8 @@ export default {
 .popup-bg {
   // background: rgba($color: #000000, $alpha: 0.5);
   .popupA{
-    width: 260px;
-    height: 150px;
+    width: 384.5px;
+    height: 178px;
     background: url("~@/assets/images/videoStreamManagement/popupBg.png")
       no-repeat center center;
     background-size: 100% 100%;
@@ -129,8 +129,8 @@ export default {
       cursor: pointer;
     }
     .img {
-      width: 108px;
-      height: 65px;
+      width: 237px;
+      // height: 117px;
       // position: absolute;
       // top: 120px;
       // left: 35px;
@@ -140,47 +140,47 @@ export default {
     .text1 {
       width: 200px;
       height: auto;
-      font-size: 14px;
+      font-size: 12px;
       color: #fff;
       position: absolute;
-      top: 60px;
-      left: 115px;
+      top: 53px;
+      left: 235px;
       transform: scale(0.7); 
     }
     .text2{
       width: 200px;
       height: auto;
-      font-size: 14px;
+      font-size: 12px;
       color: #fff;
       position: absolute;
-      top: 88px;
-      left: 115px;
+      top: 100px;
+      left: 235px;
       transform: scale(0.7); 
     }
     .text3 {
       width: 200px;
       height: auto;
-      font-size: 14px;
+      font-size: 12px;
       color: #fff;
       position: absolute;
-      top: 115px;
-      left: 115px;
+      top: 150px;
+      left: 235px;
       transform: scale(0.7); 
     }
     .img-box {
-    width: 108px;
-    height: 65px;
+    width: 237px;
+    height: 117px;
     position: absolute;
-    top: 52px;
-    left: 15px;
+    top: 33px;
+    left: 12px;
     .img-content {
       position: relative;
     }
   }
   }
   .popup {
-    width: 600px;
-    height: 350px;
+    width: 769px;
+    height: 360px;
     background: url("~@/assets/images/videoStreamManagement/popupBg.png")
       no-repeat center center;
     background-size: 100% 100%;
@@ -199,8 +199,8 @@ export default {
       cursor: pointer;
     }
     .img {
-      width: 247px;
-      height: 152px;
+      width: 474px;
+      height: 266px;
       // position: absolute;
       // top: 120px;
       // left: 35px;
@@ -213,8 +213,8 @@ export default {
       font-size: 14px;
       color: #fff;
       position: absolute;
-      top: 153px;
-      left: 313px;
+      top: 112px;
+      left: 526px;
     }
     .text2{
       width: 200px;
@@ -223,7 +223,7 @@ export default {
       color: #fff;
       position: absolute;
       top: 210px;
-      left: 313px;
+      left: 526px;
     }
     .text3 {
       width: 200px;
@@ -231,15 +231,15 @@ export default {
       font-size: 14px;
       color: #fff;
       position: absolute;
-      top: 270px;
-      left: 313px;
+      top: 310px;
+      left: 526px;
     }
     .img-box {
-    width: 247px;
-    height: 152px;
-    position: absolute;
-    top: 120px;
-    left: 35px;
+      width: 474px;
+      height: 266px;
+      position: absolute;
+      top: 72px;
+      left: 23px;
     .img-content {
       position: relative;
     }

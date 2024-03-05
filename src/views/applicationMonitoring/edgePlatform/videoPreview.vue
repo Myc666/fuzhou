@@ -1,7 +1,7 @@
 <template>
   <div class="wrap">
     <div class="flex-left">
-      <el-card class="box-card">
+      <!-- <el-card class="box-card">
         <div
           slot="header"
           style="
@@ -21,7 +21,7 @@
             >{{ item.name }}:{{ item.staticsFlagVal }}</span
           >
         </div>
-      </el-card>
+      </el-card> -->
       <el-card class="box-card">
         <div
           slot="header"
@@ -33,16 +33,19 @@
         >
           <span>
             <span style="padding-right: 20px;">视频路数</span>
-            <el-radio-group size="mini" v-model="playType" @change="setPlayType()">
+            <!-- <el-radio-group size="mini" v-model="playType" @change="setPlayType()">
               <el-radio-button :label="0" >原始流</el-radio-button>
               <el-radio-button :label="1">合成流</el-radio-button>
-            </el-radio-group>
+            </el-radio-group> -->
           </span>
-          <el-radio-group v-model="params.limit">
-            <el-radio-button label="1">一屏</el-radio-button>
-            <el-radio-button label="4">四屏</el-radio-button>
-            <el-radio-button label="6">六屏</el-radio-button>
-          </el-radio-group>
+          <div>
+            <el-button type="primary" style="margin-right: 20px;" @click="detailFun">查看当日</el-button>
+            <el-radio-group v-model="params.limit">
+              <el-radio-button label="1">一屏</el-radio-button>
+              <el-radio-button label="4">四屏</el-radio-button>
+              <el-radio-button label="6">六屏</el-radio-button>
+            </el-radio-group>
+          </div>
         </div>
         <div class="video-box" :class="'video' + params.limit">
           <div
@@ -233,16 +236,14 @@ export default {
     this.getCounter();
     this.getCameraListData();
     this.connectWebsocket();
-    this.setPlayType(1)
+    // this.setPlayType()
   },
   methods: {
     async setPlayType(){
       const {code} = await setPlayType({playType: this.playType})
       if(code == 0){
         this.getListPageActives()
-        if(type!=1){
-          this.$message.success('切换成功')
-        }
+        this.$message.success('切换成功')
       }
     },
     // 获取算法列表
@@ -587,7 +588,7 @@ export default {
       }
     }
     .scrollbar-wrapper {
-      height: calc(100vh - 230px);
+      height: calc(100vh - 265px);
       overflow: hidden !important;
     }
     .list {

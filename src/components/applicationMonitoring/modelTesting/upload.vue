@@ -481,7 +481,7 @@ export default {
 .app-box{
     display: flex;
     justify-content: space-between;
-    padding: 21px 32px;
+    padding: 21px 16px;
     >div{
         width: 49%;
     }
