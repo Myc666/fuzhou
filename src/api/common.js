@@ -87,3 +87,11 @@ export function javaLog(params) {
     params
   })
 }
+// 获取盒子日志
+export function aiboxLog(params) {
+  return request({
+    url: '/logger/reader/aibox?limit=300',
+    method: 'post',
+    params
+  })
+}
