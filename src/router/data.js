@@ -118,7 +118,7 @@ const allRoutess = [
               component: () => import('@/views/applicationMonitoring/noticeManagement/messageManagement'),
             },
             {
-              name: '微信推送',
+              name: '办公推送',
               path: '/noticeManagement/wxManagement',
               component: () => import('@/views/applicationMonitoring/noticeManagement/wxManagement'),
             },

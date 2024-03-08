@@ -15,7 +15,7 @@
         <div class="tip__text">注意，图片以base64字符串形式传递</div>
       </el-form-item> -->
       <el-divider></el-divider>
-      <el-form-item label="是否推送企业微信群机器人" prop="weworkEnable">
+      <el-form-item label="推送到企业微信群" prop="weworkEnable">
         <el-radio v-model="form2.weworkEnable" label="false">不启用</el-radio>
         <el-radio v-model="form2.weworkEnable" label="true">启用</el-radio>
       </el-form-item>
@@ -24,6 +24,17 @@
         <div class="tip__text">
           请先开通企业微信群机器人，然后复制粘贴群地址，例如：https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=1111111-2222-3333-4444444
         </div>
+      </el-form-item>
+      <el-divider></el-divider>
+      <el-form-item label="推送到钉钉群信群" prop="weworkEnable">
+        <el-radio v-model="form2.dingdingEnable" label="false">不启用</el-radio>
+        <el-radio v-model="form2.dingdingEnable" label="true">启用</el-radio>
+      </el-form-item>
+      <el-form-item label="钉钉群签名">
+        <el-input v-model="form2.dingdingSign" type="textarea"></el-input>
+      </el-form-item>
+      <el-form-item label="钉钉群地址">
+        <el-input v-model="form2.dingdingUrl" ></el-input>
       </el-form-item>
       <el-divider></el-divider>
       <!-- <el-form-item label="是否推送短信通知" prop="smsEnable">
@@ -99,6 +110,9 @@ export default {
         smsEnable: "false",
         smsAppKey: "",
         smsTplId: "",
+        dingdingEnable:false,
+        dingdingSign:'',
+        dingdingUrl:''
       },
     };
   },
