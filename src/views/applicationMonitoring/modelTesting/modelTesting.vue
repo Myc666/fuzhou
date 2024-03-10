@@ -44,7 +44,7 @@
                 <div class="alg-tip">{{ items.marks }}</div>
                 <div class="alg-btn-flex">
                   <div class="alg-btn" @click.stop="upgradeFun(items)" v-if="items.hasLocalFile" style="margin-right: 10px;">
-                    盒子升级
+                    算法升级
                   </div>
                   <div class="alg-btn" @click.stop="editData(items)" :style="{marginRight: items.hasLocalFile?'10px':''}">
                     {{items.hasLocalFile?'编辑':'下载'}}

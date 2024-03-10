@@ -1,7 +1,12 @@
 <template>
     <div class="app-box">
-        <div class="left">
-            <p class="title">识别对象</p>
+        <div class="headline">
+            <div class="icon"><i class="el-icon-magic-stick"></i></div>
+            <div class="cont">在线体验</div>
+        </div>
+        <div class="flex-box">
+            <div class="left">
+            <p class="title">原始数据<span>支持自定义上传</span></p>
             <div class="display" id="objectId" :style="{height:isDefault?'':'367px'}">
                 <!-- 视频 -->
                 <VideoItem v-if="params.type=='mp4'&&params.mp4Url" :cameraUrl="params.mp4Url" :videoWith="videoWith" :index="1"></VideoItem>
@@ -54,56 +59,57 @@
                 请参考【算法边界】的描述上传符合此场景的图片或视频，支持上传多个文件；<br/>
                 图片：支持PNG、JPG、JPEG格式, 图片大小不超过4m; 视频：类型仅支持mp4格式, 大小不超过30Mb。
             </div>
-        </div>
-        <div class="right">
-            <p class="title">识别结果</p>
-            <div class="result-sty" :style="{height:isDefault?'':'367px'}">
-                <!-- 视频 -->
-                <VideoItem v-if="videoUrl" :cameraUrl="videoUrl" :videoWith="videoWith" :index="2"></VideoItem>
-                <!-- 图片绘制区域以及上传视频第一帧绘制区域 -->
-                <MarkDetail
-                    ref="markDetail"
-                    v-if="isDraw"
-                    :fileUrl="$common.handleImgUrl(params.file)"
-                    :dataList="dataList"
-                    @dataChange="dataChange"
-                />
-                <!-- 展示识别后的图片 -->
-                <MarkResult
-                    v-if="isRes"
-                    :fileUrl="this.$common.handleImgUrl(params.file)"
-                    :dataList="boxList"
-                />
-                <!-- 识别时加载的样式 -->
-                <div class="loading-sty" v-if="loading" v-loading="loading"
-                     element-loading-text="计算中,请勿离开"
-                     element-loading-spinner="el-icon-loading"
-                     element-loading-background="rgba(3, 3, 3, 0.6)">
-                </div>
             </div>
-
-            <!-- 区域坐标展示框 -->
-            <div v-if="isDraw || isRes || !params.isDefault">
-                <div class="region-flex">
-                    <div class="txt">仅识别区域</div>
-                    <div class="btn" v-if="isIdentify" @click="refreshMarks">
-                        <span class="el-icon-refresh"></span>
-                        <span>重置区域</span>
+            <div class="right">
+                <p class="title">算法识别结果<span>支持指定扫描区域绘制</span></p>
+                <div class="result-sty" :style="{height:isDefault?'':'367px'}">
+                    <!-- 视频 -->
+                    <VideoItem v-if="videoUrl" :cameraUrl="videoUrl" :videoWith="videoWith" :index="2"></VideoItem>
+                    <!-- 图片绘制区域以及上传视频第一帧绘制区域 -->
+                    <MarkDetail
+                        ref="markDetail"
+                        v-if="isDraw"
+                        :fileUrl="$common.handleImgUrl(params.file)"
+                        :dataList="dataList"
+                        @dataChange="dataChange"
+                    />
+                    <!-- 展示识别后的图片 -->
+                    <MarkResult
+                        v-if="isRes"
+                        :fileUrl="this.$common.handleImgUrl(params.file)"
+                        :dataList="boxList"
+                    />
+                    <!-- 识别时加载的样式 -->
+                    <div class="loading-sty" v-if="loading" v-loading="loading"
+                        element-loading-text="计算中,请勿离开"
+                        element-loading-spinner="el-icon-loading"
+                        element-loading-background="rgba(3, 3, 3, 0.6)">
                     </div>
                 </div>
-                <div class="region-data">
-                    <div v-if="marksList.length>0">
-                        <div v-for="(items,i) in marksList" :key="i">
-                            x：{{ items.x }} , y：{{ items.y }}
+
+                <!-- 区域坐标展示框 -->
+                <div v-if="isDraw || isRes || !params.isDefault">
+                    <div class="region-flex">
+                        <div class="txt">指定识别区域</div>
+                        <div class="btn" v-if="isIdentify" @click="refreshMarks">
+                            <span class="el-icon-refresh"></span>
+                            <span>重置区域</span>
+                        </div>
+                    </div>
+                    <div class="region-data">
+                        <div v-if="marksList.length>0">
+                            <div v-for="(items,i) in marksList" :key="i">
+                                x：{{ items.x }} , y：{{ items.y }}
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <!-- 操作按钮 -->
-            <div class="btn-all">
-                <el-button type="primary" @click="saveFun" v-if="isDraw || isRes || !params.isDefault" :disabled="!isDraw">开始识别</el-button>
-                <el-button v-if="isDraw || isRes || !params.isDefault" @click="refreshParams" :disabled="isDraw">重置</el-button>
-                <el-button v-if="videoUrl" type="danger" icon="el-icon-download" @click="downloadFun()">下载AI判断视频</el-button>
+                <!-- 操作按钮 -->
+                <div class="btn-all">
+                    <el-button type="primary" @click="saveFun" v-if="isDraw || isRes || !params.isDefault" :disabled="!isDraw" icon="el-icon-magic-stick">开始识别</el-button>
+                    <el-button v-if="isDraw || isRes || !params.isDefault" @click="refreshParams" :disabled="isDraw">重置</el-button>
+                    <el-button v-if="videoUrl" type="primary" icon="el-icon-download" @click="downloadFun()">下载AI判断视频</el-button>
+                </div>
             </div>
         </div>
     </div>
@@ -479,190 +485,239 @@ export default {
 </script>
 <style scoped lang="scss">
 .app-box{
-    display: flex;
-    justify-content: space-between;
-    padding: 21px 16px;
-    >div{
-        width: 49%;
-    }
-    .title{
-        color: rgba(0, 0, 0, 0.90);
-        font-size: 16px;
-        font-weight: 500;
-        margin: 0;
-        padding-bottom: 10px;
-    }
-    .display{
-        width: 100%;
-        // height: 367px;
-        border: 1px solid #F3F3F3;
-        margin-bottom: 20px;
-    }
-    .tab-block{
-        display: flex;
-        overflow-x: scroll;
-        .upload-block{
-            display: flex;
-            .upload-style{
-                width: 152px;
-                height: 152px;
-                :deep(.el-upload--picture-card){
-                    width: 152px;
-                    height: 152px;
-                    background-color: #EEE;
-                    border-radius: 0;
-                    display: flex;
-                    flex-wrap: wrap;
-                    align-content: center;
-                    justify-content: center;
-                }
-                :deep(.el-upload--picture-card i){
-                    font-size: 24px;
-                    color: rgba(0, 0, 0, 0.90);
-                }
-                .tip{
-                    width: 100%;
-                    color: rgba(0, 0, 0, 0.40);
-                    text-align: center;
-                    font-size: 12px;
-                    font-weight: 400;
-                    line-height: normal;
-                    margin-top: 10px;
-                }
-            }
-        }
-        .file-list{
-            display: flex;
-            .file-item{
-                width: 152px;
-                height: 152px;
-                border-radius: 2px;
-                border: 1px #F3F3F3 solid;
-                display: flex;
-                align-content: center;
-                justify-content: center;
-                position: relative;
-                margin-left: 16px;
-            }
-            .progress-block{
-                width: 152px;
-                height: 152px;
-                position: absolute;
-                top: 0;
-                left: 0;
-                :deep(.el-progress--circle){
-                    background-color: #ffffff;
-                    width: 152px;
-                    height: 152px;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                }
-            }
-            .file-item:hover{
-                .mp4{
-                    display: none;
-                }
-                .del-sty{
-                    width: 100%;
-                    height: 100%;
-                    position: absolute;
-                    background: rgba(0, 0, 0, 0.40);
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    color: #FFF;
-                    font-size: 22px;
-                }
-            }
-            .del-sty{
-                display: none;
-            }
-            .mp4{
-                width: 100%;
-                height: 100%;
-                position: absolute;
-                background: rgba(0, 0, 0, 0.40);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-        }
+    padding: 32px;
+    border-radius: 8px;
+    border: 1px solid #E4E7ED;
+    background: #F5F7FA;
+    margin: 16px 0;
 
-        .tab-box{
+    .headline{
+        display: flex;
+        margin-bottom: 16px;
+        align-items: center;
+        
+        .icon{
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            color: white;
+            background: linear-gradient(270deg, #48C6EF 0%, #6F86D6 100%);
             display: flex;
-            .file-item-de{
-                display: flex; /* 设置容器为flex布局 */
-                align-items: center; /* 水平居中对齐项目 */
-                width: 152px;
-                height: 152px;
-                border: 1px solid #F3F3F3;
-                margin-left: 16px;
-                position: relative;
-                .mp4{
-                    width: 100%;
-                    height: 100%;
-                    position: absolute;
-                    background: rgba(0, 0, 0, 0.40);
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                }
-            }
+            justify-content: center;
+            align-items: center;
+            margin-right: 8px;
+        }
+        .cont{
+            color: rgba(0, 0, 0, 0.90);
+            font-size: 18px;
+            font-style: normal;
+            font-weight: bold;
         }
     }
-    .result-sty{
-        width: 100%;
-        // height: 367px;
-        border: 1px solid #F3F3F3;
-        margin-bottom: 20px;
-        position: relative;
-        // overflow-y: auto;
-        .loading-sty{
-            width: 100%;
-            height: 100%;
-            background: rgba(3, 3, 3, 0.70);
-            position: absolute;
-            top: 0;
-        }
-    }
-    .region-flex{
+
+    .flex-box{
         display: flex;
         justify-content: space-between;
-        align-items: center;
-        font-size: 14px;
-        margin-bottom: 15px;
-        .btn{
-            background: #73767A;
-            padding: 5px 12px;
-            color: #FFF;
-            font-size: 12px;
-            border-radius: 6px;
-            cursor: pointer;
+        
+        >div{
+            width: 49.5%;
+            border-radius: 4px;
+            background: #FFF;
+            padding: 16px;
+        }
+
+        .title{
+            color: rgba(0, 0, 0, 0.90);
+            font-weight: bold;
+            margin: 0;
+            padding-bottom: 10px;
+            font-size: 14px;
+            span{
+                display: inline-block;
+                margin-left: 8px;
+                color: #606266;
+                font-size: 14px;
+                font-weight: 400;
+            }
+        }
+        .display{
+            width: 100%;
+            // height: 367px;
+            border: 1px solid #F3F3F3;
+            margin-bottom: 20px;
+        }
+        .tab-block{
+            display: flex;
+            overflow-x: scroll;
+            margin-bottom: 16px;
+            .upload-block{
+                display: flex;
+                .upload-style{
+                    width: 152px;
+                    height: 152px;
+                    :deep(.el-upload--picture-card){
+                        width: 152px;
+                        height: 152px;
+                        background-color: #EEE;
+                        border-radius: 0;
+                        display: flex;
+                        flex-wrap: wrap;
+                        align-content: center;
+                        justify-content: center;
+                    }
+                    :deep(.el-upload--picture-card i){
+                        font-size: 24px;
+                        color: rgba(0, 0, 0, 0.90);
+                    }
+                    .tip{
+                        width: 100%;
+                        color: rgba(0, 0, 0, 0.40);
+                        text-align: center;
+                        font-size: 12px;
+                        font-weight: 400;
+                        line-height: normal;
+                        margin-top: 10px;
+                    }
+                }
+            }
+            .file-list{
+                display: flex;
+                .file-item{
+                    width: 152px;
+                    height: 152px;
+                    border-radius: 2px;
+                    border: 1px #F3F3F3 solid;
+                    display: flex;
+                    align-content: center;
+                    justify-content: center;
+                    position: relative;
+                    margin-left: 16px;
+                }
+                .progress-block{
+                    width: 152px;
+                    height: 152px;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    :deep(.el-progress--circle){
+                        background-color: #ffffff;
+                        width: 152px;
+                        height: 152px;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                    }
+                }
+                .file-item:hover{
+                    .mp4{
+                        display: none;
+                    }
+                    .del-sty{
+                        width: 100%;
+                        height: 100%;
+                        position: absolute;
+                        background: rgba(0, 0, 0, 0.40);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        color: #FFF;
+                        font-size: 22px;
+                    }
+                }
+                .del-sty{
+                    display: none;
+                }
+                .mp4{
+                    width: 100%;
+                    height: 100%;
+                    position: absolute;
+                    background: rgba(0, 0, 0, 0.40);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+            }
+
+            .tab-box{
+                display: flex;
+                .file-item-de{
+                    display: flex; /* 设置容器为flex布局 */
+                    align-items: center; /* 水平居中对齐项目 */
+                    width: 152px;
+                    height: 152px;
+                    border: 1px solid #F3F3F3;
+                    margin-left: 16px;
+                    position: relative;
+                    .mp4{
+                        width: 100%;
+                        height: 100%;
+                        position: absolute;
+                        background: rgba(0, 0, 0, 0.40);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
+                }
+            }
+        }
+        .result-sty{
+            width: 100%;
+            // height: 367px;
+            border: 1px solid #F3F3F3;
+            margin-bottom: 20px;
+            position: relative;
+            // overflow-y: auto;
+            .loading-sty{
+                width: 100%;
+                height: 100%;
+                background: rgba(3, 3, 3, 0.70);
+                position: absolute;
+                top: 0;
+            }
+        }
+        .region-flex{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            margin-bottom: 15px;
+            .btn{
+                background: #73767A;
+                padding: 5px 12px;
+                color: #FFF;
+                font-size: 12px;
+                border-radius: 6px;
+                cursor: pointer;
+            }
+        }
+        .region-data{
+            width: 100%;
+            height: 124px;
+            border-radius: 3px;
+            border: 1px solid #DCDCDC;
+            padding: 5px 8px;
+            overflow-y: auto;
+            color: rgba(0, 0, 0, 0.40);
+            font-size: 14px;
+        }
+        .btn-all{
+            margin-top: 32px;
+            :deep(.el-button--danger){
+                color: #FFF;
+                background: #ff4949;
+                border-color:#ff4949
+            }
+            :deep(.el-button--danger:hover){
+                color: #FFF !important;
+                background: #f78080 !important;
+                border-color:#f78080 !important
+            }
         }
     }
-    .region-data{
-        width: 100%;
-        height: 124px;
-        border-radius: 3px;
-        border: 1px solid #DCDCDC;
-        padding: 5px 8px;
-        overflow-y: auto;
-        color: rgba(0, 0, 0, 0.40);
-        font-size: 14px;
-    }
-    .btn-all{
-        margin-top: 32px;
-        :deep(.el-button--danger){
-            color: #FFF;
-            background: #ff4949;
-            border-color:#ff4949
-        }
-        :deep(.el-button--danger:hover){
-            color: #FFF !important;
-            background: #f78080 !important;
-            border-color:#f78080 !important
-        }
-    }
+}
+
+:deep(.el-button--primary){
+    background: linear-gradient(270deg, #48C6EF 0%, #6F86D6 100%) !important;
+    border: none;
 }
 </style>

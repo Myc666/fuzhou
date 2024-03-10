@@ -83,7 +83,7 @@ const allRoutess = [
               component: () => import('@/views/applicationMonitoring/edgePlatform/videoPreview'),
             },
             {
-              name: '盒子升级',
+              name: '程序升级',
               path: '/edgePlatform/updata',
               component: () => import('@/views/applicationMonitoring/casketManagement/edgePlatformUpdata'),
             },{

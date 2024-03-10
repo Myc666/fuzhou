@@ -34,13 +34,22 @@
           <el-button icon="el-icon-refresh" @click="refreshData"
             >重置</el-button
           >
+          <div style="float: right;">
+              <el-button  @click="batchAdd" v-if="isBtnShow">批量新增</el-button>
+              <el-button icon="el-icon-loading" v-if="!isBtnShow&&stateObj.type==1" @click="batchAdd">{{ stateObj.text }}</el-button>
+              <!-- 校验成功、完成、失败 以及导入成功、完成、失败-->
+              <div class="button-sty" v-if="!isBtnShow" @click="batchAdd">
+                <span  v-if="stateObj.type==2" class="el-icon-success" style="color: #7bc139;"></span>
+                <span  v-if="stateObj.type==3" class="el-icon-warning" style="color: #E6A23C;"></span>
+                <!-- <span class="el-icon-error" style="color: #F56C6C;"></span> -->
+                <span style="margin-left: 5px;">{{ stateObj.text }}</span>
+              </div>  
+            </div>
         </div>
         <div class="ai_table">
           <div v-if="currentNode.type == 2 && isShow" class="add-box">
             <span>{{ currentNode.text }}</span>
-            <el-button type="primary" icon="el-icon-plus" @click="addCamera"
-              >新增摄像头</el-button
-            >
+            <el-button type="primary" icon="el-icon-plus" @click="addCamera">新增摄像头</el-button>
           </div>
           <el-table
             :data="tableData"
@@ -203,6 +212,8 @@
       @success="(addBoxVisible = false), getTreeData()"
       @close="(addBoxVisible = false), getTreeData()"
     />
+    <!-- 批量导入 -->
+    <UploadInfo v-if="uploadVisible" :type="stateObj.typeStr" :typeText="stateObj.text" @close="closeHandel"/>
   </div>
 </template>
 <script>
@@ -215,10 +226,12 @@ import {
   deleteData,
   getHeart,
 } from "@/api/applicationMonitoring/cameraManagement";
+import {getState} from "@/api/applicationMonitoring/batchUpload";
 import ConfigureTime from "@/components/applicationMonitoring/boxManagement/configureTime";
 import AddCamera from "@/components/applicationMonitoring/boxManagement/addCamera";
 import AddRegion from "@/components/applicationMonitoring/boxManagement/addRegion";
 import AddBox from "@/components/applicationMonitoring/boxManagement/addBox";
+import UploadInfo from "@/components/applicationMonitoring/batchUpload/upload.vue";
 import { getMyDate } from '@/utils/common.js'
 export default {
   components: {
@@ -226,6 +239,7 @@ export default {
     AddCamera,
     AddRegion,
     AddBox,
+    UploadInfo
   },
   data() {
     return {
@@ -256,17 +270,54 @@ export default {
       },
       timer: null,
       isShow:false,
+      uploadVisible:false,
+      stateObj:{},
+      isBtnShow:true,
+      timerState:null,
     };
   },
   async created() {
     await this.getHeart();
     await this.getTreeData();
+    await this.getStateFun();
     this.getListData();
     this.timer = setInterval(() => {
       this.getHeart();
     }, 60000);
   },
   methods: {
+    // 获取批量上传的整体进度
+    async getStateFun(){
+      clearInterval(this.timerState);
+      this.timerState=null
+      const res = await getState()
+      let obj = {};
+      let str = res.data;
+      if(str&&typeof str != 'object'){
+        this.isBtnShow = false
+        obj.text = str;
+        if(str.indexOf('校验')!=-1){
+          obj.typeStr="verification"
+
+        }else if(str.indexOf('导入')!=-1){
+          obj.typeStr="import"
+        }
+        if(str.indexOf('校验中')!=-1||str.indexOf('导入中')!=-1){
+          obj.type=1;
+          this.timerState = setInterval(() => {
+              this.getStateFun();
+          }, 3000);
+        }else if(str=='校验成功'||str=='导入成功'){
+            obj.type=2;
+        }else if(str=='校验完成'||str=='导入完成'){
+          obj.type=3;
+        }
+        this.stateObj = obj;
+      }else{
+        this.isBtnShow = true
+        this.stateObj = {};
+      }
+    },
     // 获取位置tree
     async getTreeData() {
       const data = await getTreeData({ locationType: 2 });
@@ -451,10 +502,26 @@ export default {
           3000: '未使用'
       }[item]
       return str
+    },
+    // 批量新增
+    batchAdd(){
+      if(this.timerState){
+        clearInterval(this.timerState);
+        this.timerState=null
+      }
+      this.uploadVisible = true;
+    },
+    // 关闭批量新增的弹窗
+    closeHandel(){
+      this.uploadVisible = false;
+      this.getListData()
+      this.getStateFun()
     }
   },
   beforeDestroy() {
-    clearInterval(this.timer)
+    clearInterval(this.timer);
+    clearInterval(this.timerState);
+    this.timerState=null
   },
 };
 </script>
@@ -516,5 +583,17 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+.button-sty{
+  border: 1px solid #DCDFE6;
+  border-radius: 8px;
+  margin-left: 20px;
+  padding: 0px 15px;
+  line-height: 32px;
+  font-size: 13px;
+  cursor: pointer;
+  .icon-succes{
+    color: red;
+  }
 }
 </style>

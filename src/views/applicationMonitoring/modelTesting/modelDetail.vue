@@ -1,58 +1,69 @@
 <template>
     <div class="alg-detail">
         <div class="top-bg">
-            <div style="width: 50%;">
-                <div @click="goBack()" class="go-back">
-                    <span class="el-icon-back"></span>
-                    <span style="padding: 0px 32px 0px 5px;">返回查看更多模型</span>
-                </div>
-                <div class="alg-name">{{ params.name }}</div>
-                <div class="tag-flex">
-                    <div class="tag-item" v-for="(item,index) in tagNameList" :key="index">{{ item }}</div>
-                </div>
-                <div class="tip-cont">{{ params.description }}</div>
-                <div class="button-flex">
-                    <!-- <div class="btn-sty" @click="modelFun">
-                        <span class="el-icon-magic-stick"></span>
-                        <span style="padding-left: 5px;">{{ isShow?'模型使用':'查看算法边界' }}</span>
-                    </div> -->
-                    <el-tooltip content="请扫码屏幕右侧二维码" placement="top-start">
-                        <div class="btn-sty">
-                            <span class="el-icon-phone-outline"></span>
-                            <span style="padding-left: 5px;">联系我们</span>
-                        </div>
-                    </el-tooltip>
-                </div>
+            <div @click="goBack()" class="go-back">
+                <span class="el-icon-back"></span>
+                <span style="padding: 0px 32px 0px 5px;">返回</span>
             </div>
-            <div class="right-txt">
-                <div class="base-txt" style="margin-right: 50px;">
-                    <div style="padding-bottom: 16px;">
-                        <span style="padding-right: 5px;">基础准确率</span>
-                        <span class="el-icon-warning-outline"  @mouseenter="onHover(1)"  @mouseleave="hideMessage()"></span>
+            <div style="display: flex; align-items: flex-start;margin-top: 32px;">
+                <div style="width: 50%;">
+                    <div class="alg-flex">
+                        <div class="alg-name">{{ params.name }}</div>
+                        <div class="tag-flex">
+                            <div class="tag-item" v-for="(item,index) in tagNameList" :key="index">{{ item }}</div>
+                        </div>
                     </div>
-                    <div style="font-size: 24px;">{{ detailMap.basePrecision ? detailMap.basePrecision : '' }}</div>
-                    <div class="base-tip" v-if="isBase">
-                        <div class="tip-title">基础准确率</div>
-                        <div class="tip-txt">复用现有模型进行测试，可达到的识别准确率.</div>
+                    <div class="alg-nameEn">
+                        <span>{{ params.nameEn }}</span>
+                        <span style="margin-left: 5px;">最近更新 {{ $moment(params.updatedAt).format("YYYY-MM-DD") }}</span>
+                    </div>
+                    <div class="tip-cont">{{ params.description }}</div>
+                    <div class="button-flex">
+                        <!-- <div class="btn-sty" @click="modelFun">
+                            <span class="el-icon-magic-stick"></span>
+                            <span style="padding-left: 5px;">{{ isShow?'模型使用':'查看算法边界' }}</span>
+                        </div> -->
+                        <el-tooltip content="请扫码屏幕右侧二维码" placement="top-start">
+                            <div class="btn-sty">
+                                <span class="el-icon-service"></span>
+                                <span style="padding-left: 10px;">联系我们</span>
+                            </div>
+                        </el-tooltip>
                     </div>
                 </div>
-                <div class="base-txt paddL">
-                    <div style="padding-bottom: 16px;">
-                        <span style="padding-right: 5px;">场景优化准确率</span>
-                        <span class="el-icon-warning-outline"  @mouseenter="onHover(2)"  @mouseleave="hideMessage()"></span>
+                <div class="right-txt">
+                    <div class="base-txt" style="margin-right: 50px;">
+                        <div style="font-size: 32px;margin-bottom: 62px;">{{ detailMap.basePrecision ? detailMap.basePrecision : '' }}</div>
+                        <div>
+                            <span style="padding-right: 5px;">基础准确率</span>
+                            <span class="el-icon-warning-outline"  @mouseenter="onHover(1)"  @mouseleave="hideMessage()"></span>
+                        </div>
+                        <div class="base-tip" v-if="isBase">
+                            <div class="tip-title">基础准确率</div>
+                            <div class="tip-txt">复用现有模型进行测试，可达到的识别准确率.</div>
+                        </div>
                     </div>
-                    <div style="font-size: 24px;">{{detailMap.scenePrecision ? detailMap.scenePrecision : ''}}</div>
-                    <div class="base-tip" v-if="isOptimize">
-                        <div class="tip-title">场景优化准确率</div>
-                        <div class="tip-txt">基于具体场景定制优化后，可支持的识别准确率.</div>
+                    <div class="base-txt">
+                        <div style="font-size: 32px;margin-bottom: 62px;">{{detailMap.scenePrecision ? detailMap.scenePrecision : ''}}</div>
+                        <div>
+                            <span style="padding-right: 5px;">场景优化准确率</span>
+                            <span class="el-icon-warning-outline"  @mouseenter="onHover(2)"  @mouseleave="hideMessage()"></span>
+                        </div>
+                        <div class="base-tip" v-if="isOptimize">
+                            <div class="tip-title">场景优化准确率</div>
+                            <div class="tip-txt">基于具体场景定制优化后，可支持的识别准确率.</div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         <Upload v-if="params.nameEn" :nameEn="params.nameEn" :id="params.id"></Upload>
-        <!-- v-if="isShow" -->
         <div class="illustrate">
-            <div v-if="JSON.stringify(detailMap) != '{}'">
+            <div class="headline">
+                <div class="icon"><i class="el-icon-notebook-1"></i></div>
+                <div class="cont">算法边界</div>
+            </div>
+            <div class="flex-box" v-if="JSON.stringify(detailMap) != '{}'">
                 <div class="effective">
                     <div class="title">有效的拍摄方式</div>
                     <div class="demand-tip">摄像头分辨率需要满足1920*1080，支持rstp传输协议</div>
@@ -61,7 +72,7 @@
                     </div>
                     <div class="img-flex">
                         <div v-for="(item,ind) in detailMap.trueImage" :key="ind" class="img-item">
-                            <el-image :src="VUE_APP_API_BASE_URL+`/algorithm/picStream?file=${item}`" style="width: 100%;height: 200px;"></el-image>
+                            <el-image :src="VUE_APP_API_BASE_URL+`/algorithm/picStream?file=${item}`" style="width: 100%;height: 190px;border-radius: 3px;"></el-image>
                         </div>
                     </div>
                 </div>
@@ -72,14 +83,12 @@
                     </div>
                     <div class="img-flex">
                         <div v-for="(item,ind) in detailMap.falseImage" :key="ind" class="img-item">
-                            <el-image :src="VUE_APP_API_BASE_URL+`/algorithm/picStream?file=${item}`" style="width: 100%;height: 200px;"></el-image>
+                            <el-image :src="VUE_APP_API_BASE_URL+`/algorithm/picStream?file=${item}`" style="width: 100%;height: 190px;border-radius: 3px;"></el-image>
                         </div>
                     </div>
                 </div>
             </div>
-            <el-empty v-else></el-empty>
         </div>
-        <!-- <Upload v-else :nameEn="params.nameEn" :id="params.id"></Upload> -->
     </div>
 </template>
 <script>
@@ -171,54 +180,61 @@ export default {
 </script>
 <style scoped lang="scss">
 .alg-detail{
-    background: #fff;
-    border-radius: 8px;
+    background: #F1F5FB;
+    // background: #fff;
+    // border-radius: 8px;
     // min-height: 100%;
-    min-height:calc(100vh - 120px);
+    // min-height:calc(100vh - 120px);
     .top-bg{
-        min-height: 200px;
-        border-top-left-radius: 8px;
-        border-top-right-radius: 8px;
-        // background: linear-gradient(270deg, #48C6EF 0.02%, #6F86D6 149.35%);
-        background: url("@/assets/images/modelTesting/bg.png") no-repeat;
-        background-size: cover;
-        padding: 16px;
+        // min-height: 200px;
+        border-radius: 8px;
+        background: linear-gradient(270deg, #48C6EF 0%, #6F86D6 100%);
+        // background: url("@/assets/images/modelTesting/bg.png") no-repeat;
+        // background-size: cover;
+        padding: 32px;
         color: #FFFFFF;
-        display: flex;
         .go-back{
             cursor: pointer;
             font-size: 14px;
         }
+        .alg-flex{
+            display: flex;
+            align-items: center;
+        }
         .alg-name{
-            font-size: 36px;
+            font-size: 32px;
             line-height: 28px;
             font-weight: 500;
-            margin-top: 24px;
+        }
+        .alg-nameEn{
+            font-size: 12px;
+            line-height: 22px;
+            color: rgba(255, 255, 255, 0.60);
+            margin-top: 8px;
         }
         .tag-flex{
             display: flex;
-            padding: 16px 0px;
         }
         .tag-item{
-            width: 85px;
-            background: #DCDCDC;
-            color: black;
-            font-size: 14px;
-            text-align: center;
-            border-radius: 80px;
-            letter-spacing: 1px;
-        }
-        .tag-item:nth-child(n+2){
+            background: #FFFFFF;
+            color: #409EFF;
+            font-size: 12px;
+            padding: 2px 10px;
+            border-radius: 30px;
             margin-left: 16px;
         }
+        // .tag-item:nth-child(n+2){
+        //     margin-left: 16px;
+        // }
         .tip-cont{
             display: flex;
             font-size: 14px;
+            line-height: 22px;
+            margin-top: 32px;
         }
         .right-txt{
-            width: 50%;
-            padding-right: 55px;
-            padding-bottom: 50px;
+            margin-bottom: 62px;
+            margin-left: 85px;
             display: flex;
             justify-content: end;
             align-items: end;
@@ -232,7 +248,7 @@ export default {
                 border-radius: 6px;
                 font-size: 12px;
                 position: absolute;
-                bottom: 65px;
+                bottom: 25px;
                 right: 0px;
                 box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);
                 .tip-title{
@@ -248,46 +264,94 @@ export default {
         }
         .button-flex{
             display: flex;
-            margin-top: 15px;
+            margin-top: 32px;
             .btn-sty{
                 // width: 150px;
                 background: #000;
-                font-size: 12px;
+                font-size: 14px;
                 text-align: center;
-                border-radius: 30px;
-                padding: 6px 16px;
+                line-height: 22px;
+                // border-radius: 30px;
+                padding: 5px 16px;
                 cursor: pointer;
             }
         }
     }
+
     .illustrate{
-        padding: 24px 16px;
-        .title{
-            font-size: 22px;
-        }
-        .demand-tip{
-            font-size: 14px;
-            line-height: 22px;
-        }
-        .effective-cont{
-            padding: 16px 0px 24px 0px;
-            font-size: 14px;
-            color: #606266;
-            line-height: 22px;
-            white-space: pre-line;
-        }
-        .img-flex{
-            // display: flex;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, 24%);
-            justify-content: space-between;
-            // justify-content: space-around;
-            .img-item{
-                width: 100%;
+        padding: 32px;
+        border-radius: 8px;
+        border: 1px solid #E4E7ED;
+        background: #F5F7FA;
+        margin: 16px 0;
+
+        .headline{
+            display: flex;
+            margin-bottom: 16px;
+            align-items: center;
+            
+            .icon{
+                width: 28px;
+                height: 28px;
+                border-radius: 50%;
+                color: white;
+                background: linear-gradient(270deg, #48C6EF 0%, #6F86D6 100%);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin-right: 8px;
+            }
+            .cont{
+                color: rgba(0, 0, 0, 0.90);
+                font-size: 18px;
+                font-style: normal;
+                font-weight: bold;
             }
         }
-        .invalid{
-            margin-top: 32px;
+
+        .flex-box{
+            display: flex;
+            justify-content: space-between;
+            
+            >div{
+                width: 49.5%;
+                border-radius: 4px;
+                background: #FFF;
+                padding: 16px;
+
+            }
+
+            .title{
+                font-size: 22px;
+                color: rgba(0, 0, 0, 0.90);
+                font-size: 14px;
+                font-weight: bold;
+                display: inline-block;
+            }
+            .demand-tip{
+                font-size: 14px;
+                line-height: 22px;
+                display: inline-block;
+                margin-left: 40px;
+            }
+            .effective-cont{
+                padding: 8px 0px 16px 0px;
+                font-size: 14px;
+                color: #606266;
+                line-height: 22px;
+                white-space: pre-line;
+            }
+            .img-flex{
+                // display: flex;
+                // justify-content: space-around;
+                display: grid;
+                grid-template-columns: repeat(2, 49%);
+                justify-content: space-between;
+                .img-item{
+                    width: 100%;
+                    margin-bottom: 10px;
+                }
+            }
         }
     }
 }
