@@ -55,7 +55,6 @@
                       v-model="scope.row.confidence"
                       :controls="false"
                       :precision="2"
-                      :min="0.3"
                       :max="1"
                       style="width: 80px"
                     />

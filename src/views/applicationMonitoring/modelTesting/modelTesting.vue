@@ -50,7 +50,7 @@
                     {{items.hasLocalFile?'编辑':'下载'}}
                   </div>
                   <div class="alg-del-btn" v-if="items.hasLocalFile" @click.stop="deleteData(items)">
-                    删除
+                    卸载
                   </div>
                 </div>
               </div>
