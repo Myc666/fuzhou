@@ -31,7 +31,7 @@
         <el-radio v-model="form2.dingdingEnable" label="true">启用</el-radio>
       </el-form-item>
       <el-form-item label="钉钉群签名">
-        <el-input v-model="form2.dingdingSign" type="textarea"></el-input>
+        <el-input v-model="form2.dingdingSign" placeholder="选填" type="textarea"></el-input>
       </el-form-item>
       <el-form-item label="钉钉群地址">
         <el-input v-model="form2.dingdingUrl" ></el-input>
