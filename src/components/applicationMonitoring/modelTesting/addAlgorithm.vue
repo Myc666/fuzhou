@@ -123,6 +123,10 @@
       return {
         platformList:[
           {
+            name:'超星',
+            id:'chaoxing',
+          },
+          {
             name:'英伟达',
             id:'nvidia',
           },
@@ -196,7 +200,7 @@
           platform:data.data.platform
         });
       },
-     
+
       // 保存算法
       saveData() {
         this.$refs.form.validate(async (valid) => {
@@ -209,7 +213,7 @@
           }
         });
       },
-  
+
       // 搜索
       async searchFun(){
         if(!this.params.nameEn){
@@ -269,7 +273,7 @@
           }
         }).catch(res=>{
         }).finally(res=>{
-          
+
         })
       },
       // 重新下载
@@ -300,7 +304,7 @@
             this.searchFun();
           }
         })
-        
+
       },
       // 关闭回调
       closed() {
@@ -360,4 +364,3 @@
     }
   }
   </style>
-  
