@@ -113,3 +113,11 @@ export function deleteFile(params) {
     params
   })
 }
+// 检查算法是否有更新
+export function checkAlgorithmVersion(params) {
+  return request({
+    url: '/algorithm/checkAlgorithmVersion',
+    method: 'post',
+    params
+  })
+}

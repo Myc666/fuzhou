@@ -175,6 +175,7 @@ export default {
         // 客户端接收服务端返回的数据
         this.downLoadWebsocket.onmessage = (evt) => {
           const data = JSON.parse(evt.data);
+          this.$store.commit('setAlgorithmDownload',data);
           this.$message({
             type: data.type==1?"error":"success",
             message: data.title,
@@ -216,6 +217,7 @@ export default {
 }
 .el-notification {
   z-index: 1000 !important;
+  width: 390px !important;
 }
 .notify-all {
   p {

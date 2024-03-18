@@ -21,12 +21,16 @@ export default new Vuex.Store({
       logoUrl: ''
     },
     afterSalesUrl: '',
+    algorithmDownload:{}
   },
   getters: {
   },
   mutations: {
     setAfterSalesUrl(state, newUrl) {
       state.afterSalesUrl = newUrl
+    },
+    setAlgorithmDownload(state,newUrl){
+      state.algorithmDownload = newUrl
     },
   },
   actions: {

@@ -16,7 +16,7 @@
       <div class="left-cont">
         <div v-for="(item,index) in tagList" :key="index" :class="item.isCheck?'left-item bg-color':'left-item'" @click="checkFun(index)">{{ item.name }}</div>
       </div>
-      <div class="right-cont" id="rightCont">
+      <div class="right-cont" id="rightCont" v-loading="loading">
         <div class="top-tip" v-if="isShow">
           <div class="go-back" @click="goBack">
             <span class="el-icon-back"></span>
@@ -26,9 +26,10 @@
         </div>
         <div>
           <div :class="[type==0?'flex-item flex-item-w32':type==2?'flex-item flex-item-w19':'flex-item flex-item-w24']" v-if=" algorithmList.length>0">
-            <div v-for="(items,ind) in algorithmList" :key="ind" class="algorithm-item" @click="detailFun(items.id)">
+            <div v-for="(items,ind) in algorithmList" :key="ind" class="algorithm-item"  :style="{ filter: items.hasGitFile?'':'grayscale(100%)'}" @click="items.hasGitFile?detailFun(items.id):''">
               <div class="img-cont">
-                <el-image :src="VUE_APP_API_BASE_URL+`/algorithm/picStream?file=${items.image}`" style="width: 100%;height: 100%;"></el-image>
+                <el-image v-if="items.image" :src="VUE_APP_API_BASE_URL+`/algorithm/picStream?file=${items.image}`" style="width: 100%;height: 100%;"></el-image>
+                <img v-else src="@/assets/images/modelTesting/default.png" style="width: 100%;height: 100%;"/>
               </div>
               <div class="alg-cont">
                 <div style="display: flex;">
@@ -42,15 +43,26 @@
                   </div>
                 </div>
                 <div class="alg-tip">{{ items.marks }}</div>
-                <div class="alg-btn-flex">
-                  <div class="alg-btn" @click.stop="upgradeFun(items)" v-if="items.hasLocalFile" style="margin-right: 10px;">
-                    算法升级
+                <div>
+                  <div class="alg-btn-flex" v-if="items.hasGitFile">
+                    <div class="alg-btn" @click.stop="upgradeFun(items)" v-if="items.hasLocalFile&&items.downloadState!='下载中'" style="margin-right: 10px;">
+                      算法升级
+                    </div>
+                    <div class="alg-btn" @click.stop="editData(items)" :style="{marginRight: items.hasLocalFile?'10px':''}">
+                      {{items.hasLocalFile?(items.downloadState=='已启用'?'编辑':items.downloadState):'下载'}}
+                    </div>
+                    <div class="alg-del-btn" v-if="items.hasLocalFile&&items.downloadState!='下载中'" @click.stop="deleteData(items)">
+                      卸载
+                    </div>
                   </div>
-                  <div class="alg-btn" @click.stop="editData(items)" :style="{marginRight: items.hasLocalFile?'10px':''}">
-                    {{items.hasLocalFile?'编辑':'下载'}}
-                  </div>
-                  <div class="alg-del-btn" v-if="items.hasLocalFile" @click.stop="deleteData(items)">
-                    卸载
+                  <div v-else class="alg-btn-flex">
+                      <el-popover
+                        placement="top"
+                        width="240"
+                        trigger="hover"
+                        content="算法优化中，敬请期待。如有更新，系统会自动通知。">
+                        <div slot="reference" class="alg-btn">优化中，敬请期待</div>
+                      </el-popover>
                   </div>
                 </div>
               </div>
@@ -82,7 +94,7 @@
   </div>
 </template>
 <script>
-import { getListData,getTagListData,deleteFile} from "@/api/applicationMonitoring/modelTesting";
+import { getListData,getTagListData,deleteFile,checkAlgorithmVersion } from "@/api/applicationMonitoring/modelTesting";
 import {deleteData} from "@/api/applicationMonitoring/algorithmManagement";
 import AddAlgorithm from "@/components/applicationMonitoring/modelTesting/addAlgorithm";
 import AlgorithmUpgrade from "@/components/applicationMonitoring/modelTesting/algorithmUpgrade";
@@ -110,9 +122,23 @@ export default {
       dialogVisible:false,
       rowId:'',
       algorithmName:'',
+      notify:null,
+      loading:false,
     };
   },
+  watch:{
+    "$store.state.algorithmDownload": {
+      immediate: true,
+      deep: true,
+      handler(val) {
+        if (val) {
+          this.getListData();
+        }
+      },
+    },
+  },
   created() {
+    this.checkVersion();
     this.getListData();
     this.getTagListData()
   },
@@ -122,6 +148,9 @@ export default {
   },
   beforeDestroy() {
     window.removeEventListener('resize', this.handleResize); // 移除窗口大小改变事件监听器
+    if(this.notify){
+      this.notify.close()
+    }
   },
   methods: {
     handleResize() {
@@ -135,14 +164,38 @@ export default {
         this.type=1
       }
     },
+    
+    // 检查算法更新
+    checkVersion(){
+      if(this.notify){
+        this.notify.close()
+      }
+      checkAlgorithmVersion().then(res=>{
+        let Arr = res.data;
+        let Str = ""
+        if(Arr.length>0){
+          Arr.forEach(item=>{
+            Str+='<li style="font-size: 14px;line-height: 22px;color:#000;position: relative;margin-left: 20px;">'+item.name +'<span style="position: absolute; left: -10px;">•</span></li>'
+          })
+          this.notify = this.$notify({
+            title: '算法版本有更新',
+            dangerouslyUseHTMLString: true,
+            message: '<div><div style="color: #666;font-size: 12px;">共'+Arr.length+'个算法有更新，请点击各自卡片“编辑”按钮进行下载操作。</div><ul style="margin-top:10px">'+Str+'</ul></div>',
+            duration: 0
+          });
+        }
+      })
+    },
     // 获取算法列表
     async getListData() {
+      this.loading = true;
       let obj = {
         name:this.name,
         tagId:this.tagId
       }
       const data = await getListData(obj);
-      let arr = data.data.filter(item => item.image&&item.marks )
+      this.loading = false;
+      let arr = data.data //.filter(item => item.image&&item.marks )
       this.algorithmList = arr;
     },
     // 获取行业列表
