@@ -28,11 +28,6 @@ const allRoutess = [
               path: '/algorithmManagement/modelTesting',
               component: () => import('@/views/applicationMonitoring/modelTesting/modelTesting.vue'),
             },
-            // {
-            //   name: '模型测试',
-            //   path: '/algorithmManagement/modelTesting',
-            //   component: () => import('@/views/applicationMonitoring/modelTesting.vue'),
-            // },
             {
               component: () => import('@/views/applicationMonitoring/modelTesting/modelDetail'),
               name: '算法详情',

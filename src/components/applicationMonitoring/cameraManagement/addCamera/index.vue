@@ -51,6 +51,7 @@
                 ></el-table-column>
                 <el-table-column label="置信度" width="120" align="center">
                   <template slot-scope="scope">
+                    <!-- :min="0.3" -->
                     <el-input-number
                       v-model="scope.row.confidence"
                       :controls="false"

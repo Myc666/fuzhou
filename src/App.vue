@@ -89,6 +89,7 @@ export default {
   created() {
     this.getAppInfo()
     this.getData();
+    // this.getV()
     if(!localStorage.getItem('publicStyle')){
       localStorage.setItem('publicStyle',JSON.stringify({}))
     }
@@ -101,6 +102,7 @@ export default {
 
   },
   methods: {
+    
     //获取售后二维码
     async getData(){
         const res = await getAfterSales({tag:'afterSalesQRCodes'});
@@ -191,6 +193,7 @@ export default {
         };
       }
     },
+   
   },
   beforeDestroy() {
     this.websocket?.close();
@@ -293,4 +296,5 @@ body {
     border-bottom-left-radius: 7px;
   }
 }
+
 </style>

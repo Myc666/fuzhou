@@ -125,10 +125,6 @@ export default {
     return {
       platformList:[
         {
-          name:'超星',
-          id:'chaoxing',
-        },
-        {
           name:'英伟达',
           id:'nvidia',
         },
@@ -216,7 +212,7 @@ export default {
     //       if(newArr.length==0){
     //         clearInterval(this.timer);
     //       }
-
+          
     //     } else {
     //       return false;
     //     }
@@ -303,10 +299,10 @@ export default {
         }
       }).catch(res=>{
       }).finally(res=>{
-
+        
       })
 
-
+      
     },
     // 检查
     inspectFun(fileName,index){
@@ -326,7 +322,7 @@ export default {
           this.searchFun(1);
         }
        })
-
+      
     },
     // 关闭回调
     closed() {

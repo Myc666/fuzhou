@@ -95,3 +95,19 @@ export function aiboxLog(params) {
     params
   })
 }
+//获取最新版本更新
+export function getLastFileOrigin(params){
+  return request({
+    url:'/releaseNotes/getLastFileOrigin',
+    method:'get',
+    params
+  })
+}
+//获取历史版本记录
+export function getFileOrigin(params){
+  return request({
+    url:'/releaseNotes/getFileOrigin',
+    method:'get',
+    params
+  })
+}

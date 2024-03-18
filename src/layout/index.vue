@@ -18,9 +18,26 @@
           ref="elMenu"
         >
           <myitem :data="menuArr" />
-          <div style="margin-top:50px;padding-left:30px;color: #FFF;font-size: 14px;">版本：V1.0.1</div>
         </el-menu>
       </el-scrollbar>
+      <div class="version-sty">
+        <div style="display: flex;align-items: center;">
+          <div>版本：{{ versionNum }}</div>
+          <div class="tip-icon" v-if="isNew" @click="versionFun()">有更新</div>
+          <div v-else>
+            <el-popover
+              placement="top"
+              trigger="hover"
+            >
+              <div style="font-size: 12px;">
+                <span>当前已是最新版本,</span>
+                <span style="color: #409EFF;cursor: pointer;" @click="historicalFun()">查看往期版本更新记录</span>
+              </div>
+              <div class="tip-btn" slot="reference">版本检查</div>
+            </el-popover>
+          </div>
+        </div>
+      </div>
     </el-aside>
     <el-container>
       <el-header>
@@ -55,20 +72,29 @@
         :style="{ padding: $route.meta.noPadding ? '0px' : '20px' }"
       >
         <router-view />
+        <!-- 最新版本 -->
+        <NewVersion v-if="isNewVersion" :title="title" :versionObj="versionObj" @closeNewVersion="closeNewVersion"/>
+        <!-- 查看历史版本 -->
+        <HistoricalVersion v-if="isHistorical" @closeHistory="closeHistory"/>
       </el-main>
     </el-container>
   </el-container>
 </template>
 <script>
+import { getLastFileOrigin } from "@/api/common";
 import Cookies from "js-cookie";
 import myitem from "./components/myitem.vue";
 import allRoutes from "@/router/data";
 import Axios from 'axios';
 import {handlePublicUrl }from '@/utils/common'
+import NewVersion from "@/components/versionInfo/newVersion.vue";
+import HistoricalVersion from "@/components/versionInfo/historicalVersion.vue"
 export default {
   name: "LayoutIndex",
   components: {
     myitem,
+    NewVersion,
+    HistoricalVersion,
   },
   watch: {
     $route: {
@@ -98,9 +124,20 @@ export default {
       },
       avatar: require("@/assets/images/man.png"),
       isImg:false,
+      versionObj:{},
+      isNew:false,
+      isNewVersion:false,
+      isHistorical:false,
+      version: '',//当前版本
+      versionNum:'',//页面展示版本号
     };
   },
   created() {
+    if(typeof VERSION !== "undefined"){
+      this.version = VERSION
+      this.versionNum = VERSION
+    }
+    this.getV()
     // this.handleBreadcrumb(this.$route);
     class VuplexPolyfill {
       constructor() {
@@ -155,6 +192,22 @@ export default {
     }
   },
   methods: {
+    async getV(){
+      const res = await getLastFileOrigin();
+      this.versionObj = res.data;
+      if(!this.version){
+        this.versionNum = res.data.version;
+        this.isNew = true;
+      }else{
+        if(this.version==res.data.version){
+          this.versionNum = res.data.version;
+          this.isNew = false;
+        }else{
+          this.versionNum = this.version;
+          this.isNew = true;
+        }
+      }
+    },
     // 鼠标悬浮
     onHover(){
       this.isImg = true;
@@ -206,6 +259,22 @@ export default {
         document.body.removeChild(link)
       })
 
+    },
+    // 查看最新版本
+    versionFun(){
+      this.title = "AI视频监控平台 "+this.versionObj.version+" 正式发布"
+      this.isNewVersion = true;
+    },
+    // 关闭最新版本
+    closeNewVersion(){
+      this.isNewVersion = false;
+    },
+    // 查看历史版本
+    historicalFun(){
+      this.isHistorical = true;
+    },
+    closeHistory(){
+        this.isHistorical = false;
     }
   },
 };
@@ -240,7 +309,7 @@ export default {
     padding-top: 60px;
 
     .scrollbar-wrapper {
-      height: calc(100vh - 60px);
+      height: calc(100vh - 100px);
       overflow-x: hidden !important;
     }
   }
@@ -331,5 +400,29 @@ export default {
 }
 ::v-deep .el-menu .el-menu-item.is-active {
   background: #2099fa !important;
+}
+.version-sty{
+  font-size: 14px;
+  color: #fff;
+  cursor: pointer;
+  padding-left: 20px;
+  .tip-icon{
+    background: #67C23A;
+    border: 1px solid #fff;
+    font-size: 12px;
+    line-height: 22px;
+    border-radius: 22px;
+    padding: 0px 6px;
+    margin-left: 5px;
+  }
+  .tip-btn{
+    font-size: 12px;
+    line-height: 22px;
+    border-radius: 22px;
+    padding: 0px 6px;
+    margin-left: 5px;
+    border: 1px solid #FFF;
+    background: #4C4C4C;
+  }
 }
 </style>

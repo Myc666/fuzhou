@@ -40,11 +40,11 @@
           </span>
           <div>
             <el-button type="primary" style="margin-right: 20px;" @click="detailFun">查看当日</el-button>
-            <!-- <el-radio-group v-model="params.limit">
+            <el-radio-group v-model="params.limit">
               <el-radio-button label="1">一屏</el-radio-button>
               <el-radio-button label="4">四屏</el-radio-button>
               <el-radio-button label="6">六屏</el-radio-button>
-            </el-radio-group> -->
+            </el-radio-group>
           </div>
         </div>
         <div class="video-box" :class="'video' + params.limit">
@@ -210,7 +210,7 @@ export default {
       timer: null,
       params: {
         page: 1,
-        limit: 1,
+        limit: 6,
       },
       total: 0,
       timerPlayings:'',
