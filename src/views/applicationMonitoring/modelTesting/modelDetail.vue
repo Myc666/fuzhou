@@ -57,7 +57,7 @@
                 </div>
             </div>
         </div>
-        <Upload v-if="params.nameEn" :nameEn="params.nameEn" :id="params.id"></Upload>
+        <!-- <Upload v-if="params.nameEn" :nameEn="params.nameEn" :id="params.id"></Upload> -->
         <div class="illustrate">
             <div class="headline">
                 <div class="icon"><i class="el-icon-notebook-1"></i></div>
