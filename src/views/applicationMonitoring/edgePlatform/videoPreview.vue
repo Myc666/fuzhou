@@ -33,18 +33,18 @@
         >
           <span>
             <span style="padding-right: 20px;">视频路数</span>
-            <!-- <el-radio-group size="mini" v-model="playType" @change="setPlayType()">
-              <el-radio-button :label="0" >原始流</el-radio-button>
-              <el-radio-button :label="1">合成流</el-radio-button>
-            </el-radio-group> -->
           </span>
           <div>
-            <el-button type="primary" style="margin-right: 20px;" @click="detailFun">查看当日</el-button>
-            <el-radio-group v-model="params.limit">
+            <el-radio-group size="mini" v-model="playType" @change="setPlayType()">
+              <el-radio-button :label="0" >原始流</el-radio-button>
+              <el-radio-button :label="1">合成流</el-radio-button>
+            </el-radio-group>
+            <el-button type="primary" style="margin-left: 20px;" @click="detailFun">查看当日</el-button>
+            <!-- <el-radio-group v-model="params.limit">
               <el-radio-button label="1">一屏</el-radio-button>
               <el-radio-button label="4">四屏</el-radio-button>
               <el-radio-button label="6">六屏</el-radio-button>
-            </el-radio-group>
+            </el-radio-group> -->
           </div>
         </div>
         <div class="video-box" :class="'video' + params.limit">
@@ -210,7 +210,7 @@ export default {
       timer: null,
       params: {
         page: 1,
-        limit: 6,
+        limit: 1,
       },
       total: 0,
       timerPlayings:'',
