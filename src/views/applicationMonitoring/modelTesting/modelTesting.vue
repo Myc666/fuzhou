@@ -139,7 +139,7 @@ export default {
   },
   created() {
     this.checkVersion();
-    this.getListData();
+    // this.getListData();
     this.getTagListData()
   },
   mounted(){
@@ -193,6 +193,7 @@ export default {
         name:this.name,
         tagId:this.tagId
       }
+      this.algorithmList = []
       const data = await getListData(obj);
       this.loading = false;
       let arr = data.data //.filter(item => item.image&&item.marks )

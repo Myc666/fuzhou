@@ -26,16 +26,24 @@
               ></el-input>
             </el-form-item>
             <el-form-item label="识别间隔(秒)">
-              <el-input
+              <el-input-number
                 placeholder="请输入识别间隔"
                 v-model="detail.intervalTime"
-              ></el-input>
+                :min="0.05"
+                :controls="false"
+                :precision="2"
+                class="input-num"
+              ></el-input-number>
             </el-form-item>
             <el-form-item label="告警间隔(秒)">
-              <el-input
+              <el-input-number
                 placeholder="请输入告警间隔"
                 v-model="detail.alarmInterval"
-              ></el-input>
+                :min="1"
+                :controls="false"
+                :precision="2"
+                class="input-num"
+              ></el-input-number>
             </el-form-item>
             <el-form-item label="算法关联">
               <el-table
@@ -411,5 +419,13 @@ export default {
   display: flex;
   justify-content: space-between;
   padding: 10px 0;
+}
+</style>
+<style lang="scss">
+.input-num{
+  width: 380px;
+  .el-input__inner{
+    text-align: left !important;
+  }
 }
 </style>
