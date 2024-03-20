@@ -181,7 +181,7 @@ export default {
             title: '算法版本有更新',
             dangerouslyUseHTMLString: true,
             message: '<div><div style="color: #666;font-size: 12px;">共'+Arr.length+'个算法有更新，请点击各自卡片“编辑”按钮进行下载操作。</div><ul style="margin-top:10px">'+Str+'</ul></div>',
-            duration: 0
+            duration: 30000
           });
         }
       })
