@@ -261,10 +261,12 @@ export default {
       const data = await getListPageActives(this.params);
       this.activeList = data.data;
       this.total = Number(data.count);
-      this.playerList.forEach((item) => {
-        item.destroy();
-        item = null;
-      });
+      if(this.playerList.length>0){
+        this.playerList.forEach((item) => {
+          item.destroy();
+          item = null;
+        });
+      }
       this.playerList = [];
       for (let i = 0; i < this.activeList.length; i++) {
         const item = this.activeList[i];
@@ -465,7 +467,9 @@ export default {
       }
     },
     changeSelect(val, index) {
-      this.playerList[index].destroy();
+      if(this.playerList.length>0){
+        this.playerList[index].destroy();
+      }
       this.activeList[index] = val;
       getBoxPlayUrl({ cameraId: this.activeList[index].id }).then((res) => {
         const playUrl = res.data;
