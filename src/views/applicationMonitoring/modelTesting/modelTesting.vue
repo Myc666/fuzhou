@@ -141,7 +141,7 @@ export default {
     },
   },
   created() {
-    this.checkVersion();
+    // this.checkVersion();
     // this.getListData();
     this.getTagListData()
   },
