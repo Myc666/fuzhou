@@ -34,17 +34,17 @@
           <el-button icon="el-icon-refresh" @click="refreshData"
             >重置</el-button
           >
-          <div style="float: right;">
+          <!-- <div style="float: right;">
               <el-button  @click="batchAdd" v-if="isBtnShow">批量新增</el-button>
-              <el-button icon="el-icon-loading" v-if="!isBtnShow&&stateObj.type==1" @click="batchAdd">{{ stateObj.text }}</el-button>
+              <el-button icon="el-icon-loading" v-if="!isBtnShow&&stateObj.type==1" @click="batchAdd">{{ stateObj.text }}</el-button> -->
               <!-- 校验成功、完成、失败 以及导入成功、完成、失败-->
-              <div class="button-sty" v-if="!isBtnShow" @click="batchAdd">
+              <!-- <div class="button-sty" v-if="!isBtnShow" @click="batchAdd">
                 <span  v-if="stateObj.type==2" class="el-icon-success" style="color: #7bc139;"></span>
-                <span  v-if="stateObj.type==3" class="el-icon-warning" style="color: #E6A23C;"></span>
+                <span  v-if="stateObj.type==3" class="el-icon-warning" style="color: #E6A23C;"></span> -->
                 <!-- <span class="el-icon-error" style="color: #F56C6C;"></span> -->
-                <span style="margin-left: 5px;">{{ stateObj.text }}</span>
+                <!-- <span style="margin-left: 5px;">{{ stateObj.text }}</span>
               </div>  
-            </div>
+            </div> -->
         </div>
         <div class="ai_table">
           <div v-if="currentNode.type == 2 && isShow" class="add-box">
@@ -279,7 +279,7 @@ export default {
   async created() {
     await this.getHeart();
     await this.getTreeData();
-    await this.getStateFun();
+    // await this.getStateFun();
     this.getListData();
     this.timer = setInterval(() => {
       this.getHeart();
