@@ -121,6 +121,11 @@ const allRoutess = [
               name: '接囗推送',
               path: '/noticeManagement/apiManagement',
               component: () => import('@/views/applicationMonitoring/noticeManagement/apiManagement'),
+            },
+            {
+              name: '语音推送',
+              path: '/noticeManagement/voiceManagement',
+              component: () => import('@/views/applicationMonitoring/noticeManagement/voiceManagement'),
             }
           ]
         },
