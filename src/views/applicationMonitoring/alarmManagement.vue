@@ -1,142 +1,145 @@
 <template>
-  <div>
-    <div class="head-container" style="display: flex;">
-      <div style="flex: 1;">
-        <el-select
-          placeholder="摄像头"
-          clearable
-          v-model="params.cameraId"
-          class="head-container-input"
-        >
-          <el-option
-            v-for="(item, index) in cameraOptions"
-            :key="index"
-            :label="item.name"
-            :value="item.id"
-          ></el-option>
-        </el-select>
-        <el-select
-          placeholder="算法"
-          clearable
-          v-model="params.algorithmId"
-          class="head-container-input"
-        >
-          <el-option
-            v-for="(item, index) in algorithmOptions"
-            :key="index"
-            :label="item.name"
-            :value="item.id"
-          ></el-option>
-        </el-select>
-        <el-select
-          placeholder="告警等级"
-          clearable
-          v-model="params.alarmLevelId"
-          class="head-container-input"
-        >
-          <el-option
-            v-for="(item, index) in alarmLevelList"
-            :key="index"
-            :label="item.name"
-            :value="item.id"
-          ></el-option>
-        </el-select>
-        <el-date-picker
-          v-model="date"
-          type="daterange"
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-          value-format="yyyy-MM-dd"
-          format="yyyy-MM-dd"
-          class="margin-right-10"
-          @change="getListData"
-          :disabled="isDisabled"
-        >
-        </el-date-picker>
-        <el-button type="primary" icon="el-icon-search" @click="getData()"
-          >查询</el-button
-        >
-        <el-button icon="el-icon-refresh" @click="refreshData">重置</el-button>
-      </div>
-      <div class="clear-flex">
-        <div class="clear-title">
-          <span class="el-icon-warning-outline"  @mouseenter="onHover"  @mouseleave="hideMessage"></span>
-          <span style="padding: 0px 10px 0px 5px;">数据保存期限:</span>
-          <div v-if="isShowTip" class="clear-tip">数据保存期限指:告警管理内数据保存时间范围。例：“近30天”，指保存从当日起-30天内的数据，每日0点执行。</div>
+  <div style="background: #fff;border-radius: 8px;position: relative;">
+    <div class="top-tabs">
+      <div v-for="(items,index) in algorithmOptions" :key="index" :class="[items.isCheck?'tab-check':'tab-item']" @click="tabClick($event,index)">
+        <div :class="[items.isCheck?'tab-name':'']">
+          {{ items.name }}
         </div>
-        <el-select
-          placeholder="请选择"
-          v-model="clearReportDay"
-          style="width: 100px;"
-          @change="dayChange()"
-        >
-          <el-option
-            v-for="(item, index) in clearDayList"
-            :key="index"
-            :label="item.name"
-            :value="item.id"
-          ></el-option>
-        </el-select>
       </div>
     </div>
-    <div class="ai_table">
-      <el-row :gutter="12" v-if="tableData.length">
-        <el-col :span="6" v-for="item in tableData" :key="item.id">
-          <el-card :body-style="{ padding: '0px' }" shadow="hover">
-            <AlarmCard
-              :fileUrl="VUE_APP_API_BASE_URL+`/report/streamThumb?id=${item.id}`"
-              :dataList="handleParams(item.params)"
-              :alarmData="item"
-              :isAlarm="true"
-              @clickDetail="clickDetail"
-            >
-            </AlarmCard>
-          </el-card>
-        </el-col>
-      </el-row>
-      <div class="noData" v-else>
-        <el-empty description="暂无数据"></el-empty>
+    <div class="alarm-M">
+      <div class="seach-sty">
+        <div style="flex: 1;display: flex;">
+          <div class="seach-flex">
+            <div style="margin-right: 5px;padding-bottom: 8px;">摄像头:</div>
+            <div style="flex: 1;">
+              <el-select
+                placeholder="摄像头"
+                clearable
+                v-model="params.cameraId"
+                style="width: 150px;"
+              >
+                <el-option
+                  v-for="(item, index) in cameraOptions"
+                  :key="index"
+                  :label="item.name"
+                  :value="item.id"
+                ></el-option>
+              </el-select>
+            </div>
+          </div>
+          <div class="seach-flex" style="padding-bottom: 8px;margin-right: 15px;">
+            <div style="margin-right: 5px;">时间:</div>
+            <div  style="flex: 1;">
+              <el-date-picker
+                v-model="date"
+                :default-time="['00:00:00', '23:59:59']"
+                type="datetimerange"
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+                value-format="yyyy-MM-dd HH:mm:ss"
+                format="yyyy-MM-dd HH:mm:ss"
+                style="width: 330px;"
+                @change="dateChange"
+                :disabled="isDisabled"
+                :clearable="false"
+              >
+              </el-date-picker>
+            </div>
+          </div>
+          <el-button type="primary" icon="el-icon-search" @click="getData()">查询</el-button>
+          <el-button icon="el-icon-refresh" @click="refreshData">重置</el-button>
+        </div>
+        <div class="clear-flex">
+          <div class="clear-title">
+            <el-popover
+              placement="bottom-start"
+              width="300"
+              trigger="hover">
+                <div style="font-size: 12px;line-height: 18px;">
+                  数据保存期限指:告警管理内数据保存时间范围。例：“近30天”，指保存从当日起-30天内的数据，每日0点执行。
+                </div>
+                <span class="el-icon-warning-outline" slot="reference"></span>
+            </el-popover>
+            <span style="padding: 0px 10px 0px 5px;">数据保存期限:</span>
+          </div>
+          <el-select
+            placeholder="请选择"
+            v-model="clearReportDay"
+            style="width: 100px;"
+            @change="dayChange()"
+          >
+            <el-option
+              v-for="(item, index) in clearDayList"
+              :key="index"
+              :label="item.name"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+        </div>
       </div>
-      <div class="pagination">
-        <el-pagination
-          background
-          :current-page="params.page"
-          :page-size="params.limit"
-          :page-sizes="[8]"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="total"
-          @current-change="handleCurrentChange"
-          @size-change="handleSizeChange"
-        ></el-pagination>
+      <div>
+        <div v-if="tableData.length">
+          <div class="table-sty">
+            <div v-for="item in tableData" :key="item.id" class="item-sty">
+              <AlarmCard
+                :fileUrl="VUE_APP_API_BASE_URL+`/report/streamThumb?id=${item.id}`"
+                :dataList="handleParams(item.params)"
+                :alarmData="item"
+                :isAlarm="true"
+                @hoverFun="hoverFun"
+              >
+              </AlarmCard>
+            </div>
+          </div>
+        </div>
+        <div class="noData" v-else>
+          <el-empty description="暂无数据"></el-empty>
+        </div>
+        <div class="pagination">
+          <el-pagination
+            background
+            :current-page="params.page"
+            :page-size="params.limit"
+            :page-sizes="[10]"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="total"
+            @current-change="handleCurrentChange"
+            @size-change="handleSizeChange"
+          ></el-pagination>
+        </div>
       </div>
     </div>
-    <AlarmDetail
-      :currentId="currentId"
-      v-if="alarmDetailVisible"
-      @close="(alarmDetailVisible = false), getListData()"
-    />
+    <div class="big-img" v-if="isBigImg">
+      <MarkResult
+            v-if="hoverId"
+            :fileUrl="$common.handleStream(hoverId)"
+            :dataList="hoverList"
+      />
+    </div>
   </div>
 </template>
 <script>
 import Cookies from "js-cookie";
+import MarkResult from "@/components/markResult";
 import {
   getListData,
   getCameraListData,
-  getAlgorithmListData,
   getTypeListData,
-  pushData,
-  saveclearReportDayConfig
+  saveclearReportDayConfig,
+  listTabs,
 } from "@/api/applicationMonitoring/alarmManagement";
 import { getAlarmLevelList } from "@/api/applicationMonitoring/algorithmManagement";
 import { getAfterSales } from "@/api/applicationMonitoring/systemManagement";
 import AlarmDetail from "@/components/applicationMonitoring/alarmManagement/alarmDetail";
-import AlarmCard from "@/components/applicationMonitoring/alarmManagement/alarmCard";
+import AlarmCard from "@/components/applicationMonitoring/alarmManagement/newCard";
 
 export default {
   components: {
     AlarmDetail,
     AlarmCard,
+    MarkResult
   },
   props:{
     isDisabled:{
@@ -147,12 +150,10 @@ export default {
   data() {
     return {
       loading: false,
-      alarmDetailVisible: false,
       tableData: [],
-      currentId: "",
       date: [
-        this.$moment(new Date()).format("YYYY-MM-DD"),
-        this.$moment(new Date()).format("YYYY-MM-DD"),
+        new Date(),
+        new Date(),
       ],
       params: {
         cameraId: "",
@@ -161,7 +162,7 @@ export default {
         type: "",
         startDate: "",
         endDate: "",
-        limit: 8,
+        limit: 10,
         page: 1,
       },
       total: 0,
@@ -200,10 +201,18 @@ export default {
       clearReportDay:"30",
       oldDay:"30",
       isShowTip:false,
+      isBigImg:false,
+      hoverId:'',
+      hoverList:[],
     };
   },
   async created() {
+    this.date = [
+      this.$moment(new Date(this.date[0].setHours(0, 0, 0))).format("YYYY-MM-DD HH:mm:ss"),
+      this.$moment(new Date(this.date[1].setHours(23, 59, 59))).format("YYYY-MM-DD HH:mm:ss"),
+    ];
     this.getDay()
+    await this.getListTabs();
     await this.getOptions();
     this.getListData();
     await this.listAlarmLevelList();
@@ -215,22 +224,51 @@ export default {
   methods: {
     getData(){
       this.params.page = 1;
-      this.getListData()
+      this.getListData();
+      this.getListTabs();
     },
     // 获取下拉
     async getOptions() {
       const data1 = await getCameraListData();
       this.cameraOptions = data1.data;
-      const data2 = await getAlgorithmListData();
-      this.algorithmOptions = data2.data;
+      // const data2 = await getAlgorithmListData();
+      // this.algorithmOptions = data2.data;
       const data3 = await getTypeListData();
       this.typeOptions = data3.data;
+    },
+    // 获取有告警的算法
+    async getListTabs(){
+      let formData = new FormData();
+      if(this.date&&this.date.length>0){
+        formData.append("startDate", this.date[0]);
+        formData.append("endDate", this.date[1]);
+      }
+      const res = await listTabs(formData);
+      if(res.data.length>0){
+        res.data.forEach(item=>{
+          item.isCheck=false;
+        })
+      }
+      this.algorithmOptions = res.data;
+    },
+    // 选中算法
+    tabClick(e,index){
+      this.algorithmOptions.forEach((item,ind)=>{
+        item.isCheck=false;
+        if(index==ind){
+          item.isCheck = true;
+          this.params.algorithmId = item.id;
+        }
+      })
+      this.getListData()
     },
     // 获取告警列表
     async getListData() {
       this.loading = true;
-      this.params.startDate = this.date[0];
-      this.params.endDate = this.date[1];
+      if(this.date&&this.date.length>0){
+        this.params.startDate = this.date[0];
+        this.params.endDate = this.date[1];
+      }
       const data = await getListData(this.params);
       this.tableData = data.data;
       this.total = Number(data.count);
@@ -241,22 +279,31 @@ export default {
       const data = await getAlarmLevelList();
       this.alarmLevelList = data.data;
     },
+    // 改变时间
+    async dateChange(){
+      await this.getListTabs();
+      await this.getListData();
+    },
     // 重置
     refreshData() {
+      let dateList=[
+        new Date(),
+        new Date(),
+      ]
       this.date = [
-        this.$moment(new Date()).format("YYYY-MM-DD"),
-        this.$moment(new Date()).format("YYYY-MM-DD"),
+        this.$moment(new Date(dateList[0].setHours(0, 0, 0))).format("YYYY-MM-DD HH:mm:ss"),
+        this.$moment(new Date(dateList[1].setHours(23, 59, 59))).format("YYYY-MM-DD HH:mm:ss"),
       ];
-
       Object.assign(this.params, {
         cameraId: "",
         algorithmId: "",
         alarmLevelId:'',
         type: "",
-        limit: 8,
+        limit: 10,
         page: 1,
       });
       this.getListData();
+      this.getListTabs();
     },
     // 创建链接
     connectWebsocket() {
@@ -276,6 +323,7 @@ export default {
         this.websocket.onmessage = (evt) => {
           const data = JSON.parse(evt.data);
           if (data.type == "REPORT_SHOW") {
+            this.getListTabs();
             this.getListData();
           }
         };
@@ -288,28 +336,6 @@ export default {
           console.log("websocket关闭：", evt);
         };
       }
-    },
-
-    // 告警详情
-    clickDetail(id) {
-      this.currentId = id;
-      this.alarmDetailVisible = true;
-    },
-    // 推送告警
-    pushData(item) {
-      this.$confirm(`确定推送吗?`, "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-      }).then(async () => {
-        const res = await pushData({
-          id: item.id,
-        });
-        if (res.code == 0) {
-          this.$message.success("推送成功");
-          await this.getListData();
-        }
-      });
     },
     // 分页
     handleCurrentChange(val) {
@@ -373,28 +399,102 @@ export default {
     hideMessage() {
       this.isShowTip = false;
     },
+    // 图片鼠标悬浮
+    hoverFun(item){
+      this.isBigImg=item.isShow;
+      this.hoverId = item.id;
+      this.hoverList = item.dataList
+    },
   },
 };
 </script>
 <style scoped lang="scss">
-.margin-right-10 {
-  margin-right: 10px;
-  width: 20%;
+.alarm-M{
+  padding: 16px;
+  .seach-sty{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding: 5px 0px 15px 0px;
+    border-bottom: 1px solid #EDF0F3;
+    margin-bottom: 20px;
+    .seach-flex{
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+      margin-right: 10px;
+    }
+  }
 }
-
-.el-col {
-  margin-bottom: 12px;
-}
-
 .noData {
   line-height: 120px;
   text-align: center;
 }
 
-.head-container-input {
-  width: 15%;
+.table-sty{
+  display: grid;
+  grid-template-columns: repeat(5,19%);
+  justify-content: space-between;
+  grid-row-gap: 20px;
+  .item-sty{
+    border: 1px solid #D3D7DD;
+    border-radius: 6px;
+  }
 }
 
+
+.top-tabs{
+  background: #e7ebf0;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  display:flex;
+  overflow-x: auto;
+  width: 100%;
+  .tab-item{
+    flex-shrink: 0;
+    padding: 0px 20px;
+    margin: 10px 0px;
+    border-left: 1px solid #c2c6cd;
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 20px;
+    color: #6c727d;
+    cursor: pointer;
+  }
+  .tab-item:first-child{
+    border-left: none;
+  }
+  .tab-check{
+    flex-shrink: 0;
+    padding: 10px 20px 10px 10px;
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: bold;
+    color: #000;
+    background: #FFF;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+  }
+  .tab-check+.tab-item{
+    border-left: none;
+  }
+  .tab-name{
+    border-left: 2px solid #409EFF;
+    padding-left: 8px;
+  }
+}
+.big-img{
+  width: 700px;
+  padding: 10px;
+  background: #fff;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow:  10px 10px 10px rgba(0,0,0,0.3);
+  z-index: 99;
+  pointer-events: none;
+}
 </style>
 <style lang="scss">
 .clear-flex{

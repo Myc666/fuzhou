@@ -61,3 +61,12 @@ export function pushData(params) {
     params
   })
 }
+
+// 获取有告警的算法
+export function listTabs(data) {
+  return request({
+    url: 'report/listTabs',
+    method: 'post',
+    data
+  })
+}

@@ -27,6 +27,9 @@
         <div>
           <div :class="[type==0?'flex-item flex-item-w32':type==2?'flex-item flex-item-w19':'flex-item flex-item-w24']" v-if=" algorithmList.length>0">
             <div v-for="(items,ind) in algorithmList" :key="ind" class="algorithm-item"  :style="{ filter: items.hasGitFile?'':'grayscale(100%)'}" @click="items.hasGitFile?detailFun(items.id):''">
+              <div v-if="items.hasUpdate" style="position: absolute;top: 0px;right: -1px;z-index: 99;">
+                <img src="@/assets/images/modelTesting/update-icon.png" style="width: 60px;"/>
+              </div>
               <div class="img-cont">
                 <el-image v-if="items.image" :src="VUE_APP_API_BASE_URL+`/algorithm/picStream?file=${items.image}`" style="width: 100%;height: 100%;"></el-image>
                 <img v-else src="@/assets/images/modelTesting/default.png" style="width: 100%;height: 100%;"/>
@@ -359,6 +362,7 @@ export default {
         border: 1px solid #E7E7E7;
         border-radius: 6px;
         box-shadow: 0px 12px 32px 0px rgba(0, 0, 0, 0.04), 0px 8px 20px 0px rgba(0, 0, 0, 0.08);
+        position: relative;
         .img-cont{
           height: 145px;
           // background: #54B5E9;

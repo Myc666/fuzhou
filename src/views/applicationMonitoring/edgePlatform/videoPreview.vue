@@ -1,5 +1,5 @@
 <template>
-  <div class="wrap">
+  <div class="wrap video-dialog">
     <div class="flex-left">
       <!-- <el-card class="box-card">
         <div
@@ -531,6 +531,11 @@ export default {
 };
 </script>
 <style scoped lang="scss">
+.video-dialog{
+  :deep(.el-dialog__body){
+    background: #f1f5fb;
+  }
+}
 .wrap {
   display: flex;
   .flex-left {
