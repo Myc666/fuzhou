@@ -23,11 +23,12 @@
       <div class="version-sty">
         <div style="display: flex;align-items: center;">
           <div>版本：{{ versionNum }}</div>
-          <div class="tip-icon" v-if="isNew" @click="versionFun()">有更新</div>
+          <div class="tip-icon" v-if="isNew&&versionNum" @click="versionFun()">有更新</div>
           <div v-else>
             <el-popover
               placement="top"
               trigger="hover"
+              v-if="versionNum"
             >
               <div style="font-size: 12px;">
                 <span>当前已是最新版本,</span>
@@ -133,10 +134,6 @@ export default {
     };
   },
   created() {
-    if(typeof VERSION !== "undefined"){
-      this.version = VERSION
-      this.versionNum = VERSION
-    }
     this.getV()
     // this.handleBreadcrumb(this.$route);
     class VuplexPolyfill {
@@ -195,18 +192,19 @@ export default {
     async getV(){
       const res = await getLastFileOrigin();
       this.versionObj = res.data;
-      if(!this.version){
-        this.versionNum = res.data.version;
-        this.isNew = true;
-      }else{
-        if(this.version==res.data.version){
-          this.versionNum = res.data.version;
-          this.isNew = false;
-        }else{
-          this.versionNum = this.version;
-          this.isNew = true;
-        }
-      }
+      this.versionNum = res.data.version;
+      // if(!this.version){
+      //   this.versionNum = res.data.version;
+      //   this.isNew = true;
+      // }else{
+      //   if(this.version==res.data.version){
+      //     this.versionNum = res.data.version;
+      //     this.isNew = false;
+      //   }else{
+      //     this.versionNum = this.version;
+      //     this.isNew = true;
+      //   }
+      // }
     },
     // 鼠标悬浮
     onHover(){
