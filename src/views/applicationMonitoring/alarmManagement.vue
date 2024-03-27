@@ -265,6 +265,7 @@ export default {
     // 获取告警列表
     async getListData() {
       this.loading = true;
+      this.isBigImg = false;
       if(this.date&&this.date.length>0){
         this.params.startDate = this.date[0];
         this.params.endDate = this.date[1];
@@ -281,6 +282,7 @@ export default {
     },
     // 改变时间
     async dateChange(){
+      this.isBigImg = false;
       await this.getListTabs();
       await this.getListData();
     },

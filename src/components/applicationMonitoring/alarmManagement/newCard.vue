@@ -2,8 +2,7 @@
   <div>
     <div class="result">
       <div class="img-box">
-        <div class="imgLoading" v-show="imgLoading"><i class="el-icon-loading"></i></div>
-        <div v-show="!imgLoading" class="img-content" :style="{overflow:'hidden',width:ratio==1?'235px !important':'',height:ratio==1?'132px !important':''}" @mouseenter="onHover"  @mouseleave="hideMessage">
+        <div class="img-content" :style="{overflow:'hidden',width:ratio==1?'235px !important':'',height:ratio==1?'132px !important':''}" @mouseenter="onHover"  @mouseleave="hideMessage">
           <div v-for="(item, index) in pointList" :key="index"
             :class="item.type=='hook'?'xboxA':'xbox'"
             :style="{
@@ -82,7 +81,6 @@ export default {
       alarmDetailVisible: false,
       currentId: "",
       isShowTooltip:false,
-      imgLoading: true,
     };
   },
   methods: {
@@ -117,7 +115,6 @@ export default {
           }
           img.onload = () => {
             this.imgHeight = img.height;
-            this.imgLoading = false;
             setTimeout(() => {
               const ratio = this.$refs.page_image_url.offsetHeight / this.imgHeight;
               val.forEach((item) => {
@@ -186,7 +183,11 @@ export default {
       // height: 223px;
     }
   }
-
+  .img-box::after {
+      content: "";
+      display: block;
+      padding-top: 56.25%; /* 假设图片的宽高比是16:9 */
+    }
   .xbox {
     position: absolute;
     border: 2px solid #f43838;
