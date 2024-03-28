@@ -10,9 +10,10 @@
             style="display: inline"
             >
                 <img
-                    v-if="form4.screenLogoUrl"
+                    v-if="form4.screenLogoUrl&&!showUploadButton"
                     :src="VUE_APP_API_BASE_URL + form4.screenLogoUrl"
                     class="img"
+                    @error="handleImageError" 
                 />
                 <!-- <el-button type="primary" icon="el-icon-plus" v-else>上传LOGO</el-button> -->
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -33,19 +34,26 @@ export default {
             form4:{
                 screenLogoUrl:'',
             },
-            url:''
+            url:'',
+            showUploadButton:false,
         };
     },
     created() {
         this.getData();
     },
     methods: {
+        handleImageError() {
+            this.showUploadButton = true;
+        },
         // 获取数据
         async getData(){
             const res = await getAfterSales({tag:'afterSalesQRCodes'});
             if(res.code==0){
-                this.url = res.data
-                this.form4.screenLogoUrl = "/config/upload/stream?file=" + res.data;
+                if(res.data){
+                    this.url = res.data
+                    this.form4.screenLogoUrl = "/config/upload/stream?file=" + res.data;
+                }
+                
             }
         },
         // 上传

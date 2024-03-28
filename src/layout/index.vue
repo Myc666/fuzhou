@@ -1,7 +1,7 @@
 <template>
   <el-container class="container">
     <div class="logo">
-      <img :src="VUE_APP_API_BASE_URL + this.$store.state.appInfo.logoUrl" />{{
+      <img v-if="!imageError" :src="VUE_APP_API_BASE_URL + this.$store.state.appInfo.logoUrl" @error="handleImageError" />{{
         this.$store.state.appInfo.appName
       }}
     </div>
@@ -131,6 +131,7 @@ export default {
       isHistorical:false,
       version: '',//当前版本
       versionNum:'',//页面展示版本号
+      imageError:false,
     };
   },
   created() {
@@ -189,6 +190,9 @@ export default {
     }
   },
   methods: {
+    handleImageError() {
+      this.imageError = true;
+    },
     async getV(){
       const res = await getLastFileOrigin();
       this.versionObj = res.data;

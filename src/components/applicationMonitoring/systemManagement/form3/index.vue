@@ -16,9 +16,10 @@
           style="display: inline"
         >
           <img
-            v-if="form3.logoUrl || logoUrl"
+            v-if="(form3.logoUrl || logoUrl)&&!showUploadButton"
             :src="VUE_APP_API_BASE_URL + logoUrl"
             class="logo"
+            @error="handleImageError(1)"
           />
           <el-button type="primary" icon="el-icon-plus" v-else
             >上传LOGO</el-button
@@ -40,9 +41,10 @@
           style="display: inline"
         >
           <img
-            v-if="form3.screenLogoUrl || screenLogoUrl"
+            v-if="(form3.screenLogoUrl || screenLogoUrl)&&!showScreenButton"
             :src="VUE_APP_API_BASE_URL + screenLogoUrl"
             class="logo"
+            @error="handleImageError(2)"
           />
           <el-button type="primary" icon="el-icon-plus" v-else
             >上传LOGO</el-button
@@ -71,6 +73,8 @@ export default {
       VUE_APP_API_BASE_URL,
       logoUrl: "",
       screenLogoUrl: "",
+      showUploadButton:false,
+      showScreenButton:false,
     };
   },
   watch: {
@@ -86,6 +90,13 @@ export default {
   },
   async created() {},
   methods: {
+    handleImageError(type){
+      if(type==1){
+        this.showUploadButton=true
+      }else{
+        this.showScreenButton=true
+      }
+    },
     // 上传
     async handleUploadImg1(files) {
       const file = files.file ? files.file : files[0];
