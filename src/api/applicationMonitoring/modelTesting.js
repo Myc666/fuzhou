@@ -121,3 +121,19 @@ export function checkAlgorithmVersion(params) {
     params
   })
 }
+// 上传算法卡片信息zip
+export function uploadZipSave(data) {
+  return request({
+    url: '/algorithm/uploadZipSave',
+    method: 'post',
+    data
+  })
+}
+// 上传算法文件
+export function uploadAlgorithmFile(data) {
+  return request({
+    url: '/algorithm/uploadAlgorithmFile',
+    method: 'post',
+    data
+  })
+}

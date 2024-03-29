@@ -7,9 +7,15 @@
           <el-button slot="append" icon="el-icon-search" @click="seachFun"></el-button>
         </el-input>
       </div>
-      <div class="level-btn" @click="addAlarmLevelData">
-        <span class="el-icon-s-operation"></span>
-        <span style="margin-left: 4px;">告警等级管理</span>
+      <div class="flex-btn">
+        <div class="level-btn" @click="addData">
+          <span class="el-icon-plus"></span>
+          <span style="margin-left: 4px;">新增算法</span>
+        </div>
+        <div class="level-btn" @click="addAlarmLevelData">
+          <span class="el-icon-s-operation"></span>
+          <span style="margin-left: 4px;">告警等级管理</span>
+        </div>
       </div>
     </div>
     <div class="flex-cont">
@@ -26,12 +32,12 @@
         </div>
         <div>
           <div :class="[type==0?'flex-item flex-item-w32':type==2?'flex-item flex-item-w19':'flex-item flex-item-w24']" v-if=" algorithmList.length>0">
-            <div v-for="(items,ind) in algorithmList" :key="ind" class="algorithm-item"  :style="{ filter: items.hasGitFile?'':'grayscale(100%)'}" @click="items.hasGitFile?detailFun(items.id):''">
+            <div v-for="(items,ind) in algorithmList" :key="ind" class="algorithm-item" @click="items.isShowImg?detailFun(items.id):''">
               <div v-if="items.hasUpdate" style="position: absolute;top: 0px;right: -1px;z-index: 99;">
                 <img src="@/assets/images/modelTesting/update-icon.png" style="width: 60px;"/>
               </div>
-              <div class="img-cont">
-                <el-image v-if="items.image" :src="VUE_APP_API_BASE_URL+`/algorithm/picStream?file=${items.image}`" style="width: 100%;height: 100%;"></el-image>
+              <div class="img-cont"  :style="{ filter: (!items.hasLocalFile&&!items.hasGitFile)?'grayscale(100%)':''}">
+                <el-image v-if="items.image&&items.isShowImg" :src="VUE_APP_API_BASE_URL+`/algorithm/picStream?file=${items.image}`" style="width: 100%;height: 100%;" @error="handleImageError(ind)"></el-image>
                 <img v-else src="@/assets/images/modelTesting/default.png" style="width: 100%;height: 100%;"/>
               </div>
               <div class="alg-cont">
@@ -47,7 +53,7 @@
                 </div>
                 <div class="alg-tip">{{ items.marks }}</div>
                 <div>
-                  <div class="alg-btn-flex" v-if="items.hasGitFile">
+                  <div class="alg-btn-flex" v-if="items.hasGitFile||items.hasLocalFile">
                     <div class="alg-btn" @click.stop="upgradeFun(items)" v-if="items.hasLocalFile&&items.downloadState!='下载中'" style="margin-right: 10px;">
                       算法升级
                     </div>
@@ -59,13 +65,8 @@
                     </div>
                   </div>
                   <div v-else class="alg-btn-flex">
-                      <el-popover
-                        placement="top"
-                        width="240"
-                        trigger="hover"
-                        content="算法优化中，敬请期待。如有更新，系统会自动通知。">
-                        <div slot="reference" class="alg-btn">优化中，敬请期待</div>
-                      </el-popover>
+                    <div class="optimize-btn">优化中，敬请期待</div>
+                    <div class="upload-btn" @click.stop="uploadFun(items)">手动导入模型文件</div>
                   </div>
                 </div>
               </div>
@@ -94,19 +95,34 @@
       >
       <AlgorithmUpgrade v-if="dialogVisible" :id="rowId" :algorithmName="algorithmName" @close="handleClose"/>
     </el-dialog>
+    <!-- 新增算法--上传zip -->
+    <AddUpload v-if="addDialogVisible" @closeAdd="closeAdd"/>
+    <!-- 手动上传算法文件 -->
+    <el-dialog
+      title="上传算法版本文件"
+      :visible.sync="importDialog"
+      width="500px"
+      :before-close="handleDialogClose"
+    >
+      <ImportAlgorithm v-if="importDialog" :platform="platform" :nameEn="nameEn" pageType="1" @closeImport="closeImport"/>
+    </el-dialog>
   </div>
 </template>
 <script>
 import { getListData,getTagListData,deleteFile,checkAlgorithmVersion } from "@/api/applicationMonitoring/modelTesting";
 import {deleteData} from "@/api/applicationMonitoring/algorithmManagement";
 import AddAlgorithm from "@/components/applicationMonitoring/modelTesting/addAlgorithm";
+import AddUpload from "@/components/applicationMonitoring/modelTesting/addUpload";
 import AlgorithmUpgrade from "@/components/applicationMonitoring/modelTesting/algorithmUpgrade";
 import ListAlarmLevel from "@/components/applicationMonitoring/algorithmManagement/listAlarmLevel";
+import ImportAlgorithm from "@/components/applicationMonitoring/modelTesting/importAlgorithm";
 export default {
   components:{
     AddAlgorithm,
     ListAlarmLevel,
-    AlgorithmUpgrade
+    AlgorithmUpgrade,
+    AddUpload,
+    ImportAlgorithm
   },
   data() {
     return {
@@ -127,6 +143,9 @@ export default {
       algorithmName:'',
       notify:null,
       loading:false,
+      addDialogVisible:false,
+      importDialog:false,
+      isImportClose:true,
     };
   },
   watch:{
@@ -170,12 +189,12 @@ export default {
     
     // 检查算法更新
     checkVersion(){
-      if(this.notify){
-        this.notify.close()
-      }
       checkAlgorithmVersion().then(res=>{
         let Arr = res.data;
         let Str = ""
+        if(this.notify){
+          this.notify.close()
+        }
         if(Arr.length>0){
           Arr.forEach(item=>{
             Str+='<li style="font-size: 14px;line-height: 22px;color:#000;position: relative;margin-left: 20px;">'+item.name +'<span style="position: absolute; left: -10px;">•</span></li>'
@@ -196,11 +215,20 @@ export default {
         name:this.name,
         tagId:this.tagId
       }
-      this.algorithmList = []
+      this.algorithmList = [];
       const data = await getListData(obj);
       this.loading = false;
       let arr = data.data //.filter(item => item.image&&item.marks )
+      if(arr.length>0){
+        arr.forEach(item=>{
+          item.isShowImg = true;
+        })
+      }
       this.algorithmList = arr;
+    },
+    // 图片识别失败
+    handleImageError(index){
+      this.algorithmList[index].isShowImg = false
     },
     // 获取行业列表
     async getTagListData() {
@@ -286,6 +314,32 @@ export default {
       this.dialogVisible = false;
       this.getListData();
       this.getTagListData()
+    },
+    // 新增算法
+    addData(){
+      this.addDialogVisible = true;
+    },
+    closeAdd(){
+      this.addDialogVisible = false;
+      this.getListData();
+    },
+    // 手动导入模型文件
+    uploadFun(items){
+      this.platform = items.platform;
+      this.nameEn = items.nameEn
+      this.importDialog = true
+    },
+    closeImport(item){
+      this.isImportClose = item;
+      if(item){
+        this.importDialog = false;
+        this.getListData();
+      }
+    },
+    handleDialogClose(){
+      if(this.isImportClose){
+        this.importDialog = false;
+      }
     }
   },
 };
@@ -307,18 +361,22 @@ export default {
       line-height: 22px;
       text-align: center;
     }
+    .flex-btn{
+      display: flex;
+      background: #FFFFFF;
+      position: absolute;
+      right: 0;
+      bottom: 8px;
+    }
     .level-btn{
-      width: 130px;
       border: 1px solid #DCDFE6;
-      padding: 4px 0px;
+      padding: 4px 15px;
       border-radius: 4px;
       font-size: 14px;
       color: #606266;
       text-align: center;
       cursor: pointer;
-      position: absolute;
-      right: 0;
-      bottom: 8px;
+      margin-left: 8px;
     }
   }
   .flex-cont{
@@ -405,12 +463,26 @@ export default {
             color: #909399;
             cursor: pointer;
           }
+          .optimize-btn{
+            color: #909399;
+          }
+          .upload-btn{
+            color: #3587FA;
+            cursor: pointer;
+            display: none;
+          }
         }
       }
       .algorithm-item:hover{
         box-shadow: 0px 12px 32px 0px rgba(0, 0, 0, 0.08), 0px 8px 20px 0px rgba(0, 0, 0, 0.1);
         border-bottom-left-radius: 6px;
         border-bottom-right-radius: 6px;
+        .upload-btn{
+          display: block;
+        }
+        .optimize-btn{
+          display: none;
+        }
       }
     }
     .flex-item-w24{
