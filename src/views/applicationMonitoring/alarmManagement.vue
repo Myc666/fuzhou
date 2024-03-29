@@ -52,6 +52,7 @@
           <el-button icon="el-icon-refresh" @click="refreshData">重置</el-button>
         </div>
         <div class="clear-flex">
+          <!-- <div @click="dowloadData">导出</div> -->
           <div class="clear-title">
             <el-popover
               placement="bottom-start"
@@ -114,8 +115,9 @@
     <div class="big-img" v-if="isBigImg">
       <MarkResult
             v-if="hoverId"
-            :fileUrl="$common.handleStream(hoverId)"
+            :fileUrl="VUE_APP_API_BASE_URL+`/report/streamThumb?id=${hoverId}`"
             :dataList="hoverList"
+            :imgRatio="imgRatio"
       />
     </div>
   </div>
@@ -129,6 +131,7 @@ import {
   getTypeListData,
   saveclearReportDayConfig,
   listTabs,
+  exportAlarm
 } from "@/api/applicationMonitoring/alarmManagement";
 import { getAlarmLevelList } from "@/api/applicationMonitoring/algorithmManagement";
 import { getAfterSales } from "@/api/applicationMonitoring/systemManagement";
@@ -149,6 +152,7 @@ export default {
   },
   data() {
     return {
+      imgRatio:0.5,
       loading: false,
       tableData: [],
       date: [
@@ -296,6 +300,7 @@ export default {
         this.$moment(new Date(dateList[0].setHours(0, 0, 0))).format("YYYY-MM-DD HH:mm:ss"),
         this.$moment(new Date(dateList[1].setHours(23, 59, 59))).format("YYYY-MM-DD HH:mm:ss"),
       ];
+
       Object.assign(this.params, {
         cameraId: "",
         algorithmId: "",
@@ -325,7 +330,6 @@ export default {
         this.websocket.onmessage = (evt) => {
           const data = JSON.parse(evt.data);
           if (data.type == "REPORT_SHOW") {
-            this.getListTabs();
             this.getListData();
           }
         };
@@ -407,6 +411,19 @@ export default {
       this.hoverId = item.id;
       this.hoverList = item.dataList
     },
+    // 导出告警图片
+    async dowloadData() {
+      let Obj={
+        startDate:this.date[0],
+        endDate:this.date[1],
+      }
+      const data = await exportAlarm(Obj)
+      var blob = new Blob([data.data], { type: "application/zip" });
+      var url = window.URL.createObjectURL(blob);
+      var linkElement = document.createElement('a');
+      linkElement.setAttribute('href', url);
+      linkElement.click();
+    },
   },
 };
 </script>
@@ -450,8 +467,8 @@ export default {
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   display:flex;
-  overflow-x: auto;
   width: 100%;
+  overflow-x: auto;
   .tab-item{
     flex-shrink: 0;
     padding: 0px 20px;

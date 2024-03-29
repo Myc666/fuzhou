@@ -50,6 +50,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    imgRatio:{
+      type: Number,
+      default: 1,
+    }
   },
   data() {
     return {
@@ -72,7 +76,7 @@ export default {
               const ratio =
                 document.getElementById("img").offsetHeight / this.imgHeight;
               val.forEach((item) => {
-                let width = (item.position[2] - item.position[0]) * ratio
+                let width = (item.position[2] - item.position[0]) * ratio * this.imgRatio
                 // 创建临时元素
                 const _span = document.createElement('span')
                 // 放入文本
@@ -82,17 +86,17 @@ export default {
                 // span放入body中
                 document.body.appendChild(_span)
                 // 获取span的宽度
-                let txt_width = _span.offsetWidth + 15
+                let txt_width = _span.offsetWidth + 18
                 // 从body中删除该span
                 document.body.removeChild(_span)
-                if(item.position[3]>this.imgHeight){
-                  item.position[3] = this.imgHeight
+                if(item.position[3]* this.imgRatio>this.imgHeight){
+                  item.position[3] = this.imgHeight/this.imgRatio
                 }
                 this.pointList.push({
-                  left: item.position[0] * ratio + "px",
-                  top: item.position[1] * ratio + "px",
-                  width: (item.position[2] - item.position[0]) * ratio + "px",
-                  height: (item.position[3] - item.position[1]) * ratio + "px",
+                  left: item.position[0] * ratio * this.imgRatio + "px",
+                  top: item.position[1] * ratio * this.imgRatio + "px",
+                  width: (item.position[2] - item.position[0]) * ratio * this.imgRatio + "px",
+                  height: (item.position[3] - item.position[1]) * ratio * this.imgRatio + "px",
                   txt_width: (txt_width+3) + 'px',
                   confidence: item.confidence,
                   type:item.type,
