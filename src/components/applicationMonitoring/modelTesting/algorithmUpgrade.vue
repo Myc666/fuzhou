@@ -1,10 +1,10 @@
 <template>
   <div>
-    <el-row :gutter="20">
-      <el-col :span="8">
+    <el-row :gutter="24">
+      <el-col :span="10">
         <el-card class="box-card">
           <div slot="header" class="clear-flex">
-            <div>盒子列表</div>
+            <div>关联盒子</div>
             <div class="alg">{{ algorithmName }}</div>
           </div>
           <el-checkbox-group v-model="formatData.boxIds">
@@ -15,34 +15,26 @@
               style="display: block; margin-top: 10px"
               >{{ item.boxName }} <span v-if="item.algorithmVersion">{{ "(" +item.algorithmVersion+")" }}</span></el-checkbox>
           </el-checkbox-group>
-          <!-- <ul>
-            <li class="item" v-for="(item,index) in boxList" :key="item.id">
-            {{ item.name }}
-            </li>
-          </ul> -->
         </el-card>
-      </el-col>
-      <el-col :span="8">
         <el-card class="box-card">
           <div slot="header" class="clearfix">
-            <span>文件列表</span>
+            <span>更新进度</span>
+            
+          </div>
+          <ul>
+            <li style="margin-top: 10px;" v-for="(item, index) in boxList" :key="item.locationId">
+              <span style="color:#606266;font-size:14px;float: left;width: 200px;">{{ item.boxName }}:</span>
+              <span style="color:#606266;font-size:12px;">{{ state(item.boxUpdateStatus) }}</span>
+            </li>
+          </ul>
+        </el-card>
+      </el-col>
+      <el-col :span="14">
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+            <span>本地算法文件</span>
             <el-button style="float: right" type="primary" size="mini" @click="changeBoxAlgorithmVersion">切换版本</el-button>
           </div>
-          <!-- <el-radio-group v-model="formatData.fileName">
-            <el-radio
-              v-for="item in fileList"
-              :key="item.id"
-              :label="item.name"
-              style="display: block; margin-top: 10px"
-            >
-            {{  item.name }}
-            <div style="padding: 5px 0px 5px 20px;">
-              <el-progress
-                :percentage="handleProcess(item.localLength,item.length)"
-              ></el-progress>
-            </div>
-          </el-radio>
-          </el-radio-group> -->
           <div class="title">最新版本</div>
           <div class="radio-sty" v-if="lastVersionFile&&lastVersionFile.name">
             <el-radio v-model="formatData.fileName" :label="lastVersionFile.name">{{ lastVersionFile.name }}</el-radio>
@@ -64,20 +56,13 @@
             </div>
           </div>
         </el-card>
-      </el-col>
-      <el-col :span="8">
-        <el-card class="box-card">
-          <div slot="header" class="clearfix">
-            <span>更新进度</span>
-            
+        <!-- <el-card class="box-card">
+          <div slot="header" class="clear-flex">
+            <div>上传算法版本文件</div>
+            <div class="alg">{{ nameEn }}</div>
           </div>
-          <ul>
-            <li style="margin-top: 10px;" v-for="(item, index) in boxList" :key="item.locationId">
-              <span style="color:#606266;font-size:14px;float: left;width: 200px;">{{ item.boxName }}:</span>
-              <span style="color:#606266;font-size:12px;">{{ state(item.boxUpdateStatus) }}</span>
-            </li>
-          </ul>
-        </el-card>
+          <ImportAlgorithm :platform="platform" :nameEn="nameEn" @closeImport="closeImport"/>
+        </el-card> -->
       </el-col>
     </el-row>
   </div>
@@ -88,7 +73,11 @@ import {
   getBoxAndHistoryVersion,
   changeBoxAlgorithmVersion
 } from "@/api/applicationMonitoring/algorithmManagement";
+import ImportAlgorithm from "@/components/applicationMonitoring/modelTesting/importAlgorithm";
 export default {
+  components:{
+    ImportAlgorithm
+  },
   data() {
     return {
       formatData: {
@@ -181,6 +170,9 @@ export default {
         return 0
       }
     },
+    closeImport(){
+      this.getBoxAndHistoryVersion();
+    }
   },
 };
 </script>
