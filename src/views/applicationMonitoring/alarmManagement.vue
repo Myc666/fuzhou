@@ -128,12 +128,10 @@ import MarkResult from "@/components/markResult";
 import {
   getListData,
   getCameraListData,
-  getTypeListData,
   saveclearReportDayConfig,
   listTabs,
   exportAlarm
 } from "@/api/applicationMonitoring/alarmManagement";
-import { getAlarmLevelList } from "@/api/applicationMonitoring/algorithmManagement";
 import { getAfterSales } from "@/api/applicationMonitoring/systemManagement";
 import AlarmDetail from "@/components/applicationMonitoring/alarmManagement/alarmDetail";
 import AlarmCard from "@/components/applicationMonitoring/alarmManagement/newCard";
@@ -172,8 +170,6 @@ export default {
       total: 0,
       cameraOptions: [],
       algorithmOptions: [],
-      typeOptions: [],
-      alarmLevelList: [],
       VUE_APP_API_BASE_URL,
       clearDayList:[
         {
@@ -219,7 +215,6 @@ export default {
     await this.getListTabs();
     await this.getOptions();
     this.getListData();
-    await this.listAlarmLevelList();
     this.connectWebsocket();
   },
   beforeDestroy() {
@@ -235,10 +230,6 @@ export default {
     async getOptions() {
       const data1 = await getCameraListData();
       this.cameraOptions = data1.data;
-      // const data2 = await getAlgorithmListData();
-      // this.algorithmOptions = data2.data;
-      const data3 = await getTypeListData();
-      this.typeOptions = data3.data;
     },
     // 获取有告警的算法
     async getListTabs(){
@@ -286,11 +277,6 @@ export default {
       this.tableData = data.data;
       this.total = Number(data.count);
       this.loading = false;
-    },
-    //
-    async listAlarmLevelList() {
-      const data = await getAlarmLevelList();
-      this.alarmLevelList = data.data;
     },
     // 改变时间
     async dateChange(){
@@ -360,10 +346,6 @@ export default {
       this.params.limit = val;
       this.params.page = 1;
       this.getListData();
-    },
-    handleType(type) {
-      const obj = this.typeOptions.find((item) => item.id == type);
-      return obj.name;
     },
     handleParams(params) {
       try {
