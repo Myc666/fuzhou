@@ -264,6 +264,14 @@ export default {
           this.params.algorithmId = item.id;
         }
       })
+      Object.assign(this.params, {
+        cameraId: "",
+        algorithmId: "",
+        alarmLevelId:'',
+        type: "",
+        limit: 10,
+        page: 1,
+      });
       this.getListData()
     },
     // 获取告警列表
