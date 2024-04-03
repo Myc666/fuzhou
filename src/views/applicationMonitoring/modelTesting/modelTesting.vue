@@ -8,10 +8,10 @@
         </el-input>
       </div>
       <div class="flex-btn">
-        <div class="level-btn" @click="addData">
+        <!-- <div class="level-btn" @click="addData">
           <span class="el-icon-plus"></span>
           <span style="margin-left: 4px;">新增算法</span>
-        </div>
+        </div> -->
         <div class="level-btn" @click="addAlarmLevelData">
           <span class="el-icon-s-operation"></span>
           <span style="margin-left: 4px;">告警等级管理</span>
@@ -32,7 +32,7 @@
         </div>
         <div>
           <div :class="[type==0?'flex-item flex-item-w32':type==2?'flex-item flex-item-w19':'flex-item flex-item-w24']" v-if=" algorithmList.length>0">
-            <div v-for="(items,ind) in algorithmList" :key="ind" class="algorithm-item" @click="items.isShowImg?detailFun(items.id):''">
+            <div v-for="(items,ind) in algorithmList" :key="ind" class="algorithm-item" @click="items.image&&items.isShowImg?detailFun(items.id):''">
               <div v-if="items.hasUpdate" style="position: absolute;top: 0px;right: -1px;z-index: 99;">
                 <img src="@/assets/images/modelTesting/update-icon.png" style="width: 60px;"/>
               </div>
@@ -146,6 +146,7 @@ export default {
       addDialogVisible:false,
       importDialog:false,
       isImportClose:true,
+      algorithmArr:[],
     };
   },
   watch:{
@@ -225,6 +226,7 @@ export default {
         })
       }
       this.algorithmList = arr;
+      this.algorithmArr = arr;
     },
     // 图片识别失败
     handleImageError(index){
@@ -256,7 +258,23 @@ export default {
         }
       })
       this.description = ''
-      this.getListData()
+      if(idx==0){
+        this.getListData()
+        return;
+      }
+      if(this.algorithmArr.length>0){
+        let newArr = [];
+        this.algorithmArr.forEach(items=>{
+          if(items.tagIds&&items.tagIds.length>0){
+            items.tagIds.forEach(tagItem=>{
+              if(this.tagList[idx].id==tagItem){
+                newArr.push(items);
+              }
+            })
+          }
+        })
+        this.algorithmList = JSON.parse(JSON.stringify(newArr))
+      }
     },
     // 搜索
     seachFun(){
