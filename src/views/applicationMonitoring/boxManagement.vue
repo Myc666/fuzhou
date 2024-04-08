@@ -209,7 +209,7 @@
       @close="(addBoxVisible = false), getTreeData()"
     />
     <!-- 批量导入 -->
-    <UploadInfo v-if="uploadVisible" :type="stateObj.typeStr" :typeText="stateObj.text" @close="closeHandel"/>
+    <UploadInfo v-if="uploadVisible" :status="stateObj.status" :typeText="stateObj.text" @close="closeHandel"/>
   </div>
 </template>
 <script>
@@ -222,7 +222,7 @@ import {
   deleteData,
   getHeart,
 } from "@/api/applicationMonitoring/cameraManagement";
-import {getState} from "@/api/applicationMonitoring/batchUpload";
+import {statusByTag} from "@/api/applicationMonitoring/batchUpload";
 import ConfigureTime from "@/components/applicationMonitoring/boxManagement/configureTime";
 import AddCamera from "@/components/applicationMonitoring/boxManagement/addCamera";
 import AddRegion from "@/components/applicationMonitoring/boxManagement/addRegion";
