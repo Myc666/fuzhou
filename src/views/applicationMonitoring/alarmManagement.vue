@@ -52,7 +52,7 @@
           <el-button icon="el-icon-refresh" @click="refreshData">重置</el-button>
         </div>
         <div class="clear-flex">
-          <el-button type="primary" style="margin-bottom: 8px;" @click="dowloadData" :loading="dowloadLoading">导出</el-button>
+          <el-button type="primary" style="margin-bottom: 8px;" @click="dowloadData" :loading="dowloadLoading" :disabled="this.tableData.length==0?true:false">导出</el-button>
           <div class="clear-title">
             <el-popover
               placement="bottom-start"
