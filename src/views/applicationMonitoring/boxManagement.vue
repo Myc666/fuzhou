@@ -34,17 +34,13 @@
           <el-button icon="el-icon-refresh" @click="refreshData"
             >重置</el-button
           >
-          <!-- <div style="float: right;">
+            <div style="float: right;">
               <el-button  @click="batchAdd" v-if="isBtnShow">批量新增</el-button>
-              <el-button icon="el-icon-loading" v-if="!isBtnShow&&stateObj.type==1" @click="batchAdd">{{ stateObj.text }}</el-button> -->
-              <!-- 校验成功、完成、失败 以及导入成功、完成、失败-->
-              <!-- <div class="button-sty" v-if="!isBtnShow" @click="batchAdd">
-                <span  v-if="stateObj.type==2" class="el-icon-success" style="color: #7bc139;"></span>
-                <span  v-if="stateObj.type==3" class="el-icon-warning" style="color: #E6A23C;"></span> -->
-                <!-- <span class="el-icon-error" style="color: #F56C6C;"></span> -->
-                <!-- <span style="margin-left: 5px;">{{ stateObj.text }}</span>
-              </div>  
-            </div> -->
+              <el-button v-if="!isBtnShow" :class="{ 'el-import-hover': (stateObj.status == 1), 'el-fail-hover': (stateObj.status == 3) }" @click="batchAdd">
+                <i :class="{ 'el-icon-loading el-import-text': (stateObj.status == 1), 'el-icon-warning el-fail-text': (stateObj.status == 3) }"></i>
+                <span :class="{ 'el-import-text': (stateObj.status == 1), 'el-fail-text': (stateObj.status == 3) }">{{ stateObj.text }}</span>
+              </el-button>
+            </div>
         </div>
         <div class="ai_table">
           <div v-if="currentNode.type == 2 && isShow" class="add-box">
@@ -239,7 +235,7 @@ export default {
     AddCamera,
     AddRegion,
     AddBox,
-    UploadInfo
+    UploadInfo,
   },
   data() {
     return {
@@ -274,12 +270,13 @@ export default {
       stateObj:{},
       isBtnShow:true,
       timerState:null,
+      statusBtn: 'primary',
     };
   },
   async created() {
     await this.getHeart();
     await this.getTreeData();
-    // await this.getStateFun();
+    this.getStateFun();
     this.getListData();
     this.timer = setInterval(() => {
       this.getHeart();
@@ -288,34 +285,37 @@ export default {
   methods: {
     // 获取批量上传的整体进度
     async getStateFun(){
+      // 清除摄像头批量导入数据状态定时器
       clearInterval(this.timerState);
-      this.timerState=null
-      const res = await getState()
+      this.timerState=null;
+      // 查询摄像头批量导入数据状态
+      let params = {
+        tag:this.$store.state.tagInfo
+      }
+      const res = await statusByTag(params)
       let obj = {};
       let str = res.data;
-      if(str&&typeof str != 'object'){
-        this.isBtnShow = false
-        obj.text = str;
-        if(str.indexOf('校验')!=-1){
-          obj.typeStr="verification"
-
-        }else if(str.indexOf('导入')!=-1){
-          obj.typeStr="import"
+      // str.status 0-无导入 1-正在导入 2-导入完成(全部成功) 3-导入完成(包含错误)
+      if(str.status == 0 || str.status == 2) {
+        this.isBtnShow = true;
+        this.stateObj = {
+          status: str.status,
+          text: '',
+          typeStr: 'upload'
+        };
+      } else {
+        this.isBtnShow = false;
+        this.stateObj = {
+          status: str.status,
+          text: str.text,
+          typeStr: 'upload'
         }
-        if(str.indexOf('校验中')!=-1||str.indexOf('导入中')!=-1){
-          obj.type=1;
+        // 开启导入数据定时器
+        if(str.percentage!=100){
           this.timerState = setInterval(() => {
-              this.getStateFun();
+                this.getStateFun();
           }, 3000);
-        }else if(str=='校验成功'||str=='导入成功'){
-            obj.type=2;
-        }else if(str=='校验完成'||str=='导入完成'){
-          obj.type=3;
         }
-        this.stateObj = obj;
-      }else{
-        this.isBtnShow = true
-        this.stateObj = {};
       }
     },
     // 获取位置tree
@@ -504,11 +504,7 @@ export default {
       return str
     },
     // 批量新增
-    batchAdd(){
-      if(this.timerState){
-        clearInterval(this.timerState);
-        this.timerState=null
-      }
+    batchAdd() {
       this.uploadVisible = true;
     },
     // 关闭批量新增的弹窗
@@ -516,16 +512,34 @@ export default {
       this.uploadVisible = false;
       this.getListData()
       this.getStateFun()
-    }
+    },
   },
   beforeDestroy() {
     clearInterval(this.timer);
     clearInterval(this.timerState);
     this.timerState=null
-  },
+  }
 };
 </script>
 <style scoped lang="scss">
+.el-import-hover:hover {
+  border: 1px solid #d1d1d1 !important;
+}
+.el-success-hover:hover {
+  border: 1px solid #7bc139 !important;
+}
+.el-fail-hover:hover {
+  border: 1px solid #E6A23C !important;
+}
+.el-import-text {
+  color: #041335 !important;
+}
+.el-success-text {
+  color: #7bc139 !important;
+}
+.el-fail-text {
+  color: #E6A23C !important;
+}
 .search_box {
   padding-bottom: 20px;
 }

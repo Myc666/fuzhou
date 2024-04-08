@@ -56,13 +56,13 @@
             </div>
           </div>
         </el-card>
-        <!-- <el-card class="box-card">
+        <el-card class="box-card">
           <div slot="header" class="clear-flex">
             <div>上传算法版本文件</div>
             <div class="alg">{{ nameEn }}</div>
           </div>
           <ImportAlgorithm :platform="platform" :nameEn="nameEn" @closeImport="closeImport"/>
-        </el-card> -->
+        </el-card>
       </el-col>
     </el-row>
   </div>

@@ -52,7 +52,7 @@
           <el-button icon="el-icon-refresh" @click="refreshData">重置</el-button>
         </div>
         <div class="clear-flex">
-          <!-- <div @click="dowloadData">导出</div> -->
+          <el-button type="primary" style="margin-bottom: 8px;" @click="dowloadData" :loading="dowloadLoading">导出</el-button>
           <div class="clear-title">
             <el-popover
               placement="bottom-start"
@@ -204,6 +204,7 @@ export default {
       isBigImg:false,
       hoverId:'',
       hoverList:[],
+      dowloadLoading:false,
     };
   },
   async created() {
@@ -395,17 +396,26 @@ export default {
       this.hoverList = item.dataList
     },
     // 导出告警图片
-    async dowloadData() {
+    dowloadData() {
+      this.dowloadLoading = true;
       let Obj={
         startDate:this.date[0],
         endDate:this.date[1],
+        algorithmId:this.params.algorithmId,
+        cameraId:this.params.cameraId
       }
-      const data = await exportAlarm(Obj)
-      var blob = new Blob([data.data], { type: "application/zip" });
-      var url = window.URL.createObjectURL(blob);
-      var linkElement = document.createElement('a');
-      linkElement.setAttribute('href', url);
-      linkElement.click();
+      exportAlarm(Obj).then(res=>{
+        this.dowloadLoading = false;
+        var blob = new Blob([res.data], { type: "application/zip" });
+        var url = window.URL.createObjectURL(blob);
+        var linkElement = document.createElement('a');
+        linkElement.setAttribute('href', url);
+        linkElement.click();
+        document.body.removeChild(linkElement)
+      }).catch(res=>{
+        this.dowloadLoading = false;
+      })
+      
     },
   },
 };

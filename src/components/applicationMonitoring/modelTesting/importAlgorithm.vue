@@ -55,6 +55,9 @@ export default {
                 this.$emit('closeImport',true)
             }).catch(()=>{
                 this.btnLoading = false;
+                if(this.pageType==1){//上传失败，可关闭弹窗
+                    this.$emit('closeImport',1)
+                }
             })
         },
     }

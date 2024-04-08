@@ -70,3 +70,13 @@ export function listTabs(data) {
     data
   })
 }
+
+// 导出
+export function exportAlarm(params) {
+  return request({
+    url: '/report/export',
+    method: 'get',
+    params,
+    responseType: 'blob',
+  })
+}

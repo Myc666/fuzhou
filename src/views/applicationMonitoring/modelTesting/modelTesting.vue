@@ -66,7 +66,7 @@
                   </div>
                   <div v-else class="alg-btn-flex">
                     <div class="optimize-btn">优化中，敬请期待</div>
-                    <!-- <div class="upload-btn" @click.stop="uploadFun(items)">手动导入模型文件</div> -->
+                    <div class="upload-btn" @click.stop="uploadFun(items)">手动导入模型文件</div>
                   </div>
                 </div>
               </div>
@@ -348,10 +348,14 @@ export default {
       this.importDialog = true
     },
     closeImport(item){
-      this.isImportClose = item;
-      if(item){
-        this.importDialog = false;
-        this.getListData();
+      if(item!=1){
+        this.isImportClose = item;
+        if(item){
+          this.importDialog = false;
+          this.getListData();
+        }
+      }else{
+        this.isImportClose = true;
       }
     },
     handleDialogClose(){
@@ -498,9 +502,9 @@ export default {
         .upload-btn{
           display: block;
         }
-        // .optimize-btn{
-        //   display: none;
-        // }
+        .optimize-btn{
+          display: none;
+        }
       }
     }
     .flex-item-w24{
