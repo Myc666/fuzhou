@@ -299,10 +299,12 @@ export default {
     },
     // 删除文件
     async deleteData(item) {
-      this.$confirm(`是否删除已下载的算法模型?`, "提示", {
-        confirmButtonText: "确定",
+      this.$confirm(`1.卸载后将自动停止所有摄像头上关于此算法的识别计算功能。<br/>2.卸载后已生成的告警记录仍保留。<br/>3.您可在卸载完成后重新下载，且需重新关联已有的摄像头。`, `是否卸载【${item.name}】`, {
+        confirmButtonText: "卸载",
         cancelButtonText: "取消",
-        type: "warning",
+        confirmButtonClass: 'custom-confirm-class',
+        dangerouslyUseHTMLString:true,
+        customClass:"elmessagewidth"
       })
         .then(async () => {
           const res = await deleteFile({ id: item.id });
