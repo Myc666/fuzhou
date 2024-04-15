@@ -109,7 +109,11 @@ export default {
         if (x > -1) {
           this.activeIndex = to.path.substring(0, x);
         } else {
-          this.activeIndex = to.path;
+          if(to.name=="算法详情"){
+            this.activeIndex = "/algorithmManagement/modelTesting";
+          }else{
+            this.activeIndex = to.path;
+          }
         }
       },
     },

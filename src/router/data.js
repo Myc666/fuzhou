@@ -2,41 +2,21 @@ const allRoutess = [
     {
       path: '/',
       component: () => import('@/layout/index'),
-      redirect: '/algorithmManagement/algorithmArrange',
+      redirect: '/algorithmManagement/modelTesting',
       children:[
         {
           icon: 'el-icon-s-grid',
-          name: '算法管理',
-          path: '/algorithmManagement',
-          component: () => import('@/views/applicationMonitoring/index'),
-          children:[
-            {
-              name: '算法部署',
-              path: '/algorithmManagement/algorithmArrange',
-              component: () => import('@/views/applicationMonitoring/algorithmManagement'),
-            },
-            {
-              component: () => import('@/views/applicationMonitoring/algorithmArrangeUpdata'),
-              name: '算法升级',
-              path: '/algorithmManagement/algorithmArrangeUpdata',
-              meta: {
-                hideMenu: true
-              }
-            },
-            {
-              name: '算法商城',
-              path: '/algorithmManagement/modelTesting',
-              component: () => import('@/views/applicationMonitoring/modelTesting/modelTesting.vue'),
-            },
-            {
-              component: () => import('@/views/applicationMonitoring/modelTesting/modelDetail'),
-              name: '算法详情',
-              path: '/algorithmManagement/modelDetail',
-              meta: {
-                hideMenu: true
-              }
-            },
-          ]
+          name: '算法商城',
+          path: '/algorithmManagement/modelTesting',
+          component: () => import('@/views/applicationMonitoring/modelTesting/modelTesting.vue'),
+        },
+        {
+          component: () => import('@/views/applicationMonitoring/modelTesting/modelDetail'),
+          name: '算法详情',
+          path: '/algorithmManagement/modelDetail',
+          meta: {
+            hideMenu: true
+          }
         },
         // {
         //   icon: 'el-icon-video-camera-solid',
@@ -90,20 +70,13 @@ const allRoutess = [
         },
         {
           icon: 'el-icon-s-data',
-          name: '数据汇聚',
-          path: '/dataManagement',
-          component: () => import('@/views/applicationMonitoring/index'),
-          children:[
-            {
-              name: '告警管理',
-              path: '/dataManagement/alarmManagement',
-              component: () => import('@/views/applicationMonitoring/alarmManagement'),
-            }
-          ]
+          name: '告警管理',
+          path: '/dataManagement/alarmManagement',
+          component: () => import('@/views/applicationMonitoring/alarmManagement'),
         },
         {
           icon: 'el-icon-s-comment',
-          name: '通知管理',
+          name: '推送管理',
           path: '/noticeManagement',
           component: () => import('@/views/applicationMonitoring/index'),
           children:[
