@@ -89,7 +89,6 @@
                 :dataList="handleParams(item.params)"
                 :alarmData="item"
                 :isAlarm="true"
-                @hoverFun="hoverFun"
               >
               </AlarmCard>
             </div>
@@ -111,14 +110,6 @@
           ></el-pagination>
         </div>
       </div>
-    </div>
-    <div class="big-img" v-if="isBigImg">
-      <MarkResult
-            v-if="hoverId"
-            :fileUrl="VUE_APP_API_BASE_URL+`/report/streamThumb?id=${hoverId}`"
-            :dataList="hoverList"
-            :imgRatio="imgRatio"
-      />
     </div>
   </div>
 </template>
@@ -200,10 +191,6 @@ export default {
       ],
       clearReportDay:"30",
       oldDay:"30",
-      isShowTip:false,
-      isBigImg:false,
-      hoverId:'',
-      hoverList:[],
       dowloadLoading:false,
     };
   },
@@ -262,7 +249,6 @@ export default {
     // 获取告警列表
     async getListData() {
       this.loading = true;
-      this.isBigImg = false;
       if(this.date&&this.date.length>0){
         this.params.startDate = this.date[0];
         this.params.endDate = this.date[1];
@@ -274,7 +260,6 @@ export default {
     },
     // 改变时间
     async dateChange(){
-      this.isBigImg = false;
       await this.getListTabs();
       await this.getListData();
     },
@@ -381,20 +366,6 @@ export default {
         this.clearReportDay = res.data?res.data:'30'
         this.oldDay = res.data?res.data:'30'
     },
-     // 鼠标悬浮
-     onHover(){
-      this.isShowTip = true;
-    },
-    // 鼠标离开
-    hideMessage() {
-      this.isShowTip = false;
-    },
-    // 图片鼠标悬浮
-    hoverFun(item){
-      this.isBigImg=item.isShow;
-      this.hoverId = item.id;
-      this.hoverList = item.dataList
-    },
     // 导出告警图片
     dowloadData() {
       this.dowloadLoading = true;
@@ -494,18 +465,6 @@ export default {
     border-left: 2px solid #409EFF;
     padding-left: 8px;
   }
-}
-.big-img{
-  width: 700px;
-  padding: 10px;
-  background: #fff;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  box-shadow:  10px 10px 10px rgba(0,0,0,0.3);
-  z-index: 99;
-  pointer-events: none;
 }
 </style>
 <style lang="scss">

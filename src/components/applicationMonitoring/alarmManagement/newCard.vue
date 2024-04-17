@@ -44,6 +44,14 @@
         </div>
       </div>
     </div>
+    <div class="big-img" v-if="isBigImg">
+      <MarkResult
+            v-if="alarmData.id"
+            :fileUrl="VUE_APP_API_BASE_URL+`/report/streamThumb?id=${alarmData.id}`"
+            :dataList="dataList"
+            :imgRatio="imgRatio"
+      />
+    </div>
   </div>
 </template>
 <script>
@@ -76,6 +84,9 @@ export default {
   },
   data() {
     return {
+      imgRatio:0.5,
+      VUE_APP_API_BASE_URL,
+      isBigImg:false,
       imgHeight: "",
       pointList: [],
       alarmDetailVisible: false,
@@ -141,20 +152,10 @@ export default {
   },
   methods:{
       onHover(){
-          let obj = {
-              isShow:true,
-              id:this.alarmData.id,
-              dataList:this.dataList
-          }
-          this.$emit('hoverFun',obj)
+          this.isBigImg = true;
       },
       hideMessage(){
-          let obj = {
-              isShow:false,
-              id:"",
-              dataList:[]
-          }
-          this.$emit('hoverFun',obj)
+        this.isBigImg = false;
       }
   }
 };
@@ -184,10 +185,10 @@ export default {
     }
   }
   .img-box::after {
-      content: "";
-      display: block;
-      padding-top: 56.25%; /* 假设图片的宽高比是16:9 */
-    }
+    content: "";
+    display: block;
+    padding-top: 56.25%; /* 假设图片的宽高比是16:9 */
+  }
   .xbox {
     position: absolute;
     border: 2px solid #f43838;
@@ -262,5 +263,17 @@ export default {
 
 ::v-deep #img_alarm_card {
   display: block;
+}
+.big-img{
+  width: 700px;
+  padding: 10px;
+  background: #fff;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow:  10px 10px 10px rgba(0,0,0,0.3);
+  z-index: 99;
+  pointer-events: none;
 }
 </style>
