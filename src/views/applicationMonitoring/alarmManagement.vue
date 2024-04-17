@@ -475,6 +475,7 @@ export default {
     font-size: 14px;
     position: relative;
     padding-bottom: 8px;
+    margin-left: 10px;
   }
   .el-icon-warning-outline:before{
     color: #b3b3b3;
