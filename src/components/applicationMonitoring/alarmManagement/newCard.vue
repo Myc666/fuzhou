@@ -265,7 +265,7 @@ export default {
   display: block;
 }
 .big-img{
-  width: 700px;
+  width: 80%;
   padding: 10px;
   background: #fff;
   position: absolute;
