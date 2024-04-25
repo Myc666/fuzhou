@@ -177,3 +177,12 @@ export function deleteInfo(data) {
     data
   })
 }
+
+// 盒⼦算法查询列表
+export function getAlgorithmInfo(data) {
+  return request({
+    url: '/location/algorithm/info',
+    method: 'post',
+    data
+  })
+}

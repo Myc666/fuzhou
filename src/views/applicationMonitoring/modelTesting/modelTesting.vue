@@ -93,7 +93,7 @@
       :visible.sync="dialogVisible"
       width="80%"
       >
-      <AlgorithmUpgrade v-if="dialogVisible" :id="rowId" :algorithmName="algorithmName" @close="handleClose"/>
+      <AlgorithmUpgrade v-if="dialogVisible" :id="rowId" :algorithmName="algorithmName" :platform="platform" :nameEn="nameEn" @close="handleClose"/>
     </el-dialog>
     <!-- 新增算法--上传zip -->
     <AddUpload v-if="addDialogVisible" @closeAdd="closeAdd"/>
@@ -141,6 +141,8 @@ export default {
       dialogVisible:false,
       rowId:'',
       algorithmName:'',
+      platform:'',
+      nameEn:'',
       notify:null,
       loading:false,
       addDialogVisible:false,
@@ -328,6 +330,8 @@ export default {
     upgradeFun(items){
       this.rowId = items.id;
       this.algorithmName = items.name;
+      this.platform = items.platform;
+      this.nameEn = items.nameEn
       this.dialogVisible = true;
     },
     handleClose(){

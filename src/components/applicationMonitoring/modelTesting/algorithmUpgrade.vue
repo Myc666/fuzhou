@@ -98,14 +98,22 @@ export default {
     };
   },
   props:{
-      id:{
-          type:String,
-          default:''
-      },
-      algorithmName:{
-          type:String,
-          default:''
-      }
+    id:{
+      type:String,
+      default:''
+    },
+    algorithmName:{
+      type:String,
+      default:''
+    },
+    platform:{
+      type:String,
+      default:''
+    },
+    nameEn:{
+      type:String,
+      default:''
+    }
   },
   created() {
     this.getBoxAndHistoryVersion();
@@ -129,7 +137,7 @@ export default {
       this.boxList = data.boxList;
       if(data.fileList.length>0){
           let newArr = data.fileList.filter(item=>{
-          return item.name != data.lastVersionFile.name
+            return item.name != data.lastVersionFile.name
           })
           this.fileList = newArr;
       }

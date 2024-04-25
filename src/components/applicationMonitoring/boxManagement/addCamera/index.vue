@@ -45,7 +45,26 @@
                 class="input-num"
               ></el-input-number>
             </el-form-item>
-            <el-form-item label="算法关联">
+            <el-form-item>
+              <template slot="label">
+                <span style="margin-right: 5px;">算法关联</span>
+                <el-popover
+                  placement="top-start"
+                  width="400"
+                  trigger="hover"
+                >
+                  <div style="font-size: 14px; color: 606266;">
+                    <div style="font-size: 18px;color: #303133;line-height: 26px;margin-bottom: 10px;">算法版本切换提醒</div>
+                    <div style="line-height: 22px;">您可在【视频预览】页，单击“本地算法总览”查看当前边缘盒子的所有算法使用情况。</div>
+                    <div style="font-weight: bold;line-height: 22px; margin: 10px 0px;">首次下载算法模型</div>
+                    <div style="line-height: 22px; ">当您首次下载完成并启用后，系统将以首次提交的版本进行计算。</div>
+                    <div style="font-weight: bold;line-height: 22px; margin: 10px 0px;">再次下载新版本算法模型</div>
+                    <div style="line-height: 22px; ">再次下载新版本后，您修改摄像头参数后将仍以首次提交的版本进行计算</div>
+                    <div style="line-height: 22px; "> 若您希望更改此边缘盒子的算法版本，可前往【算法商城】单击具体算法卡片上的“算法升级”进行版本切换。</div>
+                  </div>
+                  <span class="el-icon-warning-outline" slot="reference"></span>
+                </el-popover>
+              </template>
               <el-table
                 :data="tableData"
                 border

@@ -44,7 +44,35 @@
         </div>
         <div class="ai_table">
           <div v-if="currentNode.type == 2 && isShow" class="add-box">
-            <span>{{ currentNode.text }}</span>
+            <div style="display: flex;align-items: center;">
+              <div>{{ currentNode.text }}</div>
+              <div style="padding: 0px 16px;"  v-if="params.locationId">
+                <el-popover
+                  placement="right"
+                  width="800"
+                  trigger="click"
+                  @show="handleShow"
+                >
+                  <el-table :data="gridData" border max-height="300" class="popover-table">
+                    <el-table-column align="center" property="algorithmName" label="算法名称"></el-table-column>
+                    <el-table-column align="center" property="isRun" label="算法状态" width="80">
+                      <template slot-scope="scope">
+                        <span :style="{color:scope.row.isRun?'#2C8AFB':'#EB3A2F'}">{{ scope.row.isRun?'正在运行':'未运行' }}</span>
+                      </template>
+                    </el-table-column>
+                    <el-table-column align="center" property="cameraNames" label="已关联摄像头"></el-table-column>
+                    <el-table-column align="center" property="currentVersion" label="当前使用版本"></el-table-column>
+                    <el-table-column align="center" property="highVersion" label="本地最新版本"></el-table-column>
+                    <el-table-column align="center" property="upgrade" label="操作" width="80">
+                      <template slot-scope="scope">
+                      <el-button type="text" style="color: #2C8AFB;" @click="upgradeFun(scope.row)">算法升级</el-button>
+                      </template>
+                    </el-table-column>
+                  </el-table>
+                  <el-button slot="reference">本地算法总览</el-button>
+                </el-popover>
+              </div>
+            </div>
             <el-button type="primary" icon="el-icon-plus" @click="addCamera">新增摄像头</el-button>
           </div>
           <el-table
@@ -210,6 +238,15 @@
     />
     <!-- 批量导入 -->
     <UploadInfo v-if="uploadVisible" :status="stateObj.status" :typeText="stateObj.text" @close="closeHandel"/>
+
+    <!-- 算法升级 -->
+    <el-dialog
+      title="算法升级"
+      :visible.sync="dialogVisible"
+      width="70%"
+      >
+      <AlgorithmUpgrade v-if="dialogVisible" :id="rowId" :algorithmName="algorithmName" :platform="platform" :nameEn="nameEn" @close="handleClose"/>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -221,6 +258,7 @@ import {
   switchRunning,
   deleteData,
   getHeart,
+  getAlgorithmInfo
 } from "@/api/applicationMonitoring/cameraManagement";
 import {statusByTag} from "@/api/applicationMonitoring/batchUpload";
 import ConfigureTime from "@/components/applicationMonitoring/boxManagement/configureTime";
@@ -228,6 +266,7 @@ import AddCamera from "@/components/applicationMonitoring/boxManagement/addCamer
 import AddRegion from "@/components/applicationMonitoring/boxManagement/addRegion";
 import AddBox from "@/components/applicationMonitoring/boxManagement/addBox";
 import UploadInfo from "@/components/applicationMonitoring/batchUpload/upload.vue";
+import AlgorithmUpgrade from "@/components/applicationMonitoring/modelTesting/algorithmUpgrade";
 import { getMyDate } from '@/utils/common.js'
 export default {
   components: {
@@ -236,6 +275,7 @@ export default {
     AddRegion,
     AddBox,
     UploadInfo,
+    AlgorithmUpgrade
   },
   data() {
     return {
@@ -271,6 +311,13 @@ export default {
       isBtnShow:true,
       timerState:null,
       statusBtn: 'primary',
+      gridData:[],
+      dialogVisible:false,
+      isDisabled:false,
+      rowId:'',
+      algorithmName:'',
+      platform:'',
+      nameEn:'',
     };
   },
   async created() {
@@ -283,6 +330,22 @@ export default {
     }, 60000);
   },
   methods: {
+    // 获取本地算法
+    handleShow(){
+      let formData = new FormData();
+      formData.append("boxId ", this.params.locationId);
+      getAlgorithmInfo(formData).then(res=>{
+        this.gridData = res.data;
+      })
+    },
+    // 算法升级
+    upgradeFun(row){
+      this.rowId = row.algorithmId;
+      this.algorithmName = row.algorithmName;
+      this.platform = row.platform;
+      this.nameEn = row.algorithmNameEn
+      this.dialogVisible = true;
+    },
     // 获取批量上传的整体进度
     async getStateFun(){
       // 清除摄像头批量导入数据状态定时器
