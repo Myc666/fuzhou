@@ -65,7 +65,7 @@
                     <el-table-column align="center" property="highVersion" label="本地最新版本"></el-table-column>
                     <el-table-column align="center" property="upgrade" label="操作" width="80">
                       <template slot-scope="scope">
-                      <el-button type="text" style="color: #2C8AFB;" @click="upgradeFun(scope.row)">算法升级</el-button>
+                      <el-button type="text" v-if="scope.row.upgrade" style="color: #2C8AFB;" @click="upgradeFun(scope.row)">算法升级</el-button>
                       </template>
                     </el-table-column>
                   </el-table>
