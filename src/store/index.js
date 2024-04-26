@@ -21,7 +21,8 @@ export default new Vuex.Store({
       logoUrl: ''
     },
     afterSalesUrl: '',
-    algorithmDownload:{}
+    algorithmDownload:{},
+    tagInfo:'',
   },
   getters: {
   },
@@ -31,6 +32,9 @@ export default new Vuex.Store({
     },
     setAlgorithmDownload(state,newUrl){
       state.algorithmDownload = newUrl
+    },
+    setTagInfo(state,newInfo){
+      state.tagInfo = newInfo
     },
   },
   actions: {

@@ -169,7 +169,7 @@ export default {
                 var url = window.URL.createObjectURL(blob);
                 var linkElement = document.createElement('a');
                 linkElement.setAttribute('href', url);
-                // linkElement.setAttribute('downLoad', 'download');
+                linkElement.setAttribute('downLoad', '导入错误数据_下载');
                 linkElement.click();
                 document.body.removeChild(linkElement)
             })
