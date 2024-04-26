@@ -222,7 +222,15 @@ export default {
       this.dataListAll = [];
       data.data.forEach((item) => {
         item.status = 1;
-        item.confidence = item.confidence?item.confidence:0.5;
+        if(item.nameEn=="helmet"){//安全帽
+          item.confidence = item.confidence?item.confidence:0.85;
+        }else if(item.nameEn=="object"){//占道
+          item.confidence = item.confidence?item.confidence:0.55;
+        }else if(item.nameEn=="fire"){//烟火
+          item.confidence = item.confidence?item.confidence:0.7;
+        }else{
+          item.confidence = item.confidence?item.confidence:0.5;
+        }
         if(item.markPoints){
           let mArr = JSON.parse(item.markPoints);
           let newArr = [];
