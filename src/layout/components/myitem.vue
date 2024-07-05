@@ -11,14 +11,16 @@
         <myitem :data="item.children"></myitem>
       </el-submenu>
       <!-- 情况二：没子集的情况： -->
-      <el-menu-item
-        :key="item.path"
-        v-if="!item.children && !item.meta?.hideMenu"
-        :index="item.path"
-      >
-        <i :class="item.icon"></i>
-        <span slot="title">{{ item.name }}</span>
-      </el-menu-item>
+      <div v-if="!item.children && !item.meta?.hideMenu" :class="[(!item.children && item.meta?.textIndent)?'isText':'']">
+        <el-menu-item
+          :key="item.path"
+          
+          :index="item.path"
+        >
+          <i :class="item.icon"></i>
+          <span slot="title">{{ item.name }}</span>
+        </el-menu-item>
+      </div>
     </template>
   </div>
 </template>
@@ -35,3 +37,18 @@ export default {
   // 注意： 在template标签上使用v-for，:key="index"不能写在template标签上，因为其标签不会被渲染，会引起循环错误
 };
 </script>
+<style scoped lang="scss">
+.isText{
+  :deep(.el-menu-item.is-active){
+    background: #FFE6E1 !important;
+    border-left: 3px solid #EB3A2F;
+  }
+  :deep(.el-menu-item){
+    text-indent: 0px !important;
+  }
+  :deep(.el-tooltip){
+    width: 70px !important;
+  }
+}
+
+</style>

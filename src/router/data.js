@@ -9,6 +9,9 @@ const allRoutess = [
           name: '算法商城',
           path: '/algorithmManagement/modelTesting',
           component: () => import('@/views/applicationMonitoring/modelTesting/modelTesting.vue'),
+          meta: {
+            textIndent: true,//控制菜单样式，text-indent：0px
+          }
         },
         {
           component: () => import('@/views/applicationMonitoring/modelTesting/modelDetail'),
@@ -73,6 +76,9 @@ const allRoutess = [
           name: '告警管理',
           path: '/dataManagement/alarmManagement',
           component: () => import('@/views/applicationMonitoring/alarmManagement'),
+          meta: {
+            textIndent: true,//控制菜单样式，text-indent：0px
+          }
         },
         {
           icon: 'el-icon-s-comment',
