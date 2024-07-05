@@ -379,7 +379,7 @@ export default {
   padding: 0 !important;
   i{
     margin-left: 20px;
-    // margin-right: 20px;
+    margin-right: 20px;
   }
 }
 

@@ -38,6 +38,9 @@ export default {
 };
 </script>
 <style scoped lang="scss">
+:deep(.el-menu-item){
+  text-indent: 29px;
+}
 .isText{
   :deep(.el-menu-item.is-active){
     background: #FFE6E1 !important;
@@ -45,6 +48,9 @@ export default {
   }
   :deep(.el-menu-item){
     text-indent: 0px !important;
+    i{
+      margin-right: 20px;
+    }
   }
   :deep(.el-tooltip){
     width: 70px !important;
