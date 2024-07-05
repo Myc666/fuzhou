@@ -211,7 +211,6 @@ export default {
     },
   },
   async created() {
-    this.getTree();
     this.date = [
       this.$moment(new Date(this.date[0].setHours(0, 0, 0))).format("YYYY-MM-DD HH:mm:ss"),
       this.$moment(new Date(this.date[1].setHours(23, 59, 59))).format("YYYY-MM-DD HH:mm:ss"),
