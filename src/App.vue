@@ -202,8 +202,29 @@ export default {
 };
 </script>
 <style lang="scss">
+@import "@/style.scss";
+
+* {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+html {
+  font-size: 100px;
+  height: 100%;
+  width: 100%;
+}
+body {
+  font-size: 12px;
+  width: 100%;
+  height: 100%;
+  box-sizing: inherit;
+  text-rendering: optimizeLegibility;
+  font-family: PingFang SC, Helvetica Neue, Helvetica, Hiragino Sans GB, Arial,
+    sans-serif;
+}
 #app {
-  background: #041335;
+  // background: #041335;
 }
 .view-files-class {
   .el-avatar > img {
@@ -297,4 +318,25 @@ body {
   }
 }
 
+
+/* 自定义整个滚动条 */
+::-webkit-scrollbar {
+  width: 5px; /* 设置滚动条的宽度 */
+  height: 5px; /* 设置滚动条的高度 */
+}
+ 
+/* 自定义滚动条轨道 */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* 设置轨道的背景颜色 */
+}
+ 
+/* 自定义滚动条的滑块（thumb） */
+::-webkit-scrollbar-thumb {
+  background: #f1f1f1; /* 设置滑块的背景颜色 */
+}
+ 
+/* 当滑块悬停或活动时自定义滚动条的滑块 */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; /* 设置滑块在悬停状态下的背景颜色 */
+}
 </style>

@@ -15,7 +15,9 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import moment from 'moment/moment'
 
-import './assets/styles/index.scss';
+// import './assets/styles/index.scss';
+import "./theme/index.css"
+import "./utils/rem.js"
 
 Vue.prototype.$echarts = echarts
 Vue.prototype.$baseUrl = process.env.VUE_APP_IMGURL

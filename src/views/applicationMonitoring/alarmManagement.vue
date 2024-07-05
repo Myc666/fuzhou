@@ -9,13 +9,13 @@
     </div>
     <div class="alarm-M">
       <div class="seach-sty">
-        <div style="flex: 1;display: flex;">
           <div class="seach-flex">
-            <div style="margin-right: 5px;padding-bottom: 8px;">摄像头:</div>
+            <div style="margin-right: 5px;color: #202B3D;">摄像头:</div>
             <div style="flex: 1;">
               <el-select
                 placeholder="摄像头"
                 clearable
+                filterable
                 v-model="params.cameraId"
                 style="width: 150px;"
               >
@@ -28,7 +28,7 @@
               </el-select>
             </div>
           </div>
-          <div class="seach-flex" style="padding-bottom: 8px;margin-right: 15px;">
+          <div class="seach-flex" style="margin-right: 15px;">
             <div style="margin-right: 5px;">时间:</div>
             <div  style="flex: 1;">
               <el-date-picker
@@ -48,12 +48,18 @@
               </el-date-picker>
             </div>
           </div>
-          <el-button type="primary" icon="el-icon-search" @click="getData()">查询</el-button>
-          <el-button icon="el-icon-refresh" @click="refreshData">重置</el-button>
-        </div>
+          <el-button size="mini" style="height: 34px;padding: 0px 15px;" type="primary" icon="el-icon-search" @click="getData()">查询</el-button>
+          <el-button size="mini" style="height: 34px;padding: 0px 15px;" icon="el-icon-refresh" @click="refreshData">重置</el-button>
         <div class="clear-flex">
-          <el-button type="primary" style="margin-bottom: 8px;" @click="dowloadData" :loading="dowloadLoading" :disabled="this.tableData.length==0?true:false">导出</el-button>
-          <div class="clear-title">
+          <div>
+              <el-radio-group v-model="params.limit" style="margin-right: 10px;">
+              <el-radio-button label="12">12图</el-radio-button>
+              <el-radio-button label="4">4图</el-radio-button>
+            </el-radio-group>
+            <el-button type="primary" style="" @click="dowloadData" :loading="dowloadLoading" :disabled="this.tableData.length==0?true:false">导出</el-button>
+          </div>
+          <div style="display: flex;align-items: center;">
+            <div class="clear-title">
             <el-popover
               placement="bottom-start"
               width="300"
@@ -78,14 +84,16 @@
               :value="item.id"
             ></el-option>
           </el-select>
+          </div>
         </div>
       </div>
       <div>
         <div v-if="tableData.length">
-          <div class="table-sty">
+          <div :class="'table-sty'+params.limit">
             <div v-for="item in tableData" :key="item.id" class="item-sty">
               <AlarmCard
                 :fileUrl="VUE_APP_API_BASE_URL+`/report/streamThumb?id=${item.id}`"
+                :originalUrl="$common.handleStream(item.id)"
                 :dataList="handleParams(item.params)"
                 :alarmData="item"
                 :isAlarm="true"
@@ -102,7 +110,7 @@
             background
             :current-page="params.page"
             :page-size="params.limit"
-            :page-sizes="[10]"
+            :page-sizes="[params.limit]"
             layout="total, sizes, prev, pager, next, jumper"
             :total="total"
             @current-change="handleCurrentChange"
@@ -115,7 +123,6 @@
 </template>
 <script>
 import Cookies from "js-cookie";
-import MarkResult from "@/components/markResult";
 import {
   getListData,
   getCameraListData,
@@ -126,12 +133,10 @@ import {
 import { getAfterSales } from "@/api/applicationMonitoring/systemManagement";
 import AlarmDetail from "@/components/applicationMonitoring/alarmManagement/alarmDetail";
 import AlarmCard from "@/components/applicationMonitoring/alarmManagement/newCard";
-
 export default {
   components: {
     AlarmDetail,
     AlarmCard,
-    MarkResult
   },
   props:{
     isDisabled:{
@@ -141,6 +146,7 @@ export default {
   },
   data() {
     return {
+      depList:[],
       imgRatio:0.5,
       loading: false,
       tableData: [],
@@ -149,13 +155,14 @@ export default {
         new Date(),
       ],
       params: {
+        departIds:[],
         cameraId: "",
         algorithmId: "",
         alarmLevelId: "",
         type: "",
         startDate: "",
         endDate: "",
-        limit: 10,
+        limit: 12,
         page: 1,
       },
       total: 0,
@@ -194,15 +201,25 @@ export default {
       dowloadLoading:false,
     };
   },
+  watch: {
+    'params.limit': {
+      deep: true,
+      handler(val) {
+        this.params.page = 1
+        this.getListData();
+      },
+    },
+  },
   async created() {
+    this.getTree();
     this.date = [
       this.$moment(new Date(this.date[0].setHours(0, 0, 0))).format("YYYY-MM-DD HH:mm:ss"),
       this.$moment(new Date(this.date[1].setHours(23, 59, 59))).format("YYYY-MM-DD HH:mm:ss"),
     ];
     this.getDay()
-    await this.getListTabs();
     await this.getOptions();
     this.getListData();
+    await this.getListTabs();
     this.connectWebsocket();
   },
   beforeDestroy() {
@@ -221,6 +238,7 @@ export default {
     },
     // 获取有告警的算法
     async getListTabs(){
+      this.algorithmOptions = [];
       let formData = new FormData();
       if(this.date&&this.date.length>0){
         formData.append("startDate", this.date[0]);
@@ -233,6 +251,11 @@ export default {
         })
       }
       this.algorithmOptions = res.data;
+      let obj = {
+        id:'',
+        name:'全部',
+      }
+      this.algorithmOptions.unshift(obj)
     },
     // 选中算法
     tabClick(e,index){
@@ -253,7 +276,18 @@ export default {
         this.params.startDate = this.date[0];
         this.params.endDate = this.date[1];
       }
-      const data = await getListData(this.params);
+      let obj = {
+        ...this.params
+      };
+      let arr =[];
+      if(obj.departIds&&obj.departIds.length>0){
+          obj.departIds.forEach((item,ind)=>{
+              let len = item.length-1;
+              arr.push(item[len])
+          })
+      }
+      obj.departIds = arr.length>0?arr.join(','):''
+      const data = await getListData(obj);
       this.tableData = data.data;
       this.total = Number(data.count);
       this.loading = false;
@@ -273,13 +307,13 @@ export default {
         this.$moment(new Date(dateList[0].setHours(0, 0, 0))).format("YYYY-MM-DD HH:mm:ss"),
         this.$moment(new Date(dateList[1].setHours(23, 59, 59))).format("YYYY-MM-DD HH:mm:ss"),
       ];
-
+      let len = this.params.limit;
       Object.assign(this.params, {
         cameraId: "",
         algorithmId: "",
         alarmLevelId:'',
         type: "",
-        limit: 10,
+        limit: len,
         page: 1,
       });
       this.getListData();
@@ -413,16 +447,21 @@ export default {
   line-height: 120px;
   text-align: center;
 }
-
-.table-sty{
+.table-sty12{
   display: grid;
-  grid-template-columns: repeat(5,19%);
+  grid-template-columns: repeat(4,24%);
   justify-content: space-between;
   grid-row-gap: 20px;
-  .item-sty{
-    border: 1px solid #D3D7DD;
-    border-radius: 6px;
-  }
+}
+.table-sty4{
+  display: grid;
+  grid-template-columns: repeat(2,49%);
+  justify-content: space-between;
+  grid-row-gap: 20px;
+}
+.item-sty{
+  border: 1px solid #D3D7DD;
+  // border-radius: 6px;
 }
 
 
@@ -466,15 +505,20 @@ export default {
     padding-left: 8px;
   }
 }
+.pagination{
+  text-align: right;
+  margin-top: 10px;
+}
 </style>
 <style lang="scss">
 .clear-flex{
   display: flex;
   align-items: center;
+  // margin-top: 8px;
   .clear-title{
     font-size: 14px;
     position: relative;
-    padding-bottom: 8px;
+    // padding-bottom: 8px;
     margin-left: 10px;
   }
   .el-icon-warning-outline:before{

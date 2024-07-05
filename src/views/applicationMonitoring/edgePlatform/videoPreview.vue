@@ -171,7 +171,7 @@ import Player from "xgplayer";
 import {FlvPlugin,Events} from "xgplayer-flv";
 import "xgplayer/dist/index.min.css";
 import AlgorithmList from "@/components/applicationMonitoring/videoStreamManagement/algorithmList";
-import AlarmPopup from "@/components/applicationMonitoring/videoStreamManagement/alarmPopup";
+import AlarmPopup from "@/components/applicationMonitoring/videoStreamManagement/alarmPopup/newPopup";
 import AlarmManagement from "../alarmManagement"
 import {
   getAlgorithms,

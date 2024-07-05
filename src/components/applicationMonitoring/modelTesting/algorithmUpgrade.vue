@@ -12,8 +12,12 @@
               v-for="(item, index) in boxList"
               :key="item.locationId"
               :label="item.locationId"
+              :disabled="item.algorithmVersion?false:true"
               style="display: block; margin-top: 10px"
-              >{{ item.boxName }} <span v-if="item.algorithmVersion">{{ "(" +item.algorithmVersion+")" }}</span></el-checkbox>
+              >{{ item.boxName }}
+              <span v-if="item.algorithmVersion">{{ "(" +item.algorithmVersion+")" }}</span>
+              <span v-else style="color: red;">(无任何摄像头使用此算法，请先关联)</span>
+            </el-checkbox>
           </el-checkbox-group>
         </el-card>
         <el-card class="box-card">
@@ -33,7 +37,7 @@
         <el-card class="box-card">
           <div slot="header" class="clearfix">
             <span>本地算法文件</span>
-            <el-button style="float: right" type="primary" size="mini" @click="changeBoxAlgorithmVersion">切换版本</el-button>
+            <el-button style="float: right" type="primary" size="mini" :loading="changeLoading" @click="changeBoxAlgorithmVersion">切换版本</el-button>
           </div>
           <div class="title">最新版本</div>
           <div class="radio-sty" v-if="lastVersionFile&&lastVersionFile.name">
@@ -94,17 +98,18 @@ export default {
       // id:"",
       timer:null,
       lastVersionFile:{},
+      changeLoading:false,
       // algorithmName:'',
     };
   },
   props:{
     id:{
-      type:String,
-      default:''
+        type:String,
+        default:''
     },
     algorithmName:{
-      type:String,
-      default:''
+        type:String,
+        default:''
     },
     platform:{
       type:String,
@@ -137,7 +142,7 @@ export default {
       this.boxList = data.boxList;
       if(data.fileList.length>0){
           let newArr = data.fileList.filter(item=>{
-            return item.name != data.lastVersionFile.name
+          return item.name != data.lastVersionFile.name
           })
           this.fileList = newArr;
       }
@@ -145,8 +150,10 @@ export default {
       let Arr = data.boxList.filter(item=>{
         return item.boxUpdateStatus!=0 
       })
-      clearInterval(this.timer)
       if(Arr.length>0){
+        if(this.timer){
+          clearInterval(this.timer)
+        }
         let that = this;
         this.timer = setInterval(function () {
             that.getBoxAndHistoryVersion();
@@ -155,19 +162,43 @@ export default {
         clearInterval(this.timer)
       }
     },
-    async changeBoxAlgorithmVersion(){
+    changeBoxAlgorithmVersion(){
       //this.formatData.locationId = this.boxCheckList
-      let { code } = await changeBoxAlgorithmVersion({
+      if(this.timer){
+        clearInterval(this.timer)
+      }
+      let that = this;
+      this.timer = setInterval(function () {
+            that.getBoxAndHistoryVersion();
+      }, 3000);
+      this.changeLoading = true;
+      let obj = {
         boxIds:this.formatData.boxIds+"",
         fileName:this.formatData.fileName,
         algorithmId:this.id
-      });
-      if(code == 0){
-        this.$message.success('更新成功')
-        this.formatData.fileName = "";
-        this.formatData.boxIds = [];
-        this.getBoxAndHistoryVersion();
       }
+      changeBoxAlgorithmVersion(obj).then(res=>{
+        this.changeLoading = false;
+        if(res.code == 0){
+          this.$message.success('更新成功')
+          this.formatData.fileName = "";
+          this.formatData.boxIds = [];
+          // this.getBoxAndHistoryVersion();
+        }
+      }).catch(()=>{
+        this.changeLoading = false;
+      })
+      // let { code } = await changeBoxAlgorithmVersion({
+        // boxIds:this.formatData.boxIds+"",
+        // fileName:this.formatData.fileName,
+        // algorithmId:this.id
+      // });
+      // if(code == 0){
+      //   this.$message.success('更新成功')
+      //   this.formatData.fileName = "";
+      //   this.formatData.boxIds = [];
+      //   this.getBoxAndHistoryVersion();
+      // }
     },
     // 处理进度条
     handleProcess(local,total) {
@@ -207,6 +238,9 @@ export default {
   flex: 1;
   padding-left: 20px;
   text-align: right;
+}
+.box-card{
+  margin-top: 10px;
 }
 </style>
 <style lang="scss">

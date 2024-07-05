@@ -1,64 +1,52 @@
 <template>
   <div>
     <div class="result">
-      <div class="img-box">
-        <div class="img-content" :style="{overflow:'hidden',width:ratio==1?'235px !important':'',height:ratio==1?'132px !important':''}" @mouseenter="onHover"  @mouseleave="hideMessage">
-          <div v-for="(item, index) in pointList" :key="index"
+      <div class="title-time">
+        <div>{{ alarmData.createdStr }}</div>
+        <div class="more">
+          <el-dropdown @command="bigImgFun()">
+            <span class="el-dropdown-link">
+              <span class="el-icon-more"></span>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item style="color: #1e9fff;">查看大图</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+          <el-image-viewer
+            v-if="isShowPics"
+            :on-close="closeViewer"
+            :url-list="[originalUrl]"
+          />
+        </div>
+      </div>
+      <div class="img-box" @click="detailFun">
+        <div class="img-content" :style="{overflow:'hidden',width:ratio==1?'235px !important':'',height:ratio==1?'132px !important':''}">
+          <!-- <div v-for="(item, index) in pointList" :key="index"
             :class="item.type=='hook'?'xboxA':'xbox'"
             :style="{
             width: item.width,
             height: item.height,
             left: item.left,
             top: item.top,
-          }">
+          }"> -->
             <!-- <div class="text" v-if="ratio==0.5" :style="{ color: '#fff', textAlign:'center',backgroundColor: item.type=='hook'?'green':'red',position:'absolute',minWidth:'100%'}">{{ item.confidence }}</div> -->
-          </div>
+          <!-- </div> -->
           <img id="img_alarm_card" ref="page_image_url" :src="this.fileUrl" style="width: 100%;"/>
         </div>
       </div>
-      <div style="padding: 5px 10px">
-        <div class="names-text">
-
-            <el-tooltip effect="dark" v-if="alarmData.cameraName" :content="alarmData.cameraName" placement="top-start" :disabled="isShowTooltip">
-              <div class="cameraName" ref="cameraName">
-                摄像头名称: {{ alarmData.cameraName }}
-              </div>
-            </el-tooltip>
-          <div class="times-text">
-              <time class="time">告警时间: {{ alarmData.createdStr }}</time>
-          </div>
-          <div class="al-info">
-            <el-tooltip effect="dark" v-if="alarmData.algorithmName" :disabled="isShowTooltip" :content="alarmData.algorithmName">
-              <div class="al-name" ref="alName">
-                检测内容: {{ alarmData.algorithmName }}
-              </div>
-            </el-tooltip>
-            <div v-if="alarmData.alarmLevel.name">
-              <el-tag size="mini" style="font-size: 12px" :style="{
-                borderColor: alarmData.alarmLevel.showColor,
-                color: alarmData.alarmLevel.showColor,
-                backgroundColor: alarmData.alarmLevel.showColorAlpha,
-              }">{{ alarmData.alarmLevel.name }}</el-tag>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
-    <div class="big-img" v-if="isBigImg">
-      <MarkResult
-            v-if="alarmData.id"
-            :fileUrl="VUE_APP_API_BASE_URL+`/report/streamThumb?id=${alarmData.id}`"
-            :dataList="dataList"
-            :imgRatio="imgRatio"
-      />
-    </div>
+    <AlarmDetail :alarmData="alarmData" :dataList="dataList" :originalUrl="originalUrl" v-if="alarmDetailVisible" @close="alarmDetailVisible = false" />
   </div>
 </template>
 <script>
 import MarkResult from "@/components/markResult";
+import ElImageViewer from "element-ui/packages/image/src/image-viewer";
+import AlarmDetail from "@/components/applicationMonitoring/alarmManagement/alarmDetail/newDetail"
 export default {
   components: {
       MarkResult,
+      ElImageViewer,
+      AlarmDetail
   },
   props: {
     fileUrl: {
@@ -80,18 +68,23 @@ export default {
     isAlarm:{
       type:Boolean,
       default:false
+    },
+    originalUrl:{
+      type:String,
+      default:""
     }
   },
   data() {
     return {
+      isBigImg:false,
       imgRatio:0.5,
       VUE_APP_API_BASE_URL,
-      isBigImg:false,
       imgHeight: "",
       pointList: [],
       alarmDetailVisible: false,
       currentId: "",
       isShowTooltip:false,
+      isShowPics:false,
     };
   },
   methods: {
@@ -126,6 +119,7 @@ export default {
           }
           img.onload = () => {
             this.imgHeight = img.height;
+            
             setTimeout(() => {
               const ratio = this.$refs.page_image_url.offsetHeight / this.imgHeight;
               val.forEach((item) => {
@@ -151,19 +145,48 @@ export default {
   mounted() {
   },
   methods:{
-      onHover(){
-          this.isBigImg = true;
+      // onHover(){
+      //     this.isBigImg = true;
+      // },
+      // hideMessage(){
+      //   this.isBigImg = false;
+      // },
+      // 查看大图
+      bigImgFun(){
+        // this.$refs.page_image_url.clickHandler()
+        this.isShowPics = true;
       },
-      hideMessage(){
-        this.isBigImg = false;
+      closeViewer() {
+        this.isShowPics = false;
+      },
+      detailFun(){
+        this.alarmDetailVisible = true
       }
+
   }
 };
 </script>
 <style scoped lang="scss">
 .result {
   width: 100%;
-
+  .title-time{
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    .more{
+      position: relative;
+      .big-btn{
+        position: absolute;
+        background: #FFF;
+        color: #1e9fff;
+        padding: 10px;
+        z-index: 99;
+        width: 50px;
+        right: -10px;
+        cursor: pointer;
+      }
+    }
+  }
   .img-box {
     width: 100%;
     display: flex;
@@ -255,7 +278,7 @@ export default {
   margin-right: 5px;
   height: 25px;
   flex: 1;
-  color: #303a4a;
+  color: #202B3D;
   overflow:hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -265,7 +288,8 @@ export default {
   display: block;
 }
 .big-img{
-  width: 80%;
+  width: 832px;
+  height: 592px;
   padding: 10px;
   background: #fff;
   position: absolute;

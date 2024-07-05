@@ -192,7 +192,7 @@ export default {
             flex-direction: column;
         }
         .video4 {
-            width: 50%;
+            width: 45%;
             height: 150px;
             padding: 0 12px;
             display: flex;

@@ -1,7 +1,7 @@
 <template>
     <div class="app-box">
         <div class="headline">
-            <div class="icon"><i class="el-icon-magic-stick"></i></div>
+            <!-- <div class="icon"><i class="el-icon-magic-stick"></i></div> -->
             <div class="cont">在线体验</div>
         </div>
         <div class="flex-box">
@@ -485,30 +485,16 @@ export default {
 </script>
 <style scoped lang="scss">
 .app-box{
-    padding: 32px;
-    border-radius: 8px;
-    border: 1px solid #E4E7ED;
-    background: #F5F7FA;
-    margin: 16px 0;
+    // padding: 32px;
+    // border-radius: 8px;
+    // border: 1px solid #E4E7ED;
+    // background: #F5F7FA;
+    // margin: 16px 0;
 
     .headline{
-        display: flex;
-        margin-bottom: 16px;
-        align-items: center;
-        
-        .icon{
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            color: white;
-            background: linear-gradient(270deg, #48C6EF 0%, #6F86D6 100%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-right: 8px;
-        }
+        margin: 30px 0px;
         .cont{
-            color: rgba(0, 0, 0, 0.90);
+            color: #202B3D;
             font-size: 18px;
             font-style: normal;
             font-weight: bold;
@@ -518,24 +504,25 @@ export default {
     .flex-box{
         display: flex;
         justify-content: space-between;
-        
+        background: #FFF;
+        padding: 23px 29px;
         >div{
-            width: 49.5%;
-            border-radius: 4px;
-            background: #FFF;
-            padding: 16px;
+            width: 47%;
+            // border-radius: 4px;
+            // background: #FFF;
+            // padding: 16px;
         }
 
         .title{
-            color: rgba(0, 0, 0, 0.90);
+            color: #202B3D;
             font-weight: bold;
             margin: 0;
-            padding-bottom: 10px;
+            padding-bottom: 20px;
             font-size: 14px;
             span{
                 display: inline-block;
                 margin-left: 8px;
-                color: #606266;
+                color: #999999;
                 font-size: 14px;
                 font-weight: 400;
             }
@@ -717,7 +704,7 @@ export default {
 }
 
 :deep(.el-button--primary){
-    background: linear-gradient(270deg, #48C6EF 0%, #6F86D6 100%) !important;
+    background: #EFA04C !important;
     border: none;
 }
 </style>

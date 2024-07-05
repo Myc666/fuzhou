@@ -4,26 +4,31 @@
       <img v-if="!imageError" :src="VUE_APP_API_BASE_URL + this.$store.state.appInfo.logoUrl" @error="handleImageError" />{{
         this.$store.state.appInfo.appName
       }}
+      <!-- <img src="@/assets/img3/logs.png" style="width: 150px;height: 34px;" alt=""> -->
     </div>
-    <el-aside class="aside" width="200px">
-      <el-scrollbar class="scrollbar-wrapper">
-        <el-menu
+    <el-aside class="aside" :style="{width: isCollapse ? '60px': '190px'}">
+      <el-menu
           :default-active="activeIndex"
           class="elMenu"
-          background-color="#041335"
-          text-color="#fff"
-          active-text-color="#fff"
+          background-color="#fff"
+          text-color="#333333"
+          active-text-color="#EB3A2F"
           :unique-opened="true"
           router
           ref="elMenu"
+          :collapse="isCollapse"
         >
           <myitem :data="menuArr" />
         </el-menu>
-      </el-scrollbar>
-      <div class="version-sty">
-        <div style="display: flex;align-items: center;">
-          <div>版本：{{ versionNum }}</div>
-          <div class="tip-icon" v-if="isNew&&versionNum" @click="versionFun()">有更新</div>
+        <div class="version-sty" >
+          <div style="display: flex;align-items: center;" >
+            <i v-if="isCollapse" @click="isCollapse = !isCollapse" style="margin-right: 14px;font-size: 18px;" class="el-icon-s-unfold
+"></i>
+            <i v-else @click="isCollapse = !isCollapse" style="margin-right: 14px;font-size: 18px;" class="el-icon-s-fold"></i>
+            <div v-if="!isCollapse">
+
+                <div>版本：{{ versionNum?versionNum:'1.03' }}</div>
+              <div class="tip-icon" v-if="isNew&&versionNum" @click="versionFun()">有更新</div>
           <div v-else>
             <el-popover
               placement="top"
@@ -37,20 +42,22 @@
               <div class="tip-btn" slot="reference">版本检查</div>
             </el-popover>
           </div>
-        </div>
+            </div>
+          </div>
       </div>
     </el-aside>
     <el-container>
       <el-header>
         <div class="userInfo">
           <div class="scan">
-            <span class="el-icon" @mouseenter="onHover"  @mouseleave="hideMessage">扫码登录</span>
+            <span class="el-icon" style="font-size: 18px;
+color: #202B3D;" @mouseenter="onHover"  @mouseleave="hideMessage">扫码登录</span>
             <div class="scan-cont" v-if="isImg">
               <img :src="VUE_APP_API_BASE_URL + '/appLoginQRCode?phone='+userInfo.nickname+'&password='+userInfo.password" style="width: 100px;height: 100px;"/>
             </div>
           </div>
-          <!-- <span class="alarmSwitch">报警弹窗 <el-switch v-model="$store.state.alarmSwitch"> </el-switch></span> -->
-          <span class="el-icon" @click="downFile()">使用手册下载<i class="el-icon-download"></i></span>
+          <!-- <span class="el-icon" style="font-size: 18px;
+color: #202B3D;" @click="downFile()">使用手册下载<i class="el-icon-download"></i></span> -->
           <el-image
             style="width: 30px; height: 30px;border-radius: 50%;"
             :src="avatar"
@@ -58,7 +65,8 @@
           ></el-image>
           <el-dropdown @command="handleCommand">
             <span class="userName"
-              >{{ userInfo.nickname
+              style="font-size: 20px;
+color: #202B3D;">{{ userInfo.nickname
               }}<i class="el-icon-arrow-down el-icon--right"></i
             ></span>
             <el-dropdown-menu slot="dropdown">
@@ -70,7 +78,7 @@
       </el-header>
       <el-main
         class="main"
-        :style="{ padding: $route.meta.noPadding ? '0px' : '20px' }"
+        :style="{ padding: $route.meta.noPadding ? '0px' : '20px'}"
       >
         <router-view />
         <!-- 最新版本 -->
@@ -82,12 +90,12 @@
   </el-container>
 </template>
 <script>
-import { getLastFileOrigin } from "@/api/common";
 import Cookies from "js-cookie";
 import myitem from "./components/myitem.vue";
 import allRoutes from "@/router/data";
 import Axios from 'axios';
 import {handlePublicUrl }from '@/utils/common'
+import {getLastFileOrigin }from '@/api/common'
 import NewVersion from "@/components/versionInfo/newVersion.vue";
 import HistoricalVersion from "@/components/versionInfo/historicalVersion.vue"
 export default {
@@ -115,11 +123,13 @@ export default {
             this.activeIndex = to.path;
           }
         }
+        
       },
     },
   },
   data() {
     return {
+      isCollapse:false,
       VUE_APP_API_BASE_URL,
       activeIndex: this.$route.path,
       menuArr: allRoutes[0].children,
@@ -128,74 +138,22 @@ export default {
         password: localStorage.getItem('pw')?localStorage.getItem('pw'):"66$",
       },
       avatar: require("@/assets/images/man.png"),
-      isImg:false,
-      versionObj:{},
-      isNew:false,
+      isImg:false,versionObj:{},
+      isNew:true,
       isNewVersion:false,
       isHistorical:false,
-      version: '',//当前版本
-      versionNum:'',//页面展示版本号
+      version: '',
+      versionNum:'',
       imageError:false,
     };
   },
   created() {
-    this.getV()
+    // this.getV();
     // this.handleBreadcrumb(this.$route);
-    class VuplexPolyfill {
-      constructor() {
-        this._listeners = {};
-        window.addEventListener('message', this._handleWindowMessage.bind(this));
-      }
-      addEventListener(eventName, listener) {
-        if (!this._listeners[eventName]) {
-          this._listeners[eventName] = [];
-        }
-        if (this._listeners[eventName].indexOf(listener) === -1) {
-          this._listeners[eventName].push(listener);
-        }
-      }
-      removeEventListener(eventName, listener) {
-        if (!this._listeners[eventName]) {
-          return;
-        }
-        const index = this._listeners[eventName].indexOf(listener);
-        if (index !== -1) {
-          this._listeners[eventName].splice(index, 1);
-        }
-      }
-      postMessage(message) {
-        // Don't pass a string to JSON.stringify() because it adds extra quotes.
-        const messageString = typeof message === 'string' ? message : JSON.stringify(message);
-        parent.postMessage({
-          type: 'vuplex.postMessage',
-          message: messageString
-        }, '*')
-      }
-      _emit(eventName, ...args) {
-        if (!this._listeners[eventName]) {
-          return;
-        }
-        for (const listener of this._listeners[eventName]) {
-          try {
-            listener(...args);
-          } catch (error) {
-            console.error(`An error occurred while invoking the '${eventName}' event handler.`, error);
-          }
-        }
-      }
-      _handleWindowMessage(event) {
-        if (event.data && event.data.type === 'vuplex.postMessage') {
-          this._emit('message', { data: event.data.message });
-        }
-      };
-    }
-    if (!window.vuplex) {
-      window.vuplex = new VuplexPolyfill();
-    }
   },
   methods: {
-    handleImageError() {
-      this.imageError = true;
+    handleImageError(){
+      this.imageError = true
     },
     async getV(){
       const res = await getLastFileOrigin();
@@ -214,8 +172,8 @@ export default {
       //   }
       // }
     },
-    // 鼠标悬浮
-    onHover(){
+     // 鼠标悬浮
+     onHover(){
       this.isImg = true;
     },
     // 鼠标离开
@@ -226,7 +184,7 @@ export default {
       this.$router.push('/bigScreen');
       setTimeout(function () {
         window.location.reload();
-      }, 100);
+      }, 90);
     },
     goBack() {
       window.history.go(-1);
@@ -237,6 +195,11 @@ export default {
       Cookies.remove("X-Token");
       localStorage.removeItem('nickname')
       localStorage.removeItem('pw')
+      sessionStorage.removeItem('VocieSwitch')
+      sessionStorage.removeItem('menu');
+      sessionStorage.removeItem('menuTree');
+      sessionStorage.removeItem('path');
+      this.$store.state.routerNav = [];
       this.$router.push("/login");
     },
     downFile(){
@@ -294,7 +257,7 @@ export default {
     text-align: center;
     font-size: 20px;
     font-weight: bold;
-    color: #fff;
+    color: #000;
     padding: 0 20px;
     display: flex;
     align-items: center;
@@ -310,17 +273,17 @@ export default {
     }
   }
   .aside {
-    background: #041335;
+    // background: #041335;
     overflow: hidden;
     padding-top: 60px;
 
-    .scrollbar-wrapper {
-      height: calc(100vh - 100px);
-      overflow-x: hidden !important;
-    }
+    // .scrollbar-wrapper {
+    //   height: calc(100vh - 100px);
+    //   overflow-x: hidden !important;
+    // }
   }
   .el-header {
-    background: #041335;
+    // background: #041335;
     color: #333;
     line-height: 60px;
     box-shadow: 0px 4px 6px 0px rgba(0, 0, 0, 0.12);
@@ -331,24 +294,24 @@ export default {
       align-items: center;
       justify-content: flex-end;
       .el-icon{
-        color: #fff;
+        color: #202B3D;
         font-size: 14px;
         cursor: pointer;
       }
       .el-icon-s-unfold{
-        color: #fff;
+        color: #202B3D;
         font-size: 22px;
         margin-right: 30px;
         cursor: pointer;
       }
       .el-icon-download{
-        color: #fff;
+        color: #202B3D;
         font-size: 16px;
         margin-right: 30px;
         cursor: pointer;
       }
       .alarmSwitch {
-        color: #fff;
+        color: #202B3D;
         margin-right: 20px;
       }
       .userInfo-message {
@@ -357,15 +320,15 @@ export default {
         margin-right: 10px;
       }
       .userName {
-        color: #fff;
+        color: #202B3D;
         padding: 0 10px;
         cursor: pointer;
       }
     }
   }
   .main {
-    border-radius: 20px;
-    background: #f1f5fb;
+    // border-radius: 20px;
+    background: #f8f7f8;
     margin: 0 20px 20px 0;
     position: relative;
     .subMain {
@@ -393,6 +356,7 @@ export default {
       position: absolute;
       background-color: #fff;
       top: 45px;
+      left: 5px;
       height: 100px;
       box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.3);
     }
@@ -404,14 +368,51 @@ export default {
 ::v-deep .el-menu {
   border: none;
 }
-::v-deep .el-menu .el-menu-item.is-active {
-  background: #2099fa !important;
+
+::v-deep .el-menu .el-menu-item:hover{
+  background: #FFE6E1 !important;
+}
+::v-deep .el-menu-item{
+  // text-indent: 29px;
+}
+::v-deep .el-submenu__title{
+  padding: 0 !important;
+  i{
+    margin-left: 20px;
+    // margin-right: 20px;
+  }
+}
+
+::v-deep .el-submenu.is-active .el-submenu__title {
+  background: #FFE6E1 !important;
+  border-left: 3px solid #EB3A2F;
+  i{
+    color: #EB3A2F;
+  }
+  span{
+    color: #EB3A2F;
+  }
+  
+}
+
+::v-deep .el-menu--collapse  .el-submenu__icon-arrow{
+  display: none;
+}
+
+::v-deep .el-menu--collapse{
+  overflow: hidden;
+}
+
+::v-deep .el-submenu__title:hover{
+  background: #FFE6E1 !important;
 }
 .version-sty{
   font-size: 14px;
-  color: #fff;
+  color: #909399;
   cursor: pointer;
   padding-left: 20px;
+  position: absolute;
+  bottom: 40px;
   .tip-icon{
     background: #67C23A;
     border: 1px solid #fff;

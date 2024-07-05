@@ -1,27 +1,37 @@
 <template>
   <div class="model-cont">
-    <div class="head-cont">
-      <div class="head-txt">探索人工智能模型</div>
-      <div style="margin-left: 25%;width: 50%;margin-top: 20px;">
-        <el-input placeholder="请输入场景关键字" v-model="name" size="mini">
-          <el-button slot="append" icon="el-icon-search" @click="seachFun"></el-button>
-        </el-input>
-      </div>
-      <div class="flex-btn">
-        <!-- <div class="level-btn" @click="addData">
-          <span class="el-icon-plus"></span>
-          <span style="margin-left: 4px;">新增算法</span>
-        </div> -->
-        <div class="level-btn" @click="addAlarmLevelData">
-          <span class="el-icon-s-operation"></span>
-          <span style="margin-left: 4px;">告警等级管理</span>
+    <div class="top-tabs">
+      <div v-for="(items,index) in tagList" :key="index" :class="[items.isCheck?'tab-check':'tab-item']" @click="checkFun(index)">
+        <div :class="[items.isCheck?'tab-name':'']">
+          {{ items.name }}
         </div>
       </div>
     </div>
-    <div class="flex-cont">
-      <div class="left-cont">
-        <div v-for="(item,index) in tagList" :key="index" :class="item.isCheck?'left-item bg-color':'left-item'" @click="checkFun(index)">{{ item.name }}</div>
+    <div class="head-cont">
+      <div class="head-txt">探索人工智能模型</div>
+      <div style="display: flex;align-items: center;">
+        <div style="font-size: 16px;">搜索场景:</div>
+        <div style="margin: 0px 10px;">
+          <el-input placeholder="请输入场景关键字" style="width: 300px;" v-model="name" size="mini"></el-input>
+        </div>
+        <div>
+          <el-button size="mini" type="primary" @click="seachFun">搜索</el-button>
+        </div>
       </div>
+      <div class="flex-btn">
+        <div class="level-btn" @click="addData">
+          <!-- <span class="el-icon-plus"></span> -->
+          <span>新增算法</span>
+        </div>
+        <div class="level-btn" @click="addAlarmLevelData">
+          <span>告警等级管理</span>
+        </div>
+        <!-- <div class="level-btn" @click="addAlarmVoice">
+          <span>告警语音管理</span>
+        </div> -->
+      </div>
+    </div>
+    <div class="flex-cont">
       <div class="right-cont" id="rightCont" v-loading="loading">
         <div class="top-tip" v-if="isShow">
           <div class="go-back" @click="goBack">
@@ -53,7 +63,7 @@
                 </div>
                 <div class="alg-tip">{{ items.marks }}</div>
                 <div>
-                  <div class="alg-btn-flex" v-if="items.hasGitFile||items.hasLocalFile">
+                  <!-- <div class="alg-btn-flex" v-if="items.hasGitFile||items.hasLocalFile">
                     <div class="alg-btn" @click.stop="upgradeFun(items)" v-if="items.hasLocalFile&&items.downloadState!='下载中'" style="margin-right: 10px;">
                       算法升级
                     </div>
@@ -67,7 +77,27 @@
                   <div v-else class="alg-btn-flex">
                     <div class="optimize-btn">优化中，敬请期待</div>
                     <div class="upload-btn" @click.stop="uploadFun(items)">手动导入模型文件</div>
-                  </div>
+                  </div> -->
+                    <div class="alg-btn-flex">
+                      <div class="alg-btn" v-if="items.hasGitFile||items.hasLocalFile" @click.stop="editData(items)">
+                        {{items.hasLocalFile?(items.downloadState=='已启用'?'编辑':items.downloadState):'下载'}}
+                      </div>
+                      <!-- <div v-if="!items.hasGitFile||!items.hasLocalFile" class="alg-btn">
+                        <div class="optimize-btn">优化中，敬请期待</div>
+                        <div class="upload-btn" @click.stop="uploadFun(items)">导入模型文件</div>
+                      </div> -->
+                      <el-dropdown @command="(command) => handleCommand(command, items)" trigger="click">
+                        <span class="more-btn"  @click.stop="">
+                          更多<i class="el-icon-arrow-down el-icon--right"></i>
+                        </span>
+                        <el-dropdown-menu slot="dropdown">
+                          <el-dropdown-item v-if="items.hasLocalFile&&items.downloadState!='下载中'" command="1" icon="el-icon-delete">卸载算法</el-dropdown-item>
+                          <el-dropdown-item command="2" icon="el-icon-upload2">导入模型文件</el-dropdown-item>
+                          <el-dropdown-item v-if="items.hasLocalFile&&items.downloadState!='下载中'" command="3" icon="el-icon-coin">版本管理</el-dropdown-item>
+                          <el-dropdown-item command="4" icon="el-icon-circle-close">删除卡片</el-dropdown-item>
+                        </el-dropdown-menu>
+                      </el-dropdown>
+                    </div>
                 </div>
               </div>
             </div>
@@ -93,10 +123,10 @@
       :visible.sync="dialogVisible"
       width="80%"
       >
-      <AlgorithmUpgrade v-if="dialogVisible" :id="rowId" :algorithmName="algorithmName" :platform="platform" :nameEn="nameEn" @close="handleClose"/>
+      <AlgorithmUpgrade v-if="dialogVisible" :id="rowId" :algorithmName="algorithmName"  :platform="platform" :nameEn="nameEn" @close="handleClose"/>
     </el-dialog>
     <!-- 新增算法--上传zip -->
-    <AddUpload v-if="addDialogVisible" @closeAdd="closeAdd"/>
+    <AddPage v-if="addDialogVisible" @closeAdd="closeAdd"/>
     <!-- 手动上传算法文件 -->
     <el-dialog
       title="上传算法版本文件"
@@ -106,23 +136,27 @@
     >
       <ImportAlgorithm v-if="importDialog" :platform="platform" :nameEn="nameEn" pageType="1" @closeImport="closeImport"/>
     </el-dialog>
+    <!-- 语音管理 -->
+    <!-- <VoiceManagement v-if="voiceDialog" @closeHandle="closeHandle"/> -->
   </div>
 </template>
 <script>
 import { getListData,getTagListData,deleteFile,checkAlgorithmVersion } from "@/api/applicationMonitoring/modelTesting";
-import {deleteData} from "@/api/applicationMonitoring/algorithmManagement";
+import {deleteAlgorithm} from "@/api/applicationMonitoring/algorithmManagement";
 import AddAlgorithm from "@/components/applicationMonitoring/modelTesting/addAlgorithm";
-import AddUpload from "@/components/applicationMonitoring/modelTesting/addUpload";
+import AddPage from "@/components/applicationMonitoring/modelTesting/addPage/index";
 import AlgorithmUpgrade from "@/components/applicationMonitoring/modelTesting/algorithmUpgrade";
 import ListAlarmLevel from "@/components/applicationMonitoring/algorithmManagement/listAlarmLevel";
 import ImportAlgorithm from "@/components/applicationMonitoring/modelTesting/importAlgorithm";
+// import VoiceManagement from "@/components/applicationMonitoring/modelTesting/voiceManagement/index.vue";
 export default {
   components:{
     AddAlgorithm,
     ListAlarmLevel,
     AlgorithmUpgrade,
-    AddUpload,
-    ImportAlgorithm
+    AddPage,
+    ImportAlgorithm,
+    // VoiceManagement
   },
   data() {
     return {
@@ -149,6 +183,7 @@ export default {
       importDialog:false,
       isImportClose:true,
       algorithmArr:[],
+      // voiceDialog:false,
     };
   },
   watch:{
@@ -350,7 +385,7 @@ export default {
     // 手动导入模型文件
     uploadFun(items){
       this.platform = items.platform;
-      this.nameEn = items.nameEn
+      this.nameEn = items.nameEn;
       this.importDialog = true
     },
     closeImport(item){
@@ -368,33 +403,69 @@ export default {
       if(this.isImportClose){
         this.importDialog = false;
       }
+    },
+    // // 告警语音管理
+    // addAlarmVoice(){
+    //   this.voiceDialog = true
+    // },
+    // // 关闭语音管理
+    // closeHandle(){
+    //   this.voiceDialog = false;
+    //   this.getListData();
+    // },
+    // 删除算法
+    deleteFun(item){
+      this.$confirm(`请谨慎删除。<br />1.将删除所有数据信息，包括卡片、识别记录等。<br />2.将自动停止所有使用此算法的摄像头播放。<br />3.若重新添加此算法，请前往【算法商城 > 新增算法】添加。`, `是否删除【${item.name}】`, {
+        confirmButtonText: "确认删除",
+        cancelButtonText: "取消",
+        confirmButtonClass: 'custom-confirm-class',
+        dangerouslyUseHTMLString:true,
+        customClass:"elmessagewidth"
+      })
+        .then(async () => {
+          const res = await deleteAlgorithm({ id: item.id });
+          if (res.code == 0) {
+            this.$message.success("删除成功");
+            await this.getListData();
+          }
+        })
+        .catch(() => {});
+    },
+    // 更多
+    handleCommand(command,items){
+      if(command==1){//卸载算法
+        this.deleteData(items)
+      }else if(command==2){//导入文件模型
+        this.uploadFun(items)
+      }else if(command==3){//版本管理
+        this.upgradeFun(items)
+      }else{//删除算法
+        this.deleteFun(items)
+      }
     }
   },
 };
 </script>
 <style scoped lang="scss">
 .model-cont{
-  height: 100%;
+  height:calc(100vh - 110px);
   background: #fff;
   border-radius: 8px;
-  padding: 32px 22px 20px 32px;
+  overflow: auto;
   .head-cont{
-    background: #fff;
-    margin-bottom: 12px;
+    margin: 0px 26px;
+    padding: 20px 0px;
+    border-bottom: 1px solid #EDF0F3;
     position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     .head-txt{
-      color: #000;
-      font-size: 32px;
-      font-weight: 400;
-      line-height: 22px;
-      text-align: center;
+      font-size: 24px;
+      color: #202B3D;
     }
     .flex-btn{
       display: flex;
-      background: #FFFFFF;
-      position: absolute;
-      right: 0;
-      bottom: 8px;
     }
     .level-btn{
       border: 1px solid #DCDFE6;
@@ -404,50 +475,86 @@ export default {
       color: #606266;
       text-align: center;
       cursor: pointer;
-      margin-left: 8px;
+      margin-left: 10px;
     }
   }
   .flex-cont{
     display: flex;
+    padding: 20px 26px;
   }
-  .left-cont{
-    width: 100px;
-    margin-right: 10px;
-    height:calc(100vh - 268px);
-    overflow: scroll;
-    .left-item{
-      padding: 13px 16px;
-      border: 1px solid #E7E7E7;
-      color: rgba(0, 0, 0, 0.60);
-      background: #F3F3F3;
-      cursor: pointer;
-      font-size: 14px;
-    }
-    .left-item:nth-child(n+2){
-      border-top: none!important;;
-    }
-    .left-item:hover{
-      color: #FFFFFF;
-      background: #54B5E9;
-    }
-    .bg-color{
-      color: #FFFFFF !important;
-      background: #54B5E9 !important;
-    }
+  .top-tabs{
+  background: rgba(227, 227, 227, 0.17);
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  display:flex;
+  width: 100%;
+  overflow-x: auto;
+  .tab-item{
+    flex-shrink: 0;
+    padding: 0px 20px;
+    margin: 10px 0px;
+    border-left: 1px solid #c2c6cd;
+    font-size: 18px;
+    color: #8692AA;
+    cursor: pointer;
   }
+  .tab-item:first-child{
+    border-left: none;
+  }
+  .tab-check{
+    flex-shrink: 0;
+    padding: 10px 10px 10px 10px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #202B3D;
+    background: #FFF;
+  }
+  .tab-check+.tab-item{
+    border-left: none;
+  }
+  .tab-name{
+    border-left: 2px solid #F05924;
+    padding-left: 8px;
+  }
+}
+  // .left-cont{
+  //   width: 100px;
+  //   margin-right: 10px;
+  //   height:calc(100vh - 268px);
+  //   overflow-y: scroll;
+  //   .left-item{
+  //     padding: 13px 16px;
+  //     border: 1px solid #E7E7E7;
+  //     color: rgba(0, 0, 0, 0.60);
+  //     background: #F3F3F3;
+  //     cursor: pointer;
+  //     font-size: 14px;
+  //   }
+  //   .left-item:nth-child(n+2){
+  //     border-top: none!important;;
+  //   }
+  //   .left-item:hover{
+  //     color: #FFFFFF;
+  //     background: #54B5E9;
+  //   }
+  //   .bg-color{
+  //     color: #FFFFFF !important;
+  //     background: #54B5E9 !important;
+  //   }
+  // }
   .right-cont{
     flex: 1;
-    height:calc(100vh - 268px);
-    overflow: scroll;
+    height:calc(100vh - 278px);
+    overflow-y: scroll;
     .flex-item{
       display: grid;
       justify-content: space-between;
       .algorithm-item{
         margin-bottom: 16px;
         cursor: pointer;
-        border: 1px solid #E7E7E7;
+        border: 1px solid #EDF0F3;
         border-radius: 6px;
-        box-shadow: 0px 12px 32px 0px rgba(0, 0, 0, 0.04), 0px 8px 20px 0px rgba(0, 0, 0, 0.08);
+        // box-shadow: 0px 12px 32px 0px rgba(0, 0, 0, 0.04), 0px 8px 20px 0px rgba(0, 0, 0, 0.08);
         position: relative;
         .img-cont{
           height: 145px;
@@ -457,6 +564,7 @@ export default {
           // height: 125px;
           padding: 16px 16px 10px 16px;
           .alg-txt{
+            color: #333333;
             font-size: 16px;
             font-weight: bold;
             white-space: nowrap; /* 不换行 */
@@ -464,10 +572,11 @@ export default {
             text-overflow: ellipsis; /* 使用省略号表示被隐藏的部分 */
           }
           .alg-tip{
-            margin-top: 8px;
-            height: 44px;
+            color: #666666;
+            margin-top: 10px;
+            height: 58px;
             font-size: 14px;
-            line-height: 22px;
+            line-height: 29px;
             overflow: hidden;
             text-overflow: ellipsis;
             display: -webkit-box;
@@ -476,7 +585,7 @@ export default {
           }
           .alg-btn-flex{
             // text-align: center;
-            margin-top: 6px;
+            margin-top: 10px;
             display: flex;
             justify-content: end;
             align-items: center;
@@ -484,27 +593,34 @@ export default {
             font-size: 14px;
           }
           .alg-btn{
-            color: #3587FA;
+            color: #F05924;
             cursor: pointer;
+            // border-right: 1px solid #F05924;
+            padding-right: 10px
           }
           .alg-del-btn{
-            color: #909399;
+            color: #202B3D;
             cursor: pointer;
           }
           .optimize-btn{
-            color: #909399;
+            color: #202B3D;
+          }
+          .more-btn{
+            color: #202B3D;
+            padding: 10px;
           }
           .upload-btn{
-            color: #3587FA;
+            color: #F05924;
             cursor: pointer;
             display: none;
           }
         }
       }
       .algorithm-item:hover{
-        box-shadow: 0px 12px 32px 0px rgba(0, 0, 0, 0.08), 0px 8px 20px 0px rgba(0, 0, 0, 0.1);
-        border-bottom-left-radius: 6px;
-        border-bottom-right-radius: 6px;
+        // box-shadow: 0px 12px 32px 0px rgba(0, 0, 0, 0.08), 0px 8px 20px 0px rgba(0, 0, 0, 0.1);
+        // border-bottom-left-radius: 6px;
+        // border-bottom-right-radius: 6px;
+        border: 1px solid #FFC693;
         .upload-btn{
           display: block;
         }
@@ -556,5 +672,8 @@ export default {
       }
     }
   }
+}
+.customClass{
+  z-index: 9999 !important;
 }
 </style>

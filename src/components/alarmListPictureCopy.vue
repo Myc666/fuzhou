@@ -151,7 +151,7 @@
         display: flex;
         flex-wrap: wrap;
         .itemInfo{
-            width: 50%;
+            width: 48%;
             padding-right: 10px;
             display: flex;
             align-items: center;

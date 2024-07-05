@@ -137,3 +137,30 @@ export function uploadAlgorithmFile(data) {
     data
   })
 }
+
+// 上传语音文件
+export function uploadSoundFile(data) {
+  return request({
+    url: '/algorithm/uploadSoundFile',
+    method: 'post',
+    data
+  })
+}
+
+// 删除语音文件
+export function deleteSoundFile(params) {
+  return request({
+    url: '/algorithm/deleteSoundFile',
+    method: 'post',
+    params
+  })
+}
+
+// 新增算法卡片信息
+export function saveOrUpdate(data) {
+  return request({
+    url: '/algorithm/saveOrUpdate',
+    method: 'post',
+    data
+  })
+}

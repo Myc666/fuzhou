@@ -101,6 +101,7 @@
     getTagListData,
     getListDataDetail,
     search,
+    getFileOrigin,
     saveData,
     getAlarmLevelList,
     downloadCheck,
@@ -123,8 +124,20 @@
       return {
         platformList:[
           {
-            name:'超星',
-            id:'chaoxing',
+            name:'英伟达',
+            id:'nvidia',
+          },
+          {
+            name:'灵汐',
+            id:'lynxi',
+          },
+          {
+            name:'登临',
+            id:'denglin',
+          },
+          {
+            name:'算能',
+            id:'sophgo',
           },
         ],
         loading: false,
@@ -224,7 +237,7 @@
           suanfa:this.params.nameEn,
           platform:this.params.platform
         };
-        const res = await search(obj);
+        const res = await getFileOrigin(obj);
         if(res.data.length==0){
           this.$message('未搜索到算法文件')
         }

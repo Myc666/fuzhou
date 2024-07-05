@@ -2,11 +2,10 @@
     <div class="alg-detail">
         <div class="top-bg">
             <div @click="goBack()" class="go-back">
-                <span class="el-icon-back"></span>
-                <span style="padding: 0px 32px 0px 5px;">返回</span>
+               <img src="@/assets/images/modelTesting/back-icon.png" style="width: 20px;"/>
             </div>
-            <div style="display: flex; align-items: flex-start;margin-top: 32px;">
-                <div style="width: 50%;">
+            <div style="display: flex; align-items: flex-start;margin-top: 12px;">
+                <div style="width: 40%;">
                     <div class="alg-flex">
                         <div class="alg-name">{{ params.name }}</div>
                         <div class="tag-flex">
@@ -19,10 +18,6 @@
                     </div>
                     <div class="tip-cont">{{ params.description }}</div>
                     <div class="button-flex">
-                        <!-- <div class="btn-sty" @click="modelFun">
-                            <span class="el-icon-magic-stick"></span>
-                            <span style="padding-left: 5px;">{{ isShow?'模型使用':'查看算法边界' }}</span>
-                        </div> -->
                         <el-tooltip content="请扫码屏幕右侧二维码" placement="top-start">
                             <div class="btn-sty">
                                 <span class="el-icon-service"></span>
@@ -33,8 +28,8 @@
                 </div>
                 <div class="right-txt">
                     <div class="base-txt" style="margin-right: 50px;">
-                        <div style="font-size: 32px;margin-bottom: 62px;">{{ detailMap.basePrecision ? detailMap.basePrecision : '' }}</div>
-                        <div>
+                        <div class="base-precision">{{ detailMap.basePrecision ? detailMap.basePrecision : '' }}</div>
+                        <div style="color: #333333;font-size: 16px;">
                             <span style="padding-right: 5px;">基础准确率</span>
                             <span class="el-icon-warning-outline"  @mouseenter="onHover(1)"  @mouseleave="hideMessage()"></span>
                         </div>
@@ -43,9 +38,9 @@
                             <div class="tip-txt">复用现有模型进行测试，可达到的识别准确率.</div>
                         </div>
                     </div>
-                    <div class="base-txt">
-                        <div style="font-size: 32px;margin-bottom: 62px;">{{detailMap.scenePrecision ? detailMap.scenePrecision : ''}}</div>
-                        <div>
+                    <div class="scene-txt">
+                        <div class="scene-precision">{{detailMap.scenePrecision ? detailMap.scenePrecision : ''}}</div>
+                        <div style="color: #333333;font-size: 16px;">
                             <span style="padding-right: 5px;">场景优化准确率</span>
                             <span class="el-icon-warning-outline"  @mouseenter="onHover(2)"  @mouseleave="hideMessage()"></span>
                         </div>
@@ -60,7 +55,7 @@
         <!-- <Upload v-if="params.nameEn" :nameEn="params.nameEn" :id="params.id"></Upload> -->
         <div class="illustrate">
             <div class="headline">
-                <div class="icon"><i class="el-icon-notebook-1"></i></div>
+                <!-- <div class="icon"><i class="el-icon-notebook-1"></i></div> -->
                 <div class="cont">算法边界</div>
             </div>
             <div class="flex-box" v-if="JSON.stringify(detailMap) != '{}'">
@@ -180,57 +175,55 @@ export default {
 </script>
 <style scoped lang="scss">
 .alg-detail{
-    background: #F1F5FB;
-    // background: #fff;
-    // border-radius: 8px;
-    // min-height: 100%;
-    // min-height:calc(100vh - 120px);
     .top-bg{
-        // min-height: 200px;
         border-radius: 8px;
-        background: linear-gradient(270deg, #48C6EF 0%, #6F86D6 100%);
-        // background: url("@/assets/images/modelTesting/bg.png") no-repeat;
-        // background-size: cover;
-        padding: 32px;
+        background: url("@/assets/images/modelTesting/bg1.png")  no-repeat center center;
+        background-size: cover;
+        padding: 26px;
         color: #FFFFFF;
         .go-back{
             cursor: pointer;
-            font-size: 14px;
         }
         .alg-flex{
             display: flex;
             align-items: center;
+            flex-wrap: wrap;
         }
         .alg-name{
-            font-size: 32px;
-            line-height: 28px;
-            font-weight: 500;
+            font-family: youhei;
+            font-weight: 400;
+            font-size: 30px;
+            color: #333333;
         }
         .alg-nameEn{
-            font-size: 12px;
-            line-height: 22px;
-            color: rgba(255, 255, 255, 0.60);
+            font-size: 14px;
+            color: #666666;
             margin-top: 8px;
         }
         .tag-flex{
             display: flex;
+            flex-wrap: wrap;
         }
         .tag-item{
-            background: #FFFFFF;
-            color: #409EFF;
+            color: #EB3A2F;
+            background: #FFE6E1;
             font-size: 12px;
-            padding: 2px 10px;
+            padding: 5px 10px;
             border-radius: 30px;
             margin-left: 16px;
+            margin-bottom: 5px;
         }
-        // .tag-item:nth-child(n+2){
-        //     margin-left: 16px;
-        // }
+        .tag-item:nth-child(even){
+            color: #F05924 !important;
+            background: #f3c696  !important;
+        }
         .tip-cont{
             display: flex;
+            // font-size: 22px;
+            color: #333333;
             font-size: 14px;
-            line-height: 22px;
-            margin-top: 32px;
+            line-height: 30px;
+            margin-top: 15px;
         }
         .right-txt{
             margin-bottom: 62px;
@@ -239,7 +232,7 @@ export default {
             justify-content: end;
             align-items: end;
         }
-        .base-txt{
+        .base-txt,.scene-txt{
             position: relative;
             .base-tip{
                 width: 240px;
@@ -262,16 +255,27 @@ export default {
                 }
             }
         }
+        .base-precision,.scene-precision{
+            font-family: youhei;
+            font-size: 28px;
+            margin-bottom: 39px;
+        }
+        .base-precision{
+            color: #EB3A2F;
+        }
+        .scene-precision{
+            color: #EFA04C;
+        }
         .button-flex{
             display: flex;
-            margin-top: 32px;
+            margin-top: 20px;
             .btn-sty{
                 // width: 150px;
-                background: #000;
+                background: #F05924;
                 font-size: 14px;
                 text-align: center;
                 line-height: 22px;
-                // border-radius: 30px;
+                border-radius: 6px;
                 padding: 5px 16px;
                 cursor: pointer;
             }
@@ -279,30 +283,10 @@ export default {
     }
 
     .illustrate{
-        padding: 32px;
-        border-radius: 8px;
-        border: 1px solid #E4E7ED;
-        background: #F5F7FA;
-        margin: 16px 0;
-
         .headline{
-            display: flex;
-            margin-bottom: 16px;
-            align-items: center;
-            
-            .icon{
-                width: 28px;
-                height: 28px;
-                border-radius: 50%;
-                color: white;
-                background: linear-gradient(270deg, #48C6EF 0%, #6F86D6 100%);
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                margin-right: 8px;
-            }
+            margin: 30px 0px;
             .cont{
-                color: rgba(0, 0, 0, 0.90);
+                color: #202B3D;
                 font-size: 18px;
                 font-style: normal;
                 font-weight: bold;
@@ -312,38 +296,35 @@ export default {
         .flex-box{
             display: flex;
             justify-content: space-between;
-            
+            background: #FFF;
+            padding: 23px 29px;
             >div{
-                width: 49.5%;
-                border-radius: 4px;
-                background: #FFF;
-                padding: 16px;
-
+                width: 47%;
             }
 
             .title{
                 font-size: 22px;
-                color: rgba(0, 0, 0, 0.90);
+                color: #202B3D;
                 font-size: 14px;
                 font-weight: bold;
                 display: inline-block;
+                margin-bottom: 15px;
             }
             .demand-tip{
                 font-size: 14px;
                 line-height: 22px;
-                display: inline-block;
-                margin-left: 40px;
+                color: #999999;
+                line-height: 30px;
             }
             .effective-cont{
-                padding: 8px 0px 16px 0px;
+                font-weight: 500;
                 font-size: 14px;
-                color: #606266;
-                line-height: 22px;
-                white-space: pre-line;
+                color: #999999;
+                line-height: 25px;
+                margin-bottom: 20px;
+                white-space:pre-line
             }
             .img-flex{
-                // display: flex;
-                // justify-content: space-around;
                 display: grid;
                 grid-template-columns: repeat(2, 49%);
                 justify-content: space-between;

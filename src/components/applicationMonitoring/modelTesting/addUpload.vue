@@ -2,9 +2,10 @@
     <div>
         <el-dialog
             :close-on-click-modal="false"
-            title="新增算法"
+            title="导入算法完整包"
             :visible.sync="dialogVisible"
             width="500px"
+            append-to-body
             :before-close="handleDialogClose"
         >
             <el-form ref="form" :model="params" :rules="rules" label-width="120px">
@@ -90,7 +91,7 @@ export default {
                         this.btnLoading = false;
                         if(res.code==0&&JSON.stringify(res.data) == "{}"){
                             this.$message.success('导入成功');
-                            this.$emit('closeAdd')
+                            this.$emit('closeAdd',true)
                         }else{
                             this.tipText = res.data;
                         }
