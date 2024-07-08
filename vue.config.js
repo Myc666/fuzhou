@@ -17,6 +17,13 @@ module.exports = defineConfig({
     },
     plugins: [new NodePolyfillPlugin()],
   },
+  css: {
+    loaderOptions: {
+            scss: {
+                additionalData: `@import "@/style.scss";`
+            }
+        }
+    },
   devServer: {
     client: {
       overlay: false // 默认为true，即开启热更新功能
