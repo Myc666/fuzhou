@@ -1,7 +1,7 @@
 <template>
     <div class="log-info">
         <el-tabs v-model="activeName"  @tab-click="handleClick">
-            <el-tab-pane label="jave日志" name="first">
+            <el-tab-pane label="java日志" name="first">
                 <div v-for="(item,index) in logList" :key="index">
                     {{ item }}
                 </div>

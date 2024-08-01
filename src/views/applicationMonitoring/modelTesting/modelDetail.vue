@@ -61,7 +61,7 @@
             <div class="flex-box" v-if="JSON.stringify(detailMap) != '{}'">
                 <div class="effective">
                     <div class="title">有效的拍摄方式</div>
-                    <div class="demand-tip">摄像头分辨率需要满足1920*1080，支持rstp传输协议</div>
+                    <div class="demand-tip">摄像头分辨率需要满足1920*1080，支持RTSP传输协议</div>
                     <div class="effective-cont">
                        {{ detailMap.trueText }}
                     </div>
