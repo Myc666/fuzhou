@@ -34,11 +34,11 @@
             <div>
               <img class="logon" src="@/assets/img3/login_title.jpg" />
             </div>
-            <ul class="tabs">
+            <!-- <ul class="tabs">
               <li :class="['tabItem',{active:!isRegister}]" @click="isRegister = false;">账户登录</li>
               <li :class="['tabItem',{active:isRegister}]" @click="isRegister = true">账户注册</li>
-            </ul>
-            <div style="width: 100%;" v-if="!isRegister && !isForgot">
+            </ul> -->
+            <div style="width: 100%;margin-top: 50px;" v-if="!isRegister && !isForgot">
               <el-form
                 ref="loginForm"
                 label-position="left"
@@ -83,10 +83,9 @@
                     <span v-if="!loading">登 录</span>
                     <span v-else>登 录 中...</span>
                   </el-button>
-                  <div class="bottom-btn">
-                    <!-- <div @click="registerFun">注册账号</div> -->
+                  <!-- <div class="bottom-btn">
                     <div class="forgot" @click="forgotFun">忘记密码?</div>
-                  </div>
+                  </div> -->
                 </el-form-item>
               </el-form>
             </div>
