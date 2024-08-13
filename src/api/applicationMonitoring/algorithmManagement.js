@@ -35,7 +35,7 @@ export function getTagListData(params) {
 }
 
 // 删除算法
-export function deleteData(params) {
+export function deleteAlgorithm(params) {
   return request({
     url: '/algorithm/delete',
     method: 'post',
@@ -139,43 +139,43 @@ export function checkNameEn(params) {
 //获取远程仓库文件 
 export function getFileOrigin(params) {
   return request({
-    url: '/test/gitlabDownload/getFileOrigin',
+    url: '/oss/getFileOrigin',
     method: 'get',
     params
   })
 }
-//下载 
-export function gitDownload(params) {
-  return request({
-    url: '/test/gitlabDownload/download',
-    method: 'get',
-    params
-  })
-}
+// //下载 
+// export function gitDownload(params) {
+//   return request({
+//     url: '/test/gitlabDownload/download',
+//     method: 'get',
+//     params
+//   })
+// }
 // 下载后检查
 export function downloadCheck(params) {
   return request({
-    url: '/test/gitlabDownload/downloadCheck',
+    url: '/oss/downloadCheck',
     method: 'get',
     params
   })
 }
-// 获取文件列表
-export function getFileListBySuanfa(params) {
-  return request({
-    url: '/test/gitlabDownload/getFileListBySuanfa',
-    method: 'get',
-    params
-  })
-}
+// // 获取文件列表
+// export function getFileListBySuanfa(params) {
+//   return request({
+//     url: '/test/gitlabDownload/getFileListBySuanfa',
+//     method: 'get',
+//     params
+//   })
+// }
 
-export function getFileList(params) {
-  return request({
-    url: '/test/gitlabDownload/getFileList',
-    method: 'get',
-    params
-  })
-}
+// export function getFileList(params) {
+//   return request({
+//     url: '/test/gitlabDownload/getFileList',
+//     method: 'get',
+//     params
+//   })
+// }
 
 //算法更新获取盒子列表及算法历史版本
 export function getBoxAndHistoryVersion(params) {
@@ -198,7 +198,7 @@ export function changeBoxAlgorithmVersion(params) {
 
 export function downloadSingleFile(params) {
   return request({
-    url: '/test/gitlabDownload/downloadSingleFile',
+    url: '/oss/downloadSingleFile',
     method: 'get',
     params
   })
@@ -207,7 +207,7 @@ export function downloadSingleFile(params) {
 // 重新下载
 export function reDownloadSingleFile(params) {
   return request({
-    url: '/test/gitlabDownload/reDownloadSingleFile',
+    url: '/oss/reDownloadSingleFile',
     method: 'get',
     params
   })

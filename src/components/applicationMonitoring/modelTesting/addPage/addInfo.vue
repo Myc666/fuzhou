@@ -80,6 +80,10 @@ export default {
                     name:'灵汐',
                     id:'lynxi',
                 },
+                {
+                    name:'算能',
+                    id:'sophgo',
+                },
             ],
             params:{
                 name:'',
