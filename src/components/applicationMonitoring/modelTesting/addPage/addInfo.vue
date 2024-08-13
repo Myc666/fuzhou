@@ -69,21 +69,25 @@ export default {
             dialogVisible:true,
             platformList:[
                 {
-                    name:'英伟达',
-                    id:'nvidia',
+                    name:'超星',
+                    id:'chaoxing',
                 },
-                {
-                    name:'登临',
-                    id:'denglin',
-                },
-                {
-                    name:'灵汐',
-                    id:'lynxi',
-                },
-                {
-                    name:'算能',
-                    id:'sophgo',
-                },
+                // {
+                //     name:'英伟达',
+                //     id:'nvidia',
+                // },
+                // {
+                //     name:'登临',
+                //     id:'denglin',
+                // },
+                // {
+                //     name:'灵汐',
+                //     id:'lynxi',
+                // },
+                // {
+                //     name:'算能',
+                //     id:'sophgo',
+                // },
             ],
             params:{
                 name:'',
