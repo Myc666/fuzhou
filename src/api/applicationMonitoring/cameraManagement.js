@@ -186,3 +186,22 @@ export function getAlgorithmInfo(data) {
     data
   })
 }
+
+/*********************************************************/ 
+// 新增、编辑摄像头
+export function submitCamera(data) {
+  return request({
+    url: '/camera/submit',
+    method: 'post',
+    data
+  })
+}
+
+// 获取摄像头详情
+export function cameraInfo(data) {
+  return request({
+    url: '/camera/info',
+    method: 'post',
+    data
+  })
+}

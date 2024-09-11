@@ -127,22 +127,6 @@
             name:'超星',
             id:'chaoxing',
           },
-          // {
-          //   name:'英伟达',
-          //   id:'nvidia',
-          // },
-          // {
-          //   name:'灵汐',
-          //   id:'lynxi',
-          // },
-          // {
-          //   name:'登临',
-          //   id:'denglin',
-          // },
-          // {
-          //   name:'算能',
-          //   id:'sophgo',
-          // },
         ],
         loading: false,
         title: this.hasLocalFile ? "算法编辑" : "算法下载",

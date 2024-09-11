@@ -7,7 +7,7 @@
         <el-form-item label="人脸对比地址">
           <el-input v-model="form5.FACE_HTTP_BASE_URL_2"></el-input>
         </el-form-item>
-        <el-form-item label="是否开启抽帧服务" prop="streamType">
+        <!-- <el-form-item label="是否开启抽帧服务" prop="streamType">
           <el-radio v-model="form5.HTTP_FRAME_ENABLE" label="true">启用</el-radio>
           <el-radio v-model="form5.HTTP_FRAME_ENABLE" label="false">不启用</el-radio>
         </el-form-item>
@@ -16,7 +16,7 @@
         </el-form-item>
         <el-form-item label="抽帧回调地址">
           <el-input v-model="form5.HTTP_FRAME_CALLBACK_URL"></el-input>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item>
           <el-button type="primary" @click="onSubmitForm('form5')"
             >提交</el-button

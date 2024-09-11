@@ -45,6 +45,16 @@
                 class="input-num"
               ></el-input-number>
             </el-form-item>
+            <el-form-item label="选择IP音柱">
+              <el-select v-model="detail.soundColumnId" clearable placeholder="请选择" style="width: 100%;">
+                <el-option
+                  v-for="item in soundColumnList"
+                  :key="item.id"
+                  :label="item.sn"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </el-form-item>
             <el-form-item>
               <template slot="label">
                 <span style="margin-right: 5px;">算法关联</span>
@@ -157,7 +167,7 @@
   </div>
 </template>
 <script>
-import MarkDetail from "@/components/markDetail";
+import MarkDetail from "./markDetail.vue";
 import DrawDialog from "./drawDialog";
 import {
   getAlgorithmListData,
@@ -165,6 +175,7 @@ import {
   saveCameraDetail,
   takePhoto,
 } from "@/api/applicationMonitoring/cameraManagement";
+import { listData } from "@/api/applicationMonitoring/soundColumnManagement"
 export default {
   components: {
     MarkDetail,
@@ -200,19 +211,28 @@ export default {
       innerVisible:false,
       algorithmId:'',
       nameEn:'',
+      soundColumnList:[],
     };
   },
   async created() {
+    console.log(this.currentData)
     if (this.currentId) {
       this.getListDataDetail();
     }
+    this.getSoundColumnList();
     this.getAlgorithmListData();
   },
   methods: {
+    // 获取音柱列表
+    async getSoundColumnList(){
+      const res = await listData();
+      this.soundColumnList = res.data;
+    },
     // 获取摄像头详情
     async getListDataDetail() {
       const data = await getListDataDetail({ id: this.currentId });
       this.detail = data.data;
+      this.detail.soundColumnId = this.detail.soundColumnId && this.detail.soundColumnId != 0 ? this.detail.soundColumnId : ""
     },
     // 获取关联算法列表
     async getAlgorithmListData(str) {
@@ -223,7 +243,7 @@ export default {
       data.data.forEach((item) => {
         item.status = 1;
         if(item.nameEn=="helmet"){//安全帽
-          item.confidence = item.confidence?item.confidence:0.85;
+          item.confidence = item.confidence?item.confidence:0.75;
         }else if(item.nameEn=="object"){//占道
           item.confidence = item.confidence?item.confidence:0.55;
         }else if(item.nameEn=="fire"){//烟火
@@ -307,7 +327,7 @@ export default {
       // 处理缩放参数
       this.btnLoading = true;
       if(this.$refs.markDetail) {
-        let scaleRatio = this.$refs.markDetail.scaleRatio();
+        let scaleRatio = 1;//this.$refs.markDetail.scaleRatio();
         this.detail.scaleRatio = scaleRatio;
       } else {
         this.detail.scaleRatio = 0;
@@ -331,7 +351,7 @@ export default {
         rtspUrl: this.detail.rtspUrl,
         intervalTime: this.detail.intervalTime,
         alarmInterval: this.detail.alarmInterval,
-        locationId: this.detail.locationId || this.currentData.meId,
+        locationId: this.detail.locationId || this.currentData.id,
         algorithmvos: algorithmvosArr.join(","),
         params: this.detail.params,
         fileName: this.detail.fileName,
@@ -343,6 +363,7 @@ export default {
         confidencevos: confidencevosArr.join(","),
         updatePoint: this.detail.updatePoint,
         locationType: 1,
+        soundColumnId: this.detail.soundColumnId ? this.detail.soundColumnId : 0,
       };
       let formData = new FormData();
       formData.append("markpointsvos", markpointsvosArr.join("#"));
@@ -431,7 +452,7 @@ export default {
 }
 
 .image-box {
-  width: 100%;
+  // width: 100%;
   min-height: 200px;
   border: 2px solid #1e9fff;
 }

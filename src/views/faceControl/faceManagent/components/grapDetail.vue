@@ -101,7 +101,10 @@ export default {
     },
     async getTable(){
       const { data,count } = await listPageDGroup()
-      this.tableData = data
+      const newArr = data.filter((item)=>{
+        return item.name != "总计"
+      })
+      this.tableData = newArr
 
     },
     closeDialog() {

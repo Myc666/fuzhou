@@ -9,6 +9,9 @@
         <!-- <el-tab-pane label="告警配置" name="second">
           <Form2 :form2="form2" @submitForm="onSubmitForm" />
         </el-tab-pane> -->
+        <el-tab-pane label="人脸配置" name="fifth">
+          <Form5 :form5="form5" @submitForm="onSubmitForm" />
+        </el-tab-pane>
         <el-tab-pane label="应用配置" name="third">
           <Form3 :form3="form3" @submitForm="onSubmitForm" />
         </el-tab-pane>
@@ -25,6 +28,7 @@ import {
   saveBasicConfig,
   saveAlarmConfig,
   saveAppConfig,
+  saveFaceFrameConfig
 } from "@/api/applicationMonitoring/systemManagement";
 import { getAppInfo } from "@/api/common";
 
@@ -33,13 +37,15 @@ import Form1 from "@/components/applicationMonitoring/systemManagement/form1";
 import Form2 from "@/components/applicationMonitoring/systemManagement/form2";
 import Form3 from "@/components/applicationMonitoring/systemManagement/form3";
 import Form4 from "@/components/applicationMonitoring/systemManagement/form4";
+import Form5 from "@/components/applicationMonitoring/systemManagement/form5";
 export default {
   components: {
     AddSystem,
     Form1,
     Form2,
     Form3,
-    Form4
+    Form4,
+    Form5,
   },
   data() {
     return {
@@ -68,6 +74,13 @@ export default {
         screenName: "",
         screenLogoUrl: ""
       },
+      form5:{
+        FACE_HTTP_BASE_URL: "",
+        FACE_HTTP_BASE_URL_2: "",
+        // HTTP_FRAME_API_URL: "",
+        // HTTP_FRAME_CALLBACK_URL: "",
+        // HTTP_FRAME_ENABLE: "",
+      }
     };
   },
   created() {
@@ -80,6 +93,7 @@ export default {
       this.form1 = data.data.forms.form1 || {};
       this.form2 = data.data.forms.form2 || {};
       this.form3 = data.data.forms.form3 || {};
+      this.form5 = data.data.forms.form4 || {};
     },
 
     async onSubmitForm(formName, formData) {
@@ -91,6 +105,11 @@ export default {
         this.$message.success("操作成功");
       } else if (formName === "form3") {
         await saveAppConfig(formData);
+        await this.getInfo()
+        await this.getAppInfo()
+        this.$message.success("操作成功");
+      }else if (formName === "form5") {
+        await saveFaceFrameConfig(formData);
         await this.getInfo()
         await this.getAppInfo()
         this.$message.success("操作成功");

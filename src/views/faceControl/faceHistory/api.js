@@ -64,3 +64,11 @@ export function save(params) {
   })
 }
 
+// 保存定时任务清除告警信息天数
+export function saveClearFaceReportDayConfig(params) {
+  return request({
+    url: '/config/saveClearFaceReportDayConfig',
+    method: 'post',
+    params
+  })
+}

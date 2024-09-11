@@ -15,12 +15,16 @@
           accept=".jpg,.jpeg,.png,.gif"
           style="display: inline"
         >
-          <img
-            v-if="(form3.logoUrl || logoUrl)&&!showUploadButton"
-            :src="VUE_APP_API_BASE_URL + logoUrl"
-            class="logo"
-            @error="handleImageError(1)"
-          />
+          <div v-if="(form3.logoUrl || logoUrl)&&!showUploadButton" class="file-img">
+            <img
+              :src="VUE_APP_API_BASE_URL + logoUrl"
+              class="logo"
+              @error="handleImageError" 
+            />
+            <div class="del-sty">
+              <div class="el-icon-delete" @click.stop="delFun()"></div>
+            </div>
+          </div>
           <el-button type="primary" icon="el-icon-plus" v-else
             >上传LOGO</el-button
           >
@@ -40,12 +44,21 @@
           accept=".jpg,.jpeg,.png,.gif"
           style="display: inline"
         >
-          <img
-            v-if="(form3.screenLogoUrl || screenLogoUrl)&&!showScreenButton"
+          <!-- <img
+            v-if="form3.screenLogoUrl || screenLogoUrl"
             :src="VUE_APP_API_BASE_URL + screenLogoUrl"
             class="logo"
-            @error="handleImageError(2)"
-          />
+          /> -->
+          <div v-if="(form3.screenLogoUrl || screenLogoUrl)&&!showScreenButton" class="file-img">
+            <img
+              :src="VUE_APP_API_BASE_URL + screenLogoUrl"
+              class="logo"
+              @error="handleImageError1" 
+            />
+            <div class="del-sty">
+              <div class="el-icon-delete" @click.stop="delFun1()"></div>
+            </div>
+          </div>
           <el-button type="primary" icon="el-icon-plus" v-else
             >上传LOGO</el-button
           >
@@ -81,21 +94,23 @@ export default {
     form3: {
       handler(val) {
         console.info(val);
-        this.logoUrl = "/config/upload/stream?file=" + val.logoUrl;
+        if(val.logoUrl){
+          this.logoUrl = "/config/upload/stream?file=" + val.logoUrl;
+        }
         this.screenLogoUrl = val.screenLogoUrl;
       },
       deep: true,
       immediate: true,
+      
     },
   },
   async created() {},
   methods: {
-    handleImageError(type){
-      if(type==1){
-        this.showUploadButton=true
-      }else{
-        this.showScreenButton=true
-      }
+    handleImageError() {
+      this.showUploadButton = true;
+    },
+    handleImageError1() {
+      this.showScreenButton = true;
     },
     // 上传
     async handleUploadImg1(files) {
@@ -127,6 +142,13 @@ export default {
         }
       });
     },
+    // 删除
+    delFun(){
+      this.logoUrl = ""
+    },
+    delFun1(){
+      this.screenLogoUrl = ""
+    }
   },
 };
 </script>
@@ -135,5 +157,27 @@ export default {
   width: 80px;
   height: 80px;
   object-fit: cover;
+}
+.file-img{
+  width: 80px;
+  height: 80px;
+  position: relative;
+}
+.file-img:hover{
+  .del-sty{
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      background: rgba(0, 0, 0, 0.40);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FFF;
+      font-size: 20px;
+      top: 0px;
+  }
+}
+.del-sty{
+    display: none;
 }
 </style>

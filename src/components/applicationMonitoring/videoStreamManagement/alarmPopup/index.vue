@@ -200,7 +200,7 @@ export default {
     }
     .img {
       width: 474px;
-      height: 266px;
+      max-height: 266px;
       // position: absolute;
       // top: 120px;
       // left: 35px;

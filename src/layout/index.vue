@@ -6,7 +6,7 @@
       }}
       <!-- <img src="@/assets/img3/logs.png" style="width: 150px;height: 34px;" alt=""> -->
     </div>
-    <el-aside class="aside" :style="{width: isCollapse ? '60px': '190px'}">
+    <el-aside class="aside" :style="{width: isCollapse ? '70px': '190px'}">
       <el-menu
           :default-active="activeIndex"
           class="elMenu"
@@ -27,7 +27,7 @@
             <i v-else @click="isCollapse = !isCollapse" style="margin-right: 14px;font-size: 18px;" class="el-icon-s-fold"></i>
             <div v-if="!isCollapse">
 
-                <div>版本：{{ versionNum?versionNum:'1.03' }}</div>
+                <div>版本：{{ versionNum?versionNum:'1.2.6' }}</div>
               <div class="tip-icon" v-if="isNew&&versionNum" @click="versionFun()">有更新</div>
           <div v-else>
             <el-popover
@@ -49,13 +49,13 @@
     <el-container>
       <el-header>
         <div class="userInfo">
-          <div class="scan">
+          <!-- <div class="scan">
             <span class="el-icon" style="font-size: 18px;
 color: #202B3D;" @mouseenter="onHover"  @mouseleave="hideMessage">扫码登录</span>
             <div class="scan-cont" v-if="isImg">
               <img :src="VUE_APP_API_BASE_URL + '/appLoginQRCode?phone='+userInfo.nickname+'&password='+userInfo.password" style="width: 100px;height: 100px;"/>
             </div>
-          </div>
+          </div> -->
           <!-- <span class="el-icon" style="font-size: 18px;
 color: #202B3D;" @click="downFile()">使用手册下载<i class="el-icon-download"></i></span> -->
           <el-image
@@ -132,7 +132,7 @@ export default {
       isCollapse:false,
       VUE_APP_API_BASE_URL,
       activeIndex: this.$route.path,
-      menuArr: allRoutes[0].children,
+      menuArr: [],//allRoutes[0].children,
       userInfo: {
         nickname: localStorage.getItem('nickname')?localStorage.getItem('nickname'):"admin",
         password: localStorage.getItem('pw')?localStorage.getItem('pw'):"66$",
@@ -148,10 +148,19 @@ export default {
     };
   },
   created() {
+    this.int();
     // this.getV();
     // this.handleBreadcrumb(this.$route);
   },
   methods: {
+    int() {
+      let menuArr = JSON.parse(JSON.stringify(allRoutes[0].children));
+      if(sessionStorage.getItem("menu")){
+        this.menuArr = [...menuArr,...JSON.parse(sessionStorage.getItem("menu"))]
+      } else {
+        this.menuArr = menuArr
+      }
+    },
     handleImageError(){
       this.imageError = true
     },
@@ -181,6 +190,7 @@ export default {
       this.isImg = false;
     },
     changePath() {
+      sessionStorage.removeItem('path');
       this.$router.push('/bigScreen');
       setTimeout(function () {
         window.location.reload();
@@ -374,6 +384,9 @@ export default {
 }
 ::v-deep .el-menu-item{
   // text-indent: 29px;
+  i{
+    margin-right: 20px;
+  }
 }
 ::v-deep .el-submenu__title{
   padding: 0 !important;

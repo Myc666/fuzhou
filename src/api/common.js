@@ -111,3 +111,12 @@ export function getFileOrigin(params){
     params
   })
 }
+
+// 获取菜单
+export function userTree(data) {
+  return request({
+    url: '/ap/menus/user/tree',
+    method: 'post',
+    data
+  })
+}

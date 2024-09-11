@@ -31,3 +31,12 @@ export function saveAlarmWeworkConfig(params) {
     params
   })
 }
+
+// IP音柱
+export function saveSoundColumnConfig(params) {
+  return request({
+    url: '/config/saveSoundColumnConfig',
+    method: 'post',
+    params
+  })
+}

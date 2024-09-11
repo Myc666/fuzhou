@@ -1,7 +1,7 @@
 <template>
     <el-dialog
         :close-on-click-modal="false"
-        title="新增算法"
+        title="告警语音管理"
         :visible.sync="dialogVisible"
         width="500px"
         append-to-body

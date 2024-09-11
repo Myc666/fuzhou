@@ -23,6 +23,9 @@ export default new Vuex.Store({
     afterSalesUrl: '',
     algorithmDownload:{},
     tagInfo:'',
+    // VocieSwitch:false,
+    alarmSwitch:true,
+    routerNav:[],
   },
   getters: {
   },
@@ -36,6 +39,16 @@ export default new Vuex.Store({
     setTagInfo(state,newInfo){
       state.tagInfo = newInfo
     },
+    // setVocieSwitch(state,newInfo){
+    //   state.VocieSwitch = newInfo
+    // },
+    setAlarmSwitch(state,newInfo){
+      state.alarmSwitch = newInfo
+    },
+    addRouterData(state, routes) {
+      const menu = JSON.parse(sessionStorage.getItem('menu'))
+      state.routerNav = menu;
+    }
   },
   actions: {
   },

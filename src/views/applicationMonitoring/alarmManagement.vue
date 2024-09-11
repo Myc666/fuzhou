@@ -9,6 +9,19 @@
     </div>
     <div class="alarm-M">
       <div class="seach-sty">
+        <div style="display: flex;flex-wrap: wrap;">
+          <div class="seach-flex">
+            <div style="margin-right: 5px;color: #202B3D;">所属组织:</div>
+            <div style="flex: 1;">
+              <el-cascader
+                v-model="params.departIds"
+                :options="depList"
+                :props="{ value: 'id', label: 'name',multiple: true,}"
+                collapse-tags
+                clearable>
+              </el-cascader>
+            </div>
+          </div>
           <div class="seach-flex">
             <div style="margin-right: 5px;color: #202B3D;">摄像头:</div>
             <div style="flex: 1;">
@@ -50,13 +63,23 @@
           </div>
           <el-button size="mini" style="height: 34px;padding: 0px 15px;" type="primary" icon="el-icon-search" @click="getData()">查询</el-button>
           <el-button size="mini" style="height: 34px;padding: 0px 15px;" icon="el-icon-refresh" @click="refreshData">重置</el-button>
+        </div>
         <div class="clear-flex">
           <div>
               <el-radio-group v-model="params.limit" style="margin-right: 10px;">
               <el-radio-button label="12">12图</el-radio-button>
               <el-radio-button label="4">4图</el-radio-button>
             </el-radio-group>
-            <el-button type="primary" style="" @click="dowloadData" :loading="dowloadLoading" :disabled="this.tableData.length==0?true:false">导出</el-button>
+            <el-dropdown @command="handleCommand">
+              <el-button type="primary">
+                导出<i class="el-icon-arrow-down el-icon--right"></i>
+              </el-button>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item v-if="btnData.includes('alarm-export-image')" command="img" >导出告警原图</el-dropdown-item>
+                <el-dropdown-item v-if="btnData.includes('alarm-export-data')" command="data" >导出告警数据</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+            <!-- <el-button type="primary" style="" @click="dowloadData" :loading="dowloadLoading" :disabled="this.tableData.length==0?true:false">导出</el-button> -->
           </div>
           <div style="display: flex;align-items: center;">
             <div class="clear-title">
@@ -119,6 +142,7 @@
         </div>
       </div>
     </div>
+    <Download v-if="downloadVisible" :seachObj="params" @close="closeHandle"/>
   </div>
 </template>
 <script>
@@ -133,10 +157,13 @@ import {
 import { getAfterSales } from "@/api/applicationMonitoring/systemManagement";
 import AlarmDetail from "@/components/applicationMonitoring/alarmManagement/alarmDetail";
 import AlarmCard from "@/components/applicationMonitoring/alarmManagement/newCard";
+import {listTree} from "@/api/applicationMonitoring/boxManagement";
+import Download from "@/components/applicationMonitoring/alarmManagement/downLoad"
 export default {
   components: {
     AlarmDetail,
     AlarmCard,
+    Download,
   },
   props:{
     isDisabled:{
@@ -199,6 +226,8 @@ export default {
       clearReportDay:"30",
       oldDay:"30",
       dowloadLoading:false,
+      downloadVisible:false,
+      btnData:[],
     };
   },
   watch: {
@@ -211,6 +240,8 @@ export default {
     },
   },
   async created() {
+    this.getBtn();
+    this.getTree();
     this.date = [
       this.$moment(new Date(this.date[0].setHours(0, 0, 0))).format("YYYY-MM-DD HH:mm:ss"),
       this.$moment(new Date(this.date[1].setHours(23, 59, 59))).format("YYYY-MM-DD HH:mm:ss"),
@@ -225,6 +256,28 @@ export default {
     this.websocket.close();
   },
   methods: {
+    getBtn(){
+      this.btnData = [];
+      const menuArr = JSON.parse(sessionStorage.getItem('menuTree'));
+      let newArr = [];
+      this.getList(menuArr).filter((item,index)=>{
+        newArr.push(item.auth)
+      })
+      this.btnData = newArr;
+    },
+    getList(data){
+      let arr = []
+      data.forEach(item=>{
+          if(item.path==this.$route.path){
+              arr = item.children.filter((items,ind)=>{
+                return items.type==2
+              })
+          }else{
+              this.getList(item.children);
+          }
+      })
+      return arr
+    },
     getData(){
       this.params.page = 1;
       this.getListData();
@@ -399,6 +452,17 @@ export default {
         this.clearReportDay = res.data?res.data:'30'
         this.oldDay = res.data?res.data:'30'
     },
+    handleCommand(command){
+      console.log(command)
+      if(command=='img'){
+        this.dowloadData();
+      }else{
+        this.downloadVisible = true;
+      }
+    },
+    closeHandle(){
+      this.downloadVisible = false;
+    },
     // 导出告警图片
     dowloadData() {
       this.dowloadLoading = true;
@@ -421,6 +485,24 @@ export default {
       })
       
     },
+    // 获取部门树
+    getTree(){
+        listTree().then(res=>{
+            if(res.data&&res.data.length>0){
+                this.depList = this.getTreeData(res.data);
+            }
+        })
+    },
+    getTreeData(data) {
+        data.forEach(item=>{
+            if(item.children.length < 1){
+                item.children = undefined;
+            }else{
+                this.getTreeData(item.children);
+            }
+        })
+        return data;
+    },
   },
 };
 </script>
@@ -428,9 +510,9 @@ export default {
 .alarm-M{
   padding: 16px;
   .seach-sty{
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
+    // display: flex;
+    // justify-content: space-between;
+    // flex-wrap: wrap;
     padding: 5px 0px 15px 0px;
     border-bottom: 1px solid #EDF0F3;
     margin-bottom: 20px;
@@ -513,7 +595,8 @@ export default {
 .clear-flex{
   display: flex;
   align-items: center;
-  // margin-top: 8px;
+  justify-content: space-between;
+  margin-top: 8px;
   .clear-title{
     font-size: 14px;
     position: relative;

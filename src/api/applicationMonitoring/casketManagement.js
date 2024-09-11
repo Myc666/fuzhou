@@ -25,11 +25,11 @@ export function save(params) {
   })
 }
 // 盒子列表--重启
-export function restart(params) {
+export function restart(data) {
   return request({
-    url: '/location/restart',
+    url: '/aibox/task/restart',
     method: 'post',
-    params
+    data
   })
 }
 // 盒子列表--停止
@@ -64,3 +64,12 @@ export function aiboxStatus(params) {
     params
   })
 }
+// 删除盒子
+export function basicDelete(data) {
+  return request({
+    url: '/aibox/basic/delete',
+    method: 'post',
+    data
+  })
+}
+

@@ -2,23 +2,33 @@
   <div>
     <div class="flex">
       <div class="flex-tree">
+        <div style="font-size: 16px;line-height: 22px;padding: 0px 0px 10px 10px;">盒子总览</div>
+        <div class="top-title" :style="{backgroundColor: isDefault?'#F5F7FA':''}" @click="allClick()">
+          <div>全部</div>
+        </div>
         <el-tree
           :data="treeData"
           :props="defaultProps"
           :highlight-current="true"
           :default-expand-all="true"
         >
-          <span class="custom-tree-node" slot-scope="{ node, data }">
-            <span @click.stop="handleNodeClick(data)" class="label-color">{{ node.label }}</span>
-            <span v-if="data.type == 2" style="margin-left: 10px">
+          <div class="custom-tree-node" slot-scope="{ node, data }" style="width: 100%;line-height: 26px;">
+            <div @click.stop="handleNodeClick(data)" class="label-color">
+              <span :class="data.depart?'el-icon-office-building':'el-icon-cpu'" style="padding-right: 5px;"></span>
+              <span>{{ node.label }}</span>
+              <span v-if="!data.depart" style="margin-left: 10px;color: red;">
+                {{ data.online?'':'离线' }}
+              </span>
+            </div>
+            <!-- <span v-if="data.type == 2" style="margin-left: 10px">
               <span :class="{ 'tree-on': handleTreeData(data.meId) }">{{
                 handleTreeData(data.meId) ? "开启" : "关闭"
               }}</span>
             </span>
             <span style="margin-left: 10px;" @click.stop="openTreeMenu(data)">
               <i class="el-icon-setting"></i>
-            </span>
-          </span>
+            </span> -->
+          </div>
         </el-tree>
       </div>
       <div class="flex-right">
@@ -34,7 +44,7 @@
           <el-button icon="el-icon-refresh" @click="refreshData"
             >重置</el-button
           >
-            <div style="float: right;">
+            <div style="float: right;" v-if="btnData.includes('box-batch-add')">
               <el-button  @click="batchAdd" v-if="isBtnShow">批量新增</el-button>
               <el-button v-if="!isBtnShow" :class="{ 'el-import-hover': (stateObj.status == 1), 'el-fail-hover': (stateObj.status == 3) }" @click="batchAdd">
                 <i :class="{ 'el-icon-loading el-import-text': (stateObj.status == 1), 'el-icon-warning el-fail-text': (stateObj.status == 3) }"></i>
@@ -42,16 +52,18 @@
               </el-button>
             </div>
         </div>
-        <div class="ai_table">
-          <div v-if="currentNode.type == 2 && isShow" class="add-box">
+        <div class="table-cont">
+          <div v-if="!currentNode.depart && isShow" class="add-box">
+            
             <div style="display: flex;align-items: center;">
-              <div>{{ currentNode.text }}</div>
-              <div style="padding: 0px 16px;"  v-if="params.locationId">
+              <div>{{ currentNode.name }}</div>
+              <div style="padding: 0px 16px;"  v-if="params.locationId&&btnData.includes('box-algorithm-overview')">
                 <el-popover
                   placement="right"
                   width="800"
                   trigger="click"
                   @show="handleShow"
+                  v-if="currentNode.online"
                 >
                   <el-table :data="gridData" border max-height="300" class="popover-table">
                     <el-table-column align="center" property="algorithmName" label="算法名称"></el-table-column>
@@ -65,130 +77,152 @@
                     <el-table-column align="center" property="highVersion" label="本地最新版本"></el-table-column>
                     <el-table-column align="center" property="upgrade" label="操作" width="80">
                       <template slot-scope="scope">
-                      <el-button type="text" v-if="scope.row.upgrade" style="color: #2C8AFB;" @click="upgradeFun(scope.row)">算法升级</el-button>
+                      <el-button type="text"  v-if="scope.row.upgrade" style="color: #2C8AFB;" @click="upgradeFun(scope.row)">算法升级</el-button>
                       </template>
                     </el-table-column>
                   </el-table>
                   <el-button slot="reference">本地算法总览</el-button>
                 </el-popover>
+                <el-button v-else @click="handleShow">本地算法总览</el-button>
               </div>
             </div>
-            <el-button type="primary" icon="el-icon-plus" @click="addCamera">新增摄像头</el-button>
+            <el-button type="primary" icon="el-icon-plus" v-if="btnData.includes('box-add')" @click="addCamera">新增摄像头</el-button>
           </div>
-          <el-table
-            :data="tableData"
-            border
-            style="width: 100%"
-            v-loading="loading"
-          >
-            <el-table-column align="center" prop="name" label="摄像头名称">
-            </el-table-column>
-            <el-table-column
-              align="center"
-              prop="locationName"
-              label="点位归属"
+          <div v-if="tableData.length>0">
+            <el-table
+              :data="tableData"
+              border
+              style="width: 100%"
+              v-loading="loading"
             >
-            </el-table-column>
-            <!-- <el-table-column align="center" prop="intervalTime" label="流类型">
-              <template slot-scope="scope">
-                <el-dropdown style="margin-left: 10px">
-                  <span class="el-dropdown-link">
-                    <span v-if="scope.row.rtspType == 0">实时</span>
-                    <span v-if="scope.row.rtspType == 1">备份</span>
-                    <span v-if="scope.row.rtspType == 2">图片</span>
-                    <i class="el-icon-arrow-down el-icon--right"></i>
-                  </span>
-                  <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item
-                      @click.native="switchRtspType(0, scope.row)"
-                      >实时视频地址</el-dropdown-item
-                    >
-                    <el-dropdown-item
-                      @click.native="switchRtspType(1, scope.row)"
-                      >备份视频地址</el-dropdown-item
-                    >
-                    <el-dropdown-item
-                      @click.native="switchRtspType(2, scope.row)"
-                      >图片地址</el-dropdown-item
-                    >
-                  </el-dropdown-menu>
-                </el-dropdown>
-              </template>
-            </el-table-column> -->
-            <el-table-column
-              align="center"
-              prop="alarmInterval"
-              label="告警间隔(秒)"
-            >
-            </el-table-column>
-            <el-table-column
-              align="center"
-              prop="intervalTime"
-              label="识别间隔(秒)"
-            >
-            </el-table-column>
-            <el-table-column
-              align="center"
-              prop="algorithmNames"
-              label="关联算法"
-            >
-            </el-table-column>
-            <el-table-column align="center" label="时段配置">
-              <template slot-scope="scope">
-                <el-button type="text" @click="configure(scope.row)"
-                  >配置</el-button
-                >
-              </template>
-            </el-table-column>
-            <el-table-column align="center" label="运行状态">
-              <template slot-scope="scope">
-                <el-switch
-                  v-model="scope.row.running"
-                  @change="switchRunning(scope.row)"
-                  :active-value="1"
-                  :inactive-value="0"
-                ></el-switch>
-              </template>
-            </el-table-column>
-            <el-table-column align="center" label="运行状态">
-              <template slot-scope="scope">
-                {{ getStatus(scope.row.aiboxExecStatus) }}
-              </template>
-            </el-table-column>
-            <el-table-column align="center" label="心跳时间">
-              <template slot-scope="scope">
-                {{ getMyDate(Number(scope.row.aiboxExecTime)) }}
-              </template>
-            </el-table-column>
-            <el-table-column align="center" label="操作" width="160">
-              <template slot-scope="scope">
-                <el-button type="text" @click="editData(scope.row)"
-                  >编辑</el-button
-                >
-                <el-button
-                  type="text"
-                  class="danger"
-                  @click="deleteData(scope.row)"
-                  >删除</el-button
-                >
-              </template>
-            </el-table-column>
-          </el-table>
-          <div class="pagination">
-            <el-pagination
-              background
-              :current-page="params.page"
-              :page-size="params.limit"
-              layout="total, sizes, prev, pager, next, jumper"
-              :total="total"
-              @current-change="handleCurrentChange"
-              @size-change="handleSizeChange"
-            ></el-pagination>
+              <el-table-column align="center" label="实况图" width="90">
+                <template slot-scope="scope" style="padding: 0px !important;">
+                  <el-image 
+                    v-if="scope.row.fileName&&scope.row.isShowImg"
+                    style="width: 100%;margin-top: 5px;"
+                    :src="$common.handleCameraImgUrl(scope.row.fileName)" 
+                    :preview-src-list="[$common.handleCameraImgUrl(scope.row.fileName)]"
+                     @error="handleImageError(scope.$index)"
+                  >
+                  </el-image>
+                  <img v-else src="@/assets/images/no-img.png"  style="width: 100%;margin-top: 5px;"/>
+                </template>
+              </el-table-column>
+              <el-table-column align="center" prop="name" label="摄像头名称">
+              </el-table-column>
+              <el-table-column
+                align="center"
+                prop="locationName"
+                label="盒子归属"
+              >
+              </el-table-column>
+              <!-- <el-table-column align="center" prop="intervalTime" label="流类型">
+                <template slot-scope="scope">
+                  <el-dropdown style="margin-left: 10px">
+                    <span class="el-dropdown-link">
+                      <span v-if="scope.row.rtspType == 0">实时</span>
+                      <span v-if="scope.row.rtspType == 1">备份</span>
+                      <span v-if="scope.row.rtspType == 2">图片</span>
+                      <i class="el-icon-arrow-down el-icon--right"></i>
+                    </span>
+                    <el-dropdown-menu slot="dropdown">
+                      <el-dropdown-item
+                        @click.native="switchRtspType(0, scope.row)"
+                        >实时视频地址</el-dropdown-item
+                      >
+                      <el-dropdown-item
+                        @click.native="switchRtspType(1, scope.row)"
+                        >备份视频地址</el-dropdown-item
+                      >
+                      <el-dropdown-item
+                        @click.native="switchRtspType(2, scope.row)"
+                        >图片地址</el-dropdown-item
+                      >
+                    </el-dropdown-menu>
+                  </el-dropdown>
+                </template>
+              </el-table-column> -->
+              <el-table-column
+                align="center"
+                prop="alarmInterval"
+                label="告警间隔(秒)"
+              >
+              </el-table-column>
+              <el-table-column
+                align="center"
+                prop="intervalTime"
+                label="识别间隔(秒)"
+              >
+              </el-table-column>
+              <el-table-column
+                align="center"
+                prop="algorithmNames"
+                label="关联算法"
+              >
+              </el-table-column>
+              <!-- <el-table-column align="center" v-if="btnData.includes('box-time-config')" label="时段配置">
+                <template slot-scope="scope">
+                  <el-button type="text" @click="configure(scope.row)"
+                    >配置</el-button
+                  >
+                </template>
+              </el-table-column> -->
+              <el-table-column align="center" label="使用开关"  width="70">
+                <template slot-scope="scope">
+                  <el-switch
+                    v-model="scope.row.running"
+                    @change="switchRunning(scope.row)"
+                    :active-value="1"
+                    :inactive-value="0"
+                    :disabled="!btnData.includes('box-run-state')"
+                  ></el-switch>
+                </template>
+              </el-table-column>
+              <el-table-column align="center" label="运行状态">
+                <template slot-scope="scope">
+                  {{ getStatus(scope.row.aiboxExecStatus) }}
+                </template>
+              </el-table-column>
+              <el-table-column align="center" label="最后心跳时间">
+                <template slot-scope="scope">
+                  {{ getMyDate(Number(scope.row.aiboxExecTime)) }}
+                </template>
+              </el-table-column>
+              <el-table-column align="center" label="操作" width="120">
+                <template slot-scope="scope">
+                  <el-button type="text" v-if="btnData.includes('box-edit')" @click="editData(scope.row)"
+                    >编辑</el-button
+                  >
+                  <el-button
+                    type="text"
+                    class="danger"
+                    v-if="btnData.includes('box-delete')"
+                    @click="deleteData(scope.row)"
+                    >删除</el-button
+                  >
+                </template>
+              </el-table-column>
+            </el-table>
+            <div class="pagination">
+              <el-pagination
+                background
+                :current-page="params.page"
+                :page-size="params.limit"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="total"
+                @current-change="handleCurrentChange"
+                @size-change="handleSizeChange"
+              ></el-pagination>
+            </div>
+          </div>
+          <div v-else style="text-align: center;padding: 60px 0px;">
+            <img src="@/assets/images/security-camera.png" style="width: 120px;height: 120px;"/>
+            <div style="color: #909399;font-size: 14px;margin-top: 16px;">请在左侧栏中点击需要添加摄像头的边缘盒子</div>
           </div>
         </div>
       </div>
     </div>
-    <div v-show="showTreeMenu" class="treeMenu">
+    <!-- <div v-show="showTreeMenu" class="treeMenu">
       <div
         @click="addRegion"
         v-if="currentNode.type == 0 || currentNode.type == 1"
@@ -210,7 +244,7 @@
       </div>
       <div @click="editBox" v-if="currentNode.type == 2">编辑盒子</div>
       <div @click="deleteRegion" v-if="currentNode.type == 2 && isShow">删除盒子</div>
-    </div>
+    </div> -->
     <ConfigureTime
       :currentId="currentId"
       v-if="configureTimeVisible"
@@ -245,7 +279,7 @@
       :visible.sync="dialogVisible"
       width="70%"
       >
-      <AlgorithmUpgrade v-if="dialogVisible" :id="rowId" :algorithmName="algorithmName" :platform="platform" :nameEn="nameEn" @close="handleClose"/>
+      <AlgorithmUpgrade v-if="dialogVisible" :id="rowId" :algorithmName="algorithmName" :platform="platform" :nameEn="nameEn"/>
     </el-dialog>
   </div>
 </template>
@@ -260,9 +294,10 @@ import {
   getHeart,
   getAlgorithmInfo
 } from "@/api/applicationMonitoring/cameraManagement";
+import {treeBasic} from "@/api/applicationMonitoring/boxManagement";
 import {statusByTag} from "@/api/applicationMonitoring/batchUpload";
 import ConfigureTime from "@/components/applicationMonitoring/boxManagement/configureTime";
-import AddCamera from "@/components/applicationMonitoring/boxManagement/addCamera";
+import AddCamera from "@/components/applicationMonitoring/boxManagement/addCamera/newAdd.vue";
 import AddRegion from "@/components/applicationMonitoring/boxManagement/addRegion";
 import AddBox from "@/components/applicationMonitoring/boxManagement/addBox";
 import UploadInfo from "@/components/applicationMonitoring/batchUpload/upload.vue";
@@ -279,6 +314,7 @@ export default {
   },
   data() {
     return {
+      isDefault:true,//默认展示全部
       getMyDate:getMyDate,
       configureTimeVisible: false,
       addCameraVisible: false,
@@ -302,7 +338,7 @@ export default {
       total: 0,
       defaultProps: {
         children: "children",
-        label: "text",
+        label: "name",
       },
       timer: null,
       isShow:false,
@@ -313,14 +349,16 @@ export default {
       statusBtn: 'primary',
       gridData:[],
       dialogVisible:false,
-      isDisabled:false,
       rowId:'',
       algorithmName:'',
       platform:'',
       nameEn:'',
+      btnData:[],
+      btnObjList:[],
     };
   },
   async created() {
+    this.getBtn();
     await this.getHeart();
     await this.getTreeData();
     this.getStateFun();
@@ -330,15 +368,47 @@ export default {
     }, 60000);
   },
   methods: {
+    // 图片识别失败
+    handleImageError(index){
+      this.tableData[index].isShowImg = false
+    },
+    getBtn(){
+      this.btnData = [];
+      this.btnObjList = [];
+      this.isDetail = false;
+      const menuArr = JSON.parse(sessionStorage.getItem('menuTree'));
+      let newArr = [];
+      this.getbtnList(menuArr);
+      this.btnObjList.filter((item,index)=>{
+          newArr.push(item.auth)
+      })
+      this.btnData = newArr;
+    },
+    getbtnList(data){
+      let arr = []
+      data.forEach(item=>{
+          if(item.path==this.$route.path){
+              arr = item.children.filter((items,ind)=>{
+                  return items.type==2
+              })
+              this.btnObjList = arr;
+          }else{
+              this.getbtnList(item.children);
+          }
+      })
+    },
     // 获取本地算法
     handleShow(){
+      if(!this.currentNode.online && !this.isDefault){
+        this.$message.error('操作失败，盒子已离线。请在盒子在线后重试。')
+        return;
+      }
       let formData = new FormData();
       formData.append("boxId ", this.params.locationId);
       getAlgorithmInfo(formData).then(res=>{
         this.gridData = res.data;
       })
     },
-    // 算法升级
     upgradeFun(row){
       this.rowId = row.algorithmId;
       this.algorithmName = row.algorithmName;
@@ -383,7 +453,8 @@ export default {
     },
     // 获取位置tree
     async getTreeData() {
-      const data = await getTreeData({ locationType: 2 });
+      // const data = await getTreeData({ locationType: 2 });
+      const data = await treeBasic();
       this.treeData = data.data;
     },
     // 监测盒子是否在线
@@ -397,6 +468,11 @@ export default {
       this.loading = true;
       const data = await getListData(this.params);
       this.tableData = data.data;
+      if(this.tableData.length>0){
+        this.tableData.forEach(item=>{
+          item.isShowImg = true;
+        })
+      }
       this.total = Number(data.count);
       this.loading = false;
     },
@@ -423,21 +499,21 @@ export default {
       this.addRegionVisible = true;
     },
     // 删除区域
-    deleteRegion() {
-      this.$confirm(`确定删除该条数据?`, "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-      })
-        .then(async () => {
-          const res = await deleteRegion({ id: this.currentNode.meId });
-          if (res.code == 0) {
-            this.$message.success("删除成功");
-            await this.getTreeData();
-          }
-        })
-        .catch(() => {});
-    },
+    // deleteRegion() {
+    //   this.$confirm(`确定删除该条数据?`, "提示", {
+    //     confirmButtonText: "确定",
+    //     cancelButtonText: "取消",
+    //     type: "warning",
+    //   })
+    //     .then(async () => {
+    //       const res = await deleteRegion({ id: this.currentNode.meId });
+    //       if (res.code == 0) {
+    //         this.$message.success("删除成功");
+    //         await this.getTreeData();
+    //       }
+    //     })
+    //     .catch(() => {});
+    // },
     // 新增盒子
     addBox() {
       this.addRegionType = "add";
@@ -450,11 +526,19 @@ export default {
     },
     // 新增摄像头
     addCamera() {
+      if(!this.currentNode.online && !this.isDefault){
+        this.$message.error('操作失败，盒子已离线。请在盒子在线后重试。')
+        return;
+      }
       this.currentId = "";
       this.addCameraVisible = true;
     },
     // 编辑摄像头
     editData(item) {
+      if(!this.currentNode.online && !this.isDefault){
+        this.$message.error('操作失败，盒子已离线。请在盒子在线后重试。')
+        return;
+      }
       this.currentId = item.id;
       this.addCameraVisible = true;
     },
@@ -474,11 +558,14 @@ export default {
     },
     // 切换运行状态
     async switchRunning(item) {
-      await switchRunning({ id: item.id });
       this.loading = true;
-      setTimeout(()=>{
-        this.getListData();
-      },500)
+      switchRunning({ id: item.id }).then(res=>{
+        setTimeout(()=>{
+          this.getListData(1);
+        },500)
+      }).catch(()=>{
+        this.loading = false;
+      })
     },
     // 删除算法
     async deleteData(item) {
@@ -496,18 +583,34 @@ export default {
         })
         .catch(() => {});
     },
+    // 点击全部
+    allClick(){
+      this.isDefault = true;
+      this.currentNode = {};
+      this.isShow = false;
+      Object.assign(this.params, {
+          departId: "",
+          locationId: "",
+      });
+      this.getListData()
+    },
     // 点击tree节点
     handleNodeClick(node) {
+      this.isDefault = false;
       this.currentNode = node;
-      if(node.parent == '#'){
-        this.isShow = false;
-      }else{
-        this.isShow = true;
-      }
-      if (node.type == "0" || node.type == "2") {
+      if(node.depart){
+        this.params.locationId = "";
         Object.assign(this.params, {
-          locationId: node.parent == '#' ? '' : node.meId,
+          departId: node.id,
         });
+        this.isShow = false;
+        this.getListData();
+      }else{
+        this.params.departId = "";
+        Object.assign(this.params, {
+          locationId: node.id,
+        });
+        this.isShow = true;
         this.getListData();
       }
     },
@@ -562,7 +665,9 @@ export default {
       const str = {
           1000: '推理中',
           2000: '下载算法中',
-          3000: '未使用'
+          3000: '未使用',
+          8000: '等待唤醒',
+          9000: '预处理',
       }[item]
       return str
     },
@@ -615,6 +720,10 @@ export default {
     padding: 10px;
     margin: 10px 10px 0 0;
     flex-shrink: 0;
+    .top-title{
+      font-size: 14px;
+      padding: 5px 25px;
+    }
     .custom-tree-node {
       font-size: 14px;
       .tree-on {
@@ -628,7 +737,12 @@ export default {
       }
   }
   .flex-right {
+    margin-top: 10px;
     flex: 1;
+    .head-container{
+      background: #FFF;
+      padding: 10px 16px;
+    }
   }
 }
 .el-dropdown-link {
@@ -671,6 +785,15 @@ export default {
   cursor: pointer;
   .icon-succes{
     color: red;
+  }
+}
+.table-cont{
+  background: #FFF;
+  padding: 16px;
+  margin-top: 10px;
+  border-radius: 6px;
+  :deep(.el-table--border .el-table__cell:first-child .cell){
+    padding: 0px !important;
   }
 }
 </style>

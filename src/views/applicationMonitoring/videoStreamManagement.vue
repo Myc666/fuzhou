@@ -233,7 +233,10 @@ export default {
     // 获取摄像头列表
     async getCameraListData() {
       const data = await getCameraListData();
-      this.cameraOptions = data.data;
+      let Arr = data.data.filter(item=>{
+        return item.running == "1"
+      })
+      this.cameraOptions = Arr;
     },
     // 获取视频流并播放
     async getListPageActives() {

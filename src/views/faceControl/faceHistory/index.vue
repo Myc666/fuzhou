@@ -2,26 +2,26 @@
   <div>
     <div class="flex">
       <div class="flex-tree">
-        <el-radio-group v-model="nodeLabel">
-          <span  style="padding-left:23px;display: block;height: 35px;line-height: 35px;"  @click="handleNodeClick('')">
+        <!-- <el-radio-group v-model="nodeLabel"> -->
+          <!-- <span  style="padding-left:23px;display: block;height: 35px;line-height: 35px;"  @click="handleNodeClick('')">
             <el-radio label="0">全部</el-radio>
-          </span>
+          </span> -->
           
           <el-tree
             :data="treeData"
             :props="defaultProps"
             :highlight-current="true"
           >
-            <span class="custom-tree-node" slot-scope="{ node, data }">
-              <span @click="handleNodeClick(data.id)"> 
-                <el-radio :label="node.id">{{ node.label }}</el-radio>
-              </span>
+            <div class="custom-tree-node" slot-scope="{ node, data }" @click="handleNodeClick(data.id)" style="width: 90%;">
+              <div style="white-space: pre-line;word-wrap: break-word;"> 
+                {{ node.label }}
+              </div>
               <!-- <span style="margin-left: 10px;" @click="openTreeMenu(data)">
                 <i class="el-icon-setting"></i>
               </span> -->
-            </span>
+            </div>
           </el-tree>
-        </el-radio-group>
+        <!-- </el-radio-group> -->
       </div>
       <div class="flex-right">
 
@@ -47,7 +47,7 @@
               </el-form-item>
               </el-col>
               <el-col :span="9">
-                <el-form-item label="">
+                <el-form-item label="日期">
                   <el-date-picker
                     v-model="times"
                     style="width: 330px;"
@@ -73,6 +73,33 @@
               
             </el-form>
           </el-row>
+          <div style="display: flex;align-items: center;">
+          <div class="clear-title">
+            <el-popover
+              placement="bottom-start"
+              width="300"
+              trigger="hover">
+                <div style="font-size: 12px;line-height: 18px;">
+                  数据保存期限指:识别记录内数据保存时间范围。例：“近30天”，指保存从当日起-30天内的数据，每日0点执行。
+                </div>
+                <span class="el-icon-warning-outline" slot="reference"></span>
+            </el-popover>
+            <span style="padding: 0px 10px 0px 5px;">数据保存期限:</span>
+          </div>
+          <el-select
+            placeholder="请选择"
+            v-model="clearReportDay"
+            style="width: 100px;"
+            @change="dayChange()"
+          >
+            <el-option
+              v-for="(item, index) in clearDayList"
+              :key="index"
+              :label="item.name"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+        </div>
         </div>
         <div class="ai_table">
           <div style="width: 100%;">
@@ -90,25 +117,25 @@
                   </el-image>
                 </div>
                 <div class="text" style="width: 100%;" >
-                  <span   v-if="item.group.name" @click="listByUserId(item)">
+                  <div   v-if="item.group?.name" @click="listByUserId(item)" class="pad-10">
                     <span class="tits">
-                      {{  item.faceUser.name || '--' }}
+                      {{  item.faceUser?.name || '--' }}
                     </span>
                     <span class="tits" style="float: right;">
-                      {{  item.group.name || '--' }}
+                      {{  item.group?.name || '--' }}
                     </span>
-                  </span>
-                  <span v-else>
+                  </div>
+                  <div v-else class="pad-10">
                     <span>陌生人</span>
                     <span  style="float: right;color: #2099fa;" @click="addHei(item)">人脸入库</span>
-                  </span>
+                  </div>
                   
                 </div>
-                <div class="text">
-                  <span class="tits" style="width: 130px;">{{  item.camera.name  }}</span>
+                <div class="text pad-10">
+                  <span class="tits" style="width: 130px;">{{  item.camera?.name  }}</span>
                   
                 </div>
-                <div class="text">
+                <div class="text pad-10">
                   {{ getMyDate(item.createdAt)  }}
                 </div>
               </div>
@@ -118,10 +145,10 @@
                     
                   </el-image>
                 </div>
-                <div class="text">
+                <div class="text pad-10">
                  
                 </div>
-                <div class="text">
+                <div class="text pad-10">
                   
                 </div>
               </div>
@@ -167,10 +194,10 @@
                 </div>
               </el-image>
             </div>
-            <div class="text">
+            <div class="text pad-10">
               <span class="tits" style="width: 130px;" :title="item.camera.name ">{{ item.camera.name || '--' }}</span> 
             </div>
-            <div class="text">
+            <div class="text pad-10">
               {{ getMyDate(item.createdAt)  }}
             </div>
           </div>
@@ -189,7 +216,8 @@
 </template>
 <script>
 import Tables from '@/components/Table/index.vue'
-import { listPage,cameraListData,groupListData,listByUserId } from './api';
+import { listPage,cameraListData,groupListData,listByUserId,saveClearFaceReportDayConfig } from './api';
+import { getAfterSales } from "@/api/applicationMonitoring/systemManagement";
 import { getMyDate } from '@/utils/common.js'
 import detail from "./components/detail.vue";
 
@@ -273,7 +301,41 @@ export default {
       groupName:'',
       detailVisible:false,
       drawer:false,
-      nodeLabel:'0'
+      nodeLabel:'0',
+      timeObj: null,
+      clearDayList:[
+        {
+          id:'30',
+          name:'近30天'
+        },{
+          id:'20',
+          name:'近20天'
+        },{
+          id:'14',
+          name:'近14天'
+        },{
+          id:'10',
+          name:'近10天'
+        },{
+          id:'7',
+          name:'近7天'
+        },{
+          id:'5',
+          name:'近5天'
+        },{
+          id:'3',
+          name:'近3天'
+        },{
+          id:'1',
+          name:'近1天'
+        },
+        {
+          id:'0',
+          name:'当天'
+        },
+      ],
+      clearReportDay:"30",
+      oldDay:"30",
    };
  },
  components:{
@@ -281,9 +343,14 @@ export default {
    detail
  },
  created() {
+  this.getDay();
    this.getTable()
    this.cameraListPage()
  },
+  destroyed() {
+    clearInterval(this.timeObj);
+    this.timeObj = null;
+  },
  methods: {
   addHei(item){
     this.detailVisible=true;
@@ -311,7 +378,8 @@ export default {
       // Object.assign(this.formatData, {
       //   cameraId: node.cameraId,
       // });
-      this.formatData.cameraId = id
+      this.formatData.cameraId = id;
+      this.params.page = 1;
       this.getTable();
     },
    handleCurrentChange(val) {
@@ -324,7 +392,6 @@ export default {
       this.getTable();
     },
    async getTable(){
-    console.log(this.times)
      if(this.times.length){
        this.formatData.startDate = encodeURIComponent(this.times[0]) 
        this.formatData.endDate =  encodeURIComponent(this.times[1]) 
@@ -347,8 +414,14 @@ export default {
      this.params.total = parseInt(count)
      this.loading = false
      this.mans()
-     
-     
+     if(this.timeObj){
+      clearInterval(this.timeObj);
+      this.timeObj = null;
+     }
+     let that = this;
+     this.timeObj = setInterval(function () {
+      that.getTable();
+    }, 2000);
    },
    reset(){
      this.times = []
@@ -358,7 +431,8 @@ export default {
    },
    async cameraListPage() {
       const { data } = await cameraListData();
-      this.treeData = data;
+
+      this.treeData = [{name:'总计',id:''},...data];
       // if (this.treeData.length) {
       //   //this.formatData.cameraId = this.cameras[0].id;
       //   this.changeCamera();
@@ -367,13 +441,51 @@ export default {
     },
     async groupListData() {
       const { data } = await groupListData();
+      data.map((item,ind)=>{
+        if(item.name=="总计"){
+          item.id = item.id.toString()
+        }
+      })
       this.groupList = data;
       this.changeCamera();
     },
     
     changeCamera() {
       this.formatData.groupId = this.activeName == 0 ? '' : this.activeName;
+      this.params.page = 1;
       this.getTable();
+    },
+    // 切换定时任务清除告警信息天数
+    dayChange(){
+      let str = "";
+      this.clearDayList.forEach(item=>{
+        if(this.clearReportDay==item.id){
+          str = item.name
+        }
+      })
+      this.$confirm(`是否将报警数据保存期限修改为“${str}”?<div style="color: red;">(确认后保存${str}内的告警数据，每日0点执行。)</div>`, "提示",{
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          dangerouslyUseHTMLString: true,
+          type: "warning",
+        }).then(() => {
+          saveClearFaceReportDayConfig({clearFaceReportDay:this.clearReportDay}).then(res=>{
+            this.$message({
+              message: '保存成功',
+              type: 'success',
+              duration:500
+            })
+            this.oldDay = this.clearReportDay
+          })
+        }).catch(() => {
+          this.clearReportDay = this.oldDay;
+        });
+    },
+    //获取清除告警信息天数
+    async getDay(){
+        const res = await getAfterSales({tag:'clearFaceReportDay'});
+        this.clearReportDay = res.data?res.data:'30'
+        this.oldDay = res.data?res.data:'30'
     },
  },
 };
@@ -392,7 +504,7 @@ export default {
     margin: 10px 10px 0 0;
     flex-shrink: 0;
     ::v-deep .el-tree-node__content{
-      height: 35px;
+      height: auto;
     }
     .custom-tree-node {
       font-size: 14px;
@@ -431,8 +543,11 @@ export default {
   font-size: 12px;
   color:#606266;
   height: 22px;
-  padding: 0 10px;
+  // padding: 0 10px;
   cursor: pointer;
+}
+.pad-10{
+  padding: 0px 10px;
 }
 .ai_table{
   width: 100%;

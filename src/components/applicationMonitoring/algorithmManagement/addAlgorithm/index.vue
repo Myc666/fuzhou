@@ -125,8 +125,8 @@ export default {
     return {
       platformList:[
         {
-          name:'超星',
-          id:'chaoxing',
+          name:'灵汐',
+          id:'lynxi',
         },
       ],
       loading: false,

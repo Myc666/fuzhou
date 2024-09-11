@@ -71,6 +71,15 @@ export function listTabs(data) {
   })
 }
 
+// 删除告警
+export function deleteAlarm(data) {
+  return request({
+    url: '/report/delete',
+    method: 'post',
+    data
+  })
+}
+
 // 导出
 export function exportAlarm(params) {
   return request({
@@ -87,5 +96,15 @@ export function saveclearReportDayConfig(params) {
     url: '/config/saveClearReportDayConfig',
     method: 'post',
     params
+  })
+}
+
+// 导出告警数据
+export function exportData(params) {
+  return request({
+    url: '/report/exportData',
+    method: 'get',
+    params,
+    responseType: 'blob',
   })
 }

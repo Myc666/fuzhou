@@ -10,12 +10,12 @@
       <div>
         <el-form ref="form" :model="params" :rules="rules" label-width="80px">
           <el-form-item label="账号名称" prop="name">
-            <el-input v-model="params.name" disabled></el-input>
+            <el-input v-model="params.name" :disabled="currentAccount==null?false:true"></el-input>
           </el-form-item>
           <el-form-item label="账号密码" prop="password" v-if="!currentAccount">
             <el-input v-model="params.password"></el-input>
           </el-form-item>
-          <el-form-item label="角色" prop="roleIds">
+          <!-- <el-form-item label="角色" prop="roleIds">
             <el-select
               style="width: 100%"
               v-model="params.roleIds"
@@ -29,7 +29,7 @@
                 :value="item.id"
               ></el-option>
             </el-select>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="账号状态" prop="val">
             <el-radio-group v-model="params.state">
               <el-radio-button label="0">正常</el-radio-button>
@@ -71,24 +71,24 @@ export default {
         account: "",
         password: "",
         state: "0",
-        roleIds: [],
+        // roleIds: [],
       },
       rules: {
         name: [{ required: true, message: "请输入账号名称", trigger: "blur" }],
         password: [
           { required: true, message: "请输入账号密码", trigger: "blur" },
         ],
-        roleIds: [{ required: true, message: "请选择角色", trigger: "blur" }],
+        // roleIds: [{ required: true, message: "请选择角色", trigger: "blur" }],
       },
       tableData: [],
     };
   },
   async created() {
-    await this.getRoleList();
+    // await this.getRoleList();
     if (this.currentAccount) {
-      this.currentAccount.roles.forEach((item) => {
-        this.params.roleIds.push(item.id);
-      });
+      // this.currentAccount.roles.forEach((item) => {
+      //   this.params.roleIds.push(item.id);
+      // });
       Object.assign(this.params, this.currentAccount);
     }
   },

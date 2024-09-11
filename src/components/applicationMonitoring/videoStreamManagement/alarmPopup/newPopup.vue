@@ -11,7 +11,7 @@
         <div class="result">
           <div class="img-box">
             <div class="img-content">
-              <!-- <div
+              <div
                 :class="item.type=='hook'?'xboxA':'xbox'"
                 v-for="(item, index) in pointList"
                 :key="index"
@@ -23,7 +23,7 @@
                 }"
               >
                 <div class="text" :style="{ color: '#fff', textAlign:'center',backgroundColor: item.type=='hook'?'green':'red' }">{{ item.confidence }}</div>
-              </div> -->
+              </div>
               <img id="img_alarm_popup" v-if="alarmData.id" :src="fileUrl" class="img" />
             </div>
           </div>

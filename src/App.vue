@@ -2,8 +2,8 @@
  * @Description:
  * @Autor: 张健，dhq
  * @Date: 2022-07-09 10:33:16
- * @LastEditors: 张健，dhq
- * @LastEditTime: 2022-09-11 13:58:41
+ * @LastEditors: fengshiqiang-xphl fengshiqiang-xphl@gome.inc
+ * @LastEditTime: 2024-05-06 21:59:20
 -->
 <template>
   <div id="app">
@@ -72,7 +72,7 @@ export default {
     "$route.path":{
       handler(val) {
         if (val) {
-          if(val=='/bigScreen' || val=='/login' || val =='/'){
+          if(val=='/bigScreen' || val=='/login' || val =='/' || val=="/dataManagement/alarmManagement1"){
             this.isShow = false;
           }else{
             this.isShow = true;

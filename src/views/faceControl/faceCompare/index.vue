@@ -61,7 +61,7 @@
             </el-row>
             <div style="padding-top: 30px">
               <span style="color: #c0c4cc">
-                图片格式：JPEG、JPG、PNG、BMP。图片小大：小于3M
+                支持图片格式:JPEG、JPG、PNG，小于2M。
               </span>
               <el-button style="float: right" size="mini" @click="faceCompare()" type="primary"
                 >开始比对</el-button
@@ -123,6 +123,9 @@
               </div>
             </div>
             <div style="padding-top: 60px;">
+              <div style="color: #c0c4cc">
+                支持图片格式:JPEG、JPG、PNG，小于15M。
+              </div>
               <el-button style="float: right;" size="mini" @click="faceRecognize()" type="primary">开始检索</el-button>
             </div>
           </el-col>
@@ -248,6 +251,10 @@ export default {
       
     },
     async faceRecognize(){
+      if(!this.fileLeft.file){
+        this.$message.error('请上传图片后在进行检索')
+        return
+      }
       let form = new FormData();
       form.append("file", this.fileLeft.file);
       const {code,data} = await faceRecognize(form);

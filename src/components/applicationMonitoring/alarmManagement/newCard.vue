@@ -21,16 +21,16 @@
       </div>
       <div class="img-box" @click="detailFun">
         <div class="img-content" :style="{overflow:'hidden',width:ratio==1?'235px !important':'',height:ratio==1?'132px !important':''}">
-          <!-- <div v-for="(item, index) in pointList" :key="index"
+          <div v-for="(item, index) in pointList" :key="index"
             :class="item.type=='hook'?'xboxA':'xbox'"
             :style="{
             width: item.width,
             height: item.height,
             left: item.left,
             top: item.top,
-          }"> -->
+          }">
             <!-- <div class="text" v-if="ratio==0.5" :style="{ color: '#fff', textAlign:'center',backgroundColor: item.type=='hook'?'green':'red',position:'absolute',minWidth:'100%'}">{{ item.confidence }}</div> -->
-          <!-- </div> -->
+          </div>
           <img id="img_alarm_card" ref="page_image_url" :src="this.fileUrl" style="width: 100%;"/>
         </div>
       </div>

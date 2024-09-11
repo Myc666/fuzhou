@@ -117,7 +117,7 @@ export default {
       });
       if(code == 0){
         this.$message.success('更新成功')
-
+        this.getBoxAndVersion();
       }
     },
     // async getBoxAndHistoryVersion(datas){

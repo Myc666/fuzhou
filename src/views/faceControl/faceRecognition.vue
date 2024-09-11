@@ -14,7 +14,7 @@
               <el-statistic :title="item.name" style="height: 70px">
                 <template slot="formatter">
                   <span
-                    @click="getTabs(item.id)"
+                    @click="getTabs(item.id,item.name)"
                     style="
                       padding: 10px 0;
                       color: #1e9fff;
@@ -32,7 +32,7 @@
               <el-statistic title="陌生人">
                 <template slot="formatter">
                   <span
-                    @click="getTabs('', 1)"
+                    @click="getTabs('','陌生人')"
                     style="padding: 10px 0; color: #1e9fff; cursor: pointer"
                     >{{ count }}</span
                   >
@@ -87,7 +87,7 @@
             </el-col> -->
           </el-row>
         </el-card>
-        <el-card class="box-card">
+        <el-card class="box-card" style="margin-top: 20px;">
           <el-row>
             <el-col :span="24">
               <div style="margin-bottom: 15px">
@@ -134,8 +134,8 @@
                 <el-table-column label="告警对象" prop="alarmTime">
                   <template slot-scope="scope">
                     <span>
-                      <span v-if="scope.row.group.name">
-                        {{ scope.row.faceUser.name }}
+                      <span v-if="scope.row.group?.name">
+                        {{ scope.row.faceUser?.name }}
                       </span>
                       <span v-else>陌生人</span>
 
@@ -145,7 +145,7 @@
                 <el-table-column label="所属分组" prop="alarmTime">
                   <template slot-scope="scope">
                     <span>
-                      {{ scope.row.group.name || '--' }}
+                      {{ scope.row.group?.name || '--' }}
                     </span>
                   </template>
                 </el-table-column>
@@ -180,14 +180,17 @@
           <div class="card-title">
             <span>视频巡航</span>
           </div>
-          <div class="video-box" :class="'video' + videoCount">
+          <div class="video-box" :class="activeList.length>2?'video' + videoCount:''">
             <div
               class="video-item"
               v-for="(item, index) in activeList"
               :key="index"
             >
               <!-- <div class="video-item-name">{{ item.name }}</div> -->
-              <div :id="'video' + item.id" v-show="index < videoCount"></div>
+              <!-- <div :id="'video' + item.id" v-show="index < videoCount"></div> -->
+              <div style="width: 95%;height: 100%;">
+                <VideoBox :Id="item.id" :index="index" :ref="'video'+index"></VideoBox>
+              </div>
             </div>
             <!-- <div
               class="video-item"
@@ -203,11 +206,11 @@
     <FaceManagement
       :currentFaceType="currentFaceType"
       v-if="faceManagementVisible"
-      @close="(faceManagementVisible = false), getNewData()"
+      @close="faceManagementVisible = false"
     />
     <StrangerList
       v-if="strangerVisible"
-      @close="(strangerVisible = false), getNewData()"
+      @close="strangerVisible = false"
     />
   </div>
 </template>
@@ -226,10 +229,12 @@ import { listPageDGroup } from "./faceManagent/api";
 import { reportImage, listPage } from "./faceHistory/api";
 import FaceManagement from "@/components/faceControl/faceRecognition/faceManagement";
 import StrangerList from "@/components/faceControl/faceRecognition/strangerList";
+import VideoBox from "@/components/faceControl/video";
 export default {
   components: {
     FaceManagement,
     StrangerList,
+    VideoBox
   },
   data() {
     return {
@@ -246,11 +251,12 @@ export default {
       groups: [],
       timeObj: {},
       groupId: "",
-      hasStranger: "",
+      hasStranger: 0,
+      count:null,
     };
   },
   created() {
-    this.getNewData();
+    // this.getNewData();
 
     let that = this;
 
@@ -261,22 +267,22 @@ export default {
 
     this.getActives();
     this.getGroup();
-    this.getNumber();
+    // this.getNumber();
   },
   destroyed() {
     clearInterval(this.timeObj);
   },
   methods: {
-    getTabs(id, hasStranger) {
+    getTabs(id, name) {
       this.groupId = id;
-      this.hasStranger = hasStranger || "";
+      this.hasStranger = name == '总计' ? 0 : name == '陌生人' ? 1 : 2;
       this.getNewLy();
     },
     // 获取统计数据
-    async getNewData() {
-      const data = await getNewData();
-      this.statisticsDetail = data.data;
-    },
+    // async getNewData() {
+    //   const data = await getNewData();
+    //   this.statisticsDetail = data.data;
+    // },
     // 获取陌生人告警记录
     async getNewLy() {
       const data = await listPage({
@@ -286,36 +292,36 @@ export default {
         hasStranger: this.hasStranger,
       });
       this.tableData = data.data;
-      console.log(this.tableData, data.data);
+      // console.log(this.tableData, data.data);
     },
 
-    async getNumber() {
-      const data = await listPage({
-        limit: 10,
-        page: 1,
-        hasStranger: 1,
-      });
-      this.count = data.count;
-    },
+    // async getNumber() {
+    //   const data = await listPage({
+    //     limit: 10,
+    //     page: 1,
+    //     hasStranger: 1,
+    //   });
+    //   this.count = data.count;
+    // },
 
     // 获取视频流并播放
     async getActives() {
       const data = await getActives();
       this.activeList = data.data;
-      this.activeList.forEach(async (item) => {
-        const res = await getPlayUrl({ cameraId: item.id });
-        const playUrl = res.data;
-        let player = new Player({
-          id: "video" + item.id,
-          isLive: true,
-          playsinline: true,
-          url: playUrl,
-          autoplay: true,
-          fluid: true,
-          controls: true,
-          plugins: [FlvPlugin],
-        });
-      });
+      // this.activeList.forEach(async (item) => {
+      //   const res = await getPlayUrl({ cameraId: item.id });
+      //   const playUrl = res.data;
+      //   let player = new Player({
+      //     id: "video" + item.id,
+      //     isLive: true,
+      //     playsinline: true,
+      //     url: playUrl,
+      //     autoplay: true,
+      //     fluid: true,
+      //     controls: true,
+      //     plugins: [FlvPlugin],
+      //   });
+      // });
     },
     // 人脸管理
     clickFaceManagement(type) {
@@ -329,7 +335,18 @@ export default {
     async getGroup() {
       const { data, count } = await listPageDGroup();
       this.groups = data;
+      if(this.groups.length>0){
+        this.groups.forEach((item,index)=>{
+          if(item.name=='总计'){
+            this.result(item)
+          }
+        })
+      }
     },
+    result(items) {
+      let otherItemsValuesSum = this.groups.filter(item => item.id !== items.id).reduce((sum, item) => sum + item.userCount, 0);
+      this.count = items.userCount - otherItemsValuesSum;
+    }
   },
 };
 </script>
@@ -373,7 +390,7 @@ export default {
       align-items: center;
       position: relative;
       margin-bottom: 5px;
-      margin-left: 5px;
+      // margin-left: 5px;
       .video-item-name {
         position: absolute;
         top: 5px;

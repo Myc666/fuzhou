@@ -21,7 +21,7 @@
           <span slot="footer" class="dialog-footer">
             <el-button v-if="dataList.length>0" @click="deleteDraw">删除</el-button>
             <el-button @click="cancelDraw">取消绘制</el-button>
-            <el-button type="primary" v-if="nameEn != 'person_tracker'" @click="newDraw">绘制新区域</el-button>
+            <el-button type="primary" v-if="nameEn != 'person_tracker'" @click="newDraw">绘制下一区域</el-button>
             <el-button type="primary" v-if="nameEn == 'person_tracker'" @click="LineDraw">绘制线</el-button>
             <el-button type="primary" @click="saveDraw">保存绘制</el-button>
           </span>

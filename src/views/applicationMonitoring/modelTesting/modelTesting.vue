@@ -23,12 +23,12 @@
           <!-- <span class="el-icon-plus"></span> -->
           <span>新增算法</span>
         </div>
-        <div class="level-btn" @click="addAlarmLevelData">
+        <div class="level-btn" v-if="btnData.includes('algorithm-alarm-level')" @click="addAlarmLevelData">
           <span>告警等级管理</span>
         </div>
-        <!-- <div class="level-btn" @click="addAlarmVoice">
+        <div class="level-btn"  v-if="btnData.includes('algorithm-alarm-voice')" @click="addAlarmVoice">
           <span>告警语音管理</span>
-        </div> -->
+        </div>
       </div>
     </div>
     <div class="flex-cont">
@@ -42,7 +42,7 @@
         </div>
         <div>
           <div :class="[type==0?'flex-item flex-item-w32':type==2?'flex-item flex-item-w19':'flex-item flex-item-w24']" v-if=" algorithmList.length>0">
-            <div v-for="(items,ind) in algorithmList" :key="ind" class="algorithm-item" @click="items.image&&items.isShowImg?detailFun(items.id):''">
+            <div v-for="(items,ind) in algorithmList" :key="ind" class="algorithm-item" @click="items.image&&items.isShowImg&&isDetail?detailFun(items.id):''">
               <div v-if="items.hasUpdate" style="position: absolute;top: 0px;right: -1px;z-index: 99;">
                 <img src="@/assets/images/modelTesting/update-icon.png" style="width: 60px;"/>
               </div>
@@ -79,7 +79,7 @@
                     <div class="upload-btn" @click.stop="uploadFun(items)">手动导入模型文件</div>
                   </div> -->
                     <div class="alg-btn-flex">
-                      <div class="alg-btn" v-if="items.hasGitFile||items.hasLocalFile" @click.stop="editData(items)">
+                      <div class="alg-btn" v-if="(items.hasGitFile||items.hasLocalFile)&&btnData.includes('algorithm-edit')" @click.stop="editData(items)">
                         {{items.hasLocalFile?(items.downloadState=='已启用'?'编辑':items.downloadState):'下载'}}
                       </div>
                       <!-- <div v-if="!items.hasGitFile||!items.hasLocalFile" class="alg-btn">
@@ -93,7 +93,7 @@
                         <el-dropdown-menu slot="dropdown">
                           <el-dropdown-item v-if="items.hasLocalFile&&items.downloadState!='下载中'" command="1" icon="el-icon-delete">卸载算法</el-dropdown-item>
                           <el-dropdown-item command="2" icon="el-icon-upload2">导入模型文件</el-dropdown-item>
-                          <el-dropdown-item v-if="items.hasLocalFile&&items.downloadState!='下载中'" command="3" icon="el-icon-coin">版本管理</el-dropdown-item>
+                          <el-dropdown-item v-if="(items.hasLocalFile&&items.downloadState!='下载中')&&btnData.includes('algorithm-version')" command="3" icon="el-icon-coin">版本管理</el-dropdown-item>
                           <el-dropdown-item command="4" icon="el-icon-circle-close">删除卡片</el-dropdown-item>
                         </el-dropdown-menu>
                       </el-dropdown>
@@ -137,7 +137,7 @@
       <ImportAlgorithm v-if="importDialog" :platform="platform" :nameEn="nameEn" pageType="1" @closeImport="closeImport"/>
     </el-dialog>
     <!-- 语音管理 -->
-    <!-- <VoiceManagement v-if="voiceDialog" @closeHandle="closeHandle"/> -->
+    <VoiceManagement v-if="voiceDialog" @closeHandle="closeHandle"/>
   </div>
 </template>
 <script>
@@ -148,7 +148,7 @@ import AddPage from "@/components/applicationMonitoring/modelTesting/addPage/ind
 import AlgorithmUpgrade from "@/components/applicationMonitoring/modelTesting/algorithmUpgrade";
 import ListAlarmLevel from "@/components/applicationMonitoring/algorithmManagement/listAlarmLevel";
 import ImportAlgorithm from "@/components/applicationMonitoring/modelTesting/importAlgorithm";
-// import VoiceManagement from "@/components/applicationMonitoring/modelTesting/voiceManagement/index.vue";
+import VoiceManagement from "@/components/applicationMonitoring/modelTesting/voiceManagement/index.vue";
 export default {
   components:{
     AddAlgorithm,
@@ -156,7 +156,7 @@ export default {
     AlgorithmUpgrade,
     AddPage,
     ImportAlgorithm,
-    // VoiceManagement
+    VoiceManagement
   },
   data() {
     return {
@@ -183,7 +183,9 @@ export default {
       importDialog:false,
       isImportClose:true,
       algorithmArr:[],
-      // voiceDialog:false,
+      voiceDialog:false,
+      btnData:[],
+      isDetail:false,
     };
   },
   watch:{
@@ -198,6 +200,7 @@ export default {
     },
   },
   created() {
+    this.getBtn();
     // this.checkVersion();
     // this.getListData();
     this.getTagListData()
@@ -213,6 +216,35 @@ export default {
     }
   },
   methods: {
+    getBtn(){
+      this.btnData = [];
+      this.isDetail = false;
+      const menuArr = JSON.parse(sessionStorage.getItem('menuTree'));
+      let newArr = [];
+      this.getList(menuArr).filter((item,index)=>{
+        newArr.push(item.auth)
+      })
+      this.btnData = newArr;
+      let detailArr = menuArr.filter((items,i)=>{
+        return items.path == '/algorithmManagement/modelDetail'
+      })
+      if(detailArr.length>0){
+        this.isDetail = true;
+      }
+    },
+    getList(data){
+      let arr = []
+      data.forEach(item=>{
+          if(item.path==this.$route.path){
+              arr = item.children.filter((items,ind)=>{
+                return items.type==2
+              })
+          }else{
+              this.getList(item.children);
+          }
+      })
+      return arr
+    },
     handleResize() {
       const element = document.getElementById("rightCont");
       let width = element.offsetWidth
@@ -404,15 +436,15 @@ export default {
         this.importDialog = false;
       }
     },
-    // // 告警语音管理
-    // addAlarmVoice(){
-    //   this.voiceDialog = true
-    // },
-    // // 关闭语音管理
-    // closeHandle(){
-    //   this.voiceDialog = false;
-    //   this.getListData();
-    // },
+    // 告警语音管理
+    addAlarmVoice(){
+      this.voiceDialog = true
+    },
+    // 关闭语音管理
+    closeHandle(){
+      this.voiceDialog = false;
+      this.getListData();
+    },
     // 删除算法
     deleteFun(item){
       this.$confirm(`请谨慎删除。<br />1.将删除所有数据信息，包括卡片、识别记录等。<br />2.将自动停止所有使用此算法的摄像头播放。<br />3.若重新添加此算法，请前往【算法商城 > 新增算法】添加。`, `是否删除【${item.name}】`, {

@@ -9,12 +9,16 @@
             accept=".jpg,.jpeg,.png,.gif"
             style="display: inline"
             >
-                <img
-                    v-if="form4.screenLogoUrl&&!showUploadButton"
-                    :src="VUE_APP_API_BASE_URL + form4.screenLogoUrl"
-                    class="img"
-                    @error="handleImageError" 
-                />
+                <div v-if="form4.screenLogoUrl&&!showUploadButton" class="file-img">
+                    <img
+                        :src="VUE_APP_API_BASE_URL + form4.screenLogoUrl"
+                        class="img"
+                        @error="handleImageError" 
+                    />
+                    <div class="del-sty">
+                    <div class="el-icon-delete" @click.stop="delFun()"></div>
+                    </div>
+                </div>
                 <!-- <el-button type="primary" icon="el-icon-plus" v-else>上传LOGO</el-button> -->
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
@@ -53,7 +57,6 @@ export default {
                     this.url = res.data
                     this.form4.screenLogoUrl = "/config/upload/stream?file=" + res.data;
                 }
-                
             }
         },
         // 上传
@@ -68,13 +71,17 @@ export default {
         },
         // 保存
         async SubmitForm(){
-            if(!this.url){
-                this.$message.waring("请上传");
-                return;
-            }
+            // if(!this.url){
+            //     this.$message.waring("请上传");
+            //     return;
+            // }
             await saveAfterSalesConfig({afterSalesQRCodes:this.url})
             this.$message.success("保存成功");
             this.$store.commit('setAfterSalesUrl', this.url);
+        },
+        delFun(){
+            this.url = "";
+            this.form4.screenLogoUrl = "";
         }
     },
 };
@@ -94,4 +101,26 @@ export default {
     text-align: center;
     border: 1px dashed #d9d9d9;
   }
+.file-img{
+    width: 150px;
+    height: 150px;
+    position: relative;
+}
+.file-img:hover{
+    .del-sty{
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        background: rgba(0, 0, 0, 0.40);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #FFF;
+        font-size: 20px;
+        top: 0px;
+    }
+}
+.del-sty{
+    display: none;
+}
 </style>

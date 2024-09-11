@@ -22,7 +22,7 @@
         >
       </div>
     </div>
-    <div class="ai_table">
+    <div class="ai_table" style="margin-top: 10px;">
       <el-table
         :data="tableData"
         border
@@ -45,7 +45,7 @@
             >
           </template>
         </el-table-column>
-        <el-table-column align="center" prop="name" label="用户角色">
+        <!-- <el-table-column align="center" prop="name" label="用户角色">
           <template slot-scope="scope">
             {{ handleRoleData(scope.row.roles) }}
           </template>
@@ -54,7 +54,7 @@
           <template slot-scope="scope">
             {{ scope.row.teams[0]?.name || "--" }}
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column align="center" label="创建时间">
           <template slot-scope="scope">
             {{ $moment(scope.row.createdAt).format("YYYY-MM-DD HH:mm:ss") }}

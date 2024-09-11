@@ -20,6 +20,7 @@
         <el-form-item label="地址">
           <el-input
             placeholder="请输入地址"
+            disabled
             v-model="detail.ipAddr"
           ></el-input>
         </el-form-item>

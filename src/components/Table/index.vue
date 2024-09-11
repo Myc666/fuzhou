@@ -4,6 +4,7 @@
       <slot name="header"></slot>
     </div>
     <div class="table-container">
+      <slot name="header-btn"></slot>
       <div>
         <el-table
           ref="gm-table"

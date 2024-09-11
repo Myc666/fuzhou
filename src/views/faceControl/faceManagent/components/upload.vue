@@ -38,6 +38,7 @@
             accept=".zip"
             :on-success="onSuccess"
             :limit="1"
+            :disabled="isDisabled"
           >
           <el-button size="small" type="primary">点击上传</el-button>
   <div slot="tip" class="el-upload__tip">只能上传zip文件，且不超过100M</div>
@@ -69,7 +70,8 @@ export default {
       },
       tableData: [],
       VUE_APP_API_BASE_URL,
-      token:Cookies.get('X-Token')
+      token:Cookies.get('X-Token'),
+      isDisabled:false,
     };
   },
   computed: {},
@@ -100,12 +102,17 @@ export default {
         if (!isLt2M) {
           this.$message.error('上传文件不能超过 100MB!');
           return false
-        }  
+        }
+        this.isDisabled = true;  
     },
     onSuccess(data){
       if(data.code == 0){
+        this.isDisabled = false;
         this.$message.success("导入成功")
         this.closeDialog()
+      }else{
+        this.isDisabled = false;
+        this.$message.erro(data.msg)
       }
     }
   },
@@ -124,5 +131,8 @@ export default {
 }
 .upload-demo{
   width: 290px;
+}
+::v-deep .el-form-item {
+  margin-bottom: 18px !important;
 }
 </style>

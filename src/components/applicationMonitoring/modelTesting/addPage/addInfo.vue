@@ -2,7 +2,7 @@
     <div>
         <el-dialog
             :close-on-click-modal="false"
-            title="导入算法完整包"
+            title="新增算法卡片"
             :visible.sync="dialogVisible"
             width="500px"
             append-to-body
@@ -72,22 +72,6 @@ export default {
                     name:'超星',
                     id:'chaoxing',
                 },
-                // {
-                //     name:'英伟达',
-                //     id:'nvidia',
-                // },
-                // {
-                //     name:'登临',
-                //     id:'denglin',
-                // },
-                // {
-                //     name:'灵汐',
-                //     id:'lynxi',
-                // },
-                // {
-                //     name:'算能',
-                //     id:'sophgo',
-                // },
             ],
             params:{
                 name:'',

@@ -33,18 +33,18 @@
         >
           <span>
             <span style="padding-right: 20px;">视频路数</span>
-          </span>
-          <div>
-            <el-radio-group size="mini" v-model="playType" @change="setPlayType()">
+            <!-- <el-radio-group size="mini" v-model="playType" @change="setPlayType()">
               <el-radio-button :label="0" >原始流</el-radio-button>
               <el-radio-button :label="1">合成流</el-radio-button>
-            </el-radio-group>
-            <el-button type="primary" style="margin-left: 20px;" @click="detailFun">查看当日</el-button>
-            <!-- <el-radio-group v-model="params.limit">
+            </el-radio-group> -->
+          </span>
+          <div>
+            <el-button type="primary" style="margin-right: 20px;" @click="detailFun">查看当日</el-button>
+            <el-radio-group v-model="params.limit">
               <el-radio-button label="1">一屏</el-radio-button>
               <el-radio-button label="4">四屏</el-radio-button>
               <el-radio-button label="6">六屏</el-radio-button>
-            </el-radio-group> -->
+            </el-radio-group>
           </div>
         </div>
         <div class="video-box" :class="'video' + params.limit">
@@ -171,7 +171,7 @@ import Player from "xgplayer";
 import {FlvPlugin,Events} from "xgplayer-flv";
 import "xgplayer/dist/index.min.css";
 import AlgorithmList from "@/components/applicationMonitoring/videoStreamManagement/algorithmList";
-import AlarmPopup from "@/components/applicationMonitoring/videoStreamManagement/alarmPopup/newPopup";
+import AlarmPopup from "@/components/applicationMonitoring/videoStreamManagement/alarmPopup";
 import AlarmManagement from "../alarmManagement"
 import {
   getAlgorithms,
@@ -210,7 +210,7 @@ export default {
       timer: null,
       params: {
         page: 1,
-        limit: 1,
+        limit: 6,
       },
       total: 0,
       timerPlayings:'',

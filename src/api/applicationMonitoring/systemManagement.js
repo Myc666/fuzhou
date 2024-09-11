@@ -104,3 +104,12 @@ export function getAfterSales(params) {
     params
   })
 }
+
+// 保存人脸及抽帧应用配置
+export function saveFaceFrameConfig(params) {
+  return request({
+    url: '/config//saveFaceFrameConfig',
+    method: 'post',
+    params
+  })
+}
