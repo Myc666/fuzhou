@@ -70,6 +70,18 @@
           >提交</el-button
         >
       </el-form-item>
+      <el-divider></el-divider>
+      <el-form-item label="推送数据范围">
+        <el-table
+        :data="listData"
+        border
+        style="width: 100%">
+          <el-table-column prop="name" label="参数名称"></el-table-column>
+          <el-table-column prop="illustrate" label="参数中文说明"></el-table-column>
+          <el-table-column prop="type" label="参数类型"></el-table-column>
+          <el-table-column prop="remarks" label="备注"></el-table-column>
+        </el-table>
+      </el-form-item>
     </el-form>
   </div>
 </template>
@@ -100,6 +112,69 @@ export default {
         smsAppKey: "",
         smsTplId: "",
       },
+      listData:[
+        {
+          name:'cmpn_cd',
+          illustrate:'公司标识',
+          type:'string',
+          remarks:'固定值TLB',
+        },{
+          name:'camera_id',
+          illustrate:'摄像头id',
+          type:'string',
+          remarks:'',
+        },{
+          name:'camera_name',
+          illustrate:'摄像头名称 ',
+          type:'string',
+          remarks:'',
+        },{
+          name:'algorithm_id',
+          illustrate:'算法id',
+          type:'string',
+          remarks:'',
+        },{
+          name:'algorithm_name',
+          illustrate:'算法名称',
+          type:'string',
+          remarks:'',
+        },{
+          name:'level',
+          illustrate:'告警级别',
+          type:'string',
+          remarks:'固定值：F',
+        },{
+          name:'img_path',
+          illustrate:'图片路径',
+          type:'string',
+          remarks:'',
+        },{
+          name:'img_ext',
+          illustrate:'图片扩展名',
+          type:'string',
+          remarks:'',
+        },{
+          name:'img_name',
+          illustrate:'图片名称',
+          type:'string',
+          remarks:'',
+        },{
+          name:'alarm_dt',
+          illustrate:'告警时间',
+          type:'string',
+          remarks:'Yyyy-mm-dd hh:mm:ss',
+        },{
+          name:'report_id',
+          illustrate:'告警id',
+          type:'string',
+          remarks:'http://domain:port/report/stream?id=report_id 图片地址',
+        },{
+          name:'params',
+          illustrate:'告警位置坐标',
+          type:'string',
+          remarks:'JSON字符串',
+        },
+      ]
     };
   },
   async created() {

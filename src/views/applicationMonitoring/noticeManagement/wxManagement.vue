@@ -19,22 +19,24 @@
         <el-radio v-model="form2.weworkEnable" label="false">不启用</el-radio>
         <el-radio v-model="form2.weworkEnable" label="true">启用</el-radio>
       </el-form-item>
-      <el-form-item label="企业微信群机器人地址">
+      <el-form-item label="企业微信群Webhook地址">
         <el-input v-model="form2.weworkUrl"></el-input>
         <div class="tip__text">
-          请先开通企业微信群机器人，然后复制粘贴群地址，例如：https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=1111111-2222-3333-4444444
+          请先开通企业微信群机器人，并粘贴 Webhook 地址至此。例如：https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=1111111-2222-3333-4444444
         </div>
       </el-form-item>
       <el-divider></el-divider>
-      <el-form-item label="推送到钉钉群信群" prop="weworkEnable">
+      <el-form-item label="推送到钉钉群" prop="weworkEnable">
         <el-radio v-model="form2.dingdingEnable" label="false">不启用</el-radio>
         <el-radio v-model="form2.dingdingEnable" label="true">启用</el-radio>
       </el-form-item>
-      <el-form-item label="钉钉群签名">
-        <el-input v-model="form2.dingdingSign" placeholder="选填" type="textarea"></el-input>
-      </el-form-item>
-      <el-form-item label="钉钉群地址">
+      <el-form-item label="钉钉群Webhook地址">
         <el-input v-model="form2.dingdingUrl" ></el-input>
+        <div class="tip__text">必填，请先开通钉钉群“自定义机器人”，并粘贴 Webhook 地址至此。</div>
+      </el-form-item>
+      <el-form-item label="加签（选填）">
+        <el-input v-model="form2.dingdingSign" placeholder="选填" type="textarea"></el-input>
+        <div class="tip__text">签名加密用于双向安全验证，需粘贴自定义机器人的“加签地址“至此。</div>
       </el-form-item>
       <el-divider></el-divider>
       <!-- <el-form-item label="是否推送短信通知" prop="smsEnable">
