@@ -11,7 +11,7 @@
         <div class="result">
           <div class="img-box">
             <div class="img-content">
-              <div
+              <!-- <div
                 :class="item.type=='hook'?'xboxA':'xbox'"
                 v-for="(item, index) in pointList"
                 :key="index"
@@ -23,7 +23,7 @@
                 }"
               >
                 <div class="text" :style="{ color: '#fff', textAlign:'center',backgroundColor: item.type=='hook'?'green':'red' }">{{ item.confidence }}</div>
-              </div>
+              </div> -->
               <img id="img_alarm_popup" v-if="alarmData.id" :src="fileUrl" class="img" />
             </div>
           </div>
@@ -51,39 +51,39 @@ export default {
         }
     },
     watch:{
-        alarmData:{
-            immediate: true,
-            handler(val) {
-                let arr = val.params?JSON.parse(val.params):[]
-                this.$nextTick(() => {
-                this.pointList = [];
-                let img = new Image();
-                img.src = this.fileUrl;
-                if(!this.fileUrl){
-                    return
-                }
-                img.onload = () => {
-                    this.imgHeight = img.height;
-                    setTimeout(() => {
-                        const ratio = document.getElementById("img_alarm_popup").offsetHeight / this.imgHeight;
-                        arr.forEach((item) => {
-                            if(item.position[3] * 0.5 >this.imgHeight){
-                                item.position[3] = this.imgHeight/0.5
-                            }
-                            let leftNum = (item.position[0] * ratio)*0.5
-                            this.pointList.push({
-                                ...item,
-                                left: leftNum > 0 ? leftNum + "px" : "0px",
-                                top: (item.position[1] * ratio)*0.5-5  + "px",
-                                width: ((item.position[2] - item.position[0]) * ratio)*0.5  + "px",
-                                height: ((item.position[3] - item.position[1]) * ratio)*0.5  + "px",
-                            });
-                        });
-                    },50)
-                }
-                })
-            }
-        }
+        // alarmData:{
+        //     immediate: true,
+        //     handler(val) {
+        //         let arr = val.params?JSON.parse(val.params):[]
+        //         this.$nextTick(() => {
+        //         this.pointList = [];
+        //         let img = new Image();
+        //         img.src = this.fileUrl;
+        //         if(!this.fileUrl){
+        //             return
+        //         }
+        //         img.onload = () => {
+        //             this.imgHeight = img.height;
+        //             setTimeout(() => {
+        //                 const ratio = document.getElementById("img_alarm_popup").offsetHeight / this.imgHeight;
+        //                 arr.forEach((item) => {
+        //                     if(item.position[3] * 0.5 >this.imgHeight){
+        //                         item.position[3] = this.imgHeight/0.5
+        //                     }
+        //                     let leftNum = (item.position[0] * ratio)*0.5
+        //                     this.pointList.push({
+        //                         ...item,
+        //                         left: leftNum > 0 ? leftNum + "px" : "0px",
+        //                         top: (item.position[1] * ratio)*0.5-5  + "px",
+        //                         width: ((item.position[2] - item.position[0]) * ratio)*0.5  + "px",
+        //                         height: ((item.position[3] - item.position[1]) * ratio)*0.5  + "px",
+        //                     });
+        //                 });
+        //             },50)
+        //         }
+        //         })
+        //     }
+        // }
     },
     methods:{
         // 关闭回调
