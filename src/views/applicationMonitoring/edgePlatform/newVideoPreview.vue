@@ -136,7 +136,7 @@
     getAlarms,
     getCounter,
     getCameraListData,
-    playings,
+    // playings,
   } from "@/api/applicationMonitoring/videoStreamManagement";
   import AlarmDetail from "@/components/applicationMonitoring/alarmManagement/alarmDetail";
   import VideoBox from "@/components/applicationMonitoring/videoStreamManagement/videoBox";
@@ -170,7 +170,7 @@
           limit: 6,
         },
         total: 0,
-        timerPlayings:'',
+        // timerPlayings:'',
         playerKeyframe: [],
           timerKeyframe: '',
           checkKeyframeRun: false,
@@ -239,22 +239,22 @@
         this.params.page = val;
         this.getListPageActives(1);
       },
-      async savePlayings(){
-          let newArr = [];
-          if(this.activeList.length>0){
-              this.activeList.forEach((item)=>{
-                  if(item.id){
-                      newArr.push(item.id)
-                  }
-              })
-          }
-          playings({cameraIds:newArr}).then(res=>{
+      // async savePlayings(){
+      //     let newArr = [];
+      //     if(this.activeList.length>0){
+      //         this.activeList.forEach((item)=>{
+      //             if(item.id){
+      //                 newArr.push(item.id)
+      //             }
+      //         })
+      //     }
+      //     playings({cameraIds:newArr}).then(res=>{
   
-          }).catch(res => {
-            clearInterval(this.timerPlayings);
-            this.timerPlayings=''
-          });;
-      },
+      //     }).catch(res => {
+      //       clearInterval(this.timerPlayings);
+      //       this.timerPlayings=''
+      //     });;
+      // },
       // 获取实时告警数据
       async getAlarms() {
         const data = await getAlarms();

@@ -31,6 +31,7 @@
 <script>
 import {
     getBoxPlayUrl,
+    playCx
   } from "@/api/applicationMonitoring/videoStreamManagement";
 export default {
   props:{
@@ -116,6 +117,11 @@ export default {
         }
       }
     },
+    getPlayCx(){
+      playCx({cameraId:this.cameraId}).then(res=>{
+
+      })
+    },
     // 切换原始流、合成流
     setPlayType(){
         let obj = {
@@ -136,6 +142,7 @@ export default {
       getBoxPlayUrl({ cameraId: this.cameraId, playType: this.playType }).then((res) => {
           const playUrl = res.data;
           this.streamUrl = playUrl;
+          this.getPlayCx();
           this.start();
       })
     },

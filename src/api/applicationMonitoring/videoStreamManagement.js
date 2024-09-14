@@ -113,3 +113,11 @@ export function getBoxPlayUrls(data) {
     data
   })
 }
+
+export function playCx(data) {
+  return request({
+    url: '/stream/playCx',
+    method: 'post',
+    data
+  })
+}
