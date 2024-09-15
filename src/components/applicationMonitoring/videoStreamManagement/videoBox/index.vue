@@ -107,7 +107,7 @@ export default {
       this.timer = null;
     }
     if(this.timerObj){
-      clearInterval(this.timer);
+      clearInterval(this.timerObj);
       this.timerObj = null;
     }
     this.stop();
@@ -148,7 +148,7 @@ export default {
           const playUrl = res.data;
           this.streamUrl = playUrl;
           if(this.timerObj){
-            clearInterval(this.timer);
+            clearInterval(this.timerObj);
             this.timerObj = null;
           }
           this.timerObj = setInterval(this.getPlayCx,5000);
