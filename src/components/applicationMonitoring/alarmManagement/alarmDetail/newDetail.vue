@@ -8,12 +8,12 @@
         :append-to-body="true"
         @closed="closed"
       >
-        <!-- <MarkResult
+         <MarkResult
             v-if="alarmData.id"
             :fileUrl="$common.handleStream(alarmData.id)"
             :dataList="dataList"
-        /> -->
-        <el-image
+        />
+        <!--<el-image
         id="img"
         style="width: 100%"
         :src="$common.handleStream(alarmData.id)"
@@ -25,7 +25,7 @@
         <div slot="placeholder" class="image-slot">
           加载中<span class="dot">...</span>
         </div>
-      </el-image>
+      </el-image>-->
         <div class="alarm-cont">
             <div class="title">{{ alarmData.algorithmName }}</div>
             <div class="big-btn">
@@ -109,7 +109,7 @@ export default {
         }
         .tip{
             font-size: 12px;
-            line-height: 20px; 
+            line-height: 20px;
             color: #606266;
         }
     }
