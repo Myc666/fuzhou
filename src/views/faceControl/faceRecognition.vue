@@ -180,25 +180,41 @@
           <div class="card-title">
             <span>视频巡航</span>
           </div>
-          <div class="video-box" :class="activeList.length>2?'video' + videoCount:''">
+          <!-- <div class="video-box" :class="activeList.length>2?'video' + videoCount:''">
             <div
               class="video-item"
               v-for="(item, index) in activeList"
               :key="index"
             >
-              <!-- <div class="video-item-name">{{ item.name }}</div> -->
-              <!-- <div :id="'video' + item.id" v-show="index < videoCount"></div> -->
               <div style="width: 95%;height: 100%;">
                 <VideoBox :Id="item.id" :index="index" :ref="'video'+index"></VideoBox>
               </div>
             </div>
-            <!-- <div
+          </div> -->
+          <div class="video-box">
+            <div
               class="video-item"
-              v-for="i in Number(videoCount) > activeList.length
-                ? Number(videoCount) - activeList.length
-                : 0"
-              :key="'key' + i"
-            ></div> -->
+            >
+              <div style="width: 100%;height: 100%;" v-if="cameraId">
+                <VideoBox :Id="cameraId" :index="1" ref="video1"></VideoBox>
+              </div>
+            </div>
+            <div class="dropdown">
+              <el-select
+                placeholder="摄像头"
+                v-model="cameraId"
+                class="head-container-input"
+                @change="changeCameraId()"
+                style="margin-left: 10px;"
+              >
+                <el-option
+                  v-for="(subItem, subIndex) in activeList"
+                  :key="subIndex"
+                  :label="subItem.name"
+                  :value="subItem.id"
+                ></el-option>
+              </el-select>
+            </div>
           </div>
         </el-card>
       </el-col>
@@ -253,6 +269,7 @@ export default {
       groupId: "",
       hasStranger: 0,
       count:null,
+      cameraId:'',
     };
   },
   created() {
@@ -278,7 +295,7 @@ export default {
       this.hasStranger = name == '总计' ? 0 : name == '陌生人' ? 1 : 2;
       this.getNewLy();
     },
-    // 获取统计数据
+    // // 获取统计数据
     // async getNewData() {
     //   const data = await getNewData();
     //   this.statisticsDetail = data.data;
@@ -308,6 +325,7 @@ export default {
     async getActives() {
       const data = await getActives();
       this.activeList = data.data;
+      this.cameraId = this.activeList.length>0?this.activeList[0].id:'';
       // this.activeList.forEach(async (item) => {
       //   const res = await getPlayUrl({ cameraId: item.id });
       //   const playUrl = res.data;
@@ -322,6 +340,11 @@ export default {
       //     plugins: [FlvPlugin],
       //   });
       // });
+    },
+    changeCameraId(){
+      console.log(this.$refs,"=========this.$refs")
+      this.$refs.video1.cameraId = this.cameraId
+      this.$refs.video1.getPlayUrl()
     },
     // 人脸管理
     clickFaceManagement(type) {
@@ -384,6 +407,7 @@ export default {
     // background: rgba(47, 64, 86, 0.7);
     display: grid;
     overflow: hidden;
+    position: relative;
     .video-item {
       // border: 1px #2f4056 solid;
       display: flex;
@@ -458,5 +482,11 @@ export default {
   //    font-weight: bolder;
   //  }
   //}
+}
+.dropdown {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    z-index: 10;
 }
 </style>

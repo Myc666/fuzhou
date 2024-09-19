@@ -3,10 +3,10 @@
     <video  :id="'video' + Id" controls autoplay muted width="100%" height="100%" :ref="'video' + Id">
     </video>
     <div class="dropdown">
-      <el-radio-group size="mini" v-model="playType" style="margin-right: 10px" @change="setPlayType()">
+      <!-- <el-radio-group size="mini" v-model="playType" style="margin-right: 10px" @change="setPlayType()">
         <el-radio-button :label="0" >原始流</el-radio-button>
         <el-radio-button :label="1">合成流</el-radio-button>
-      </el-radio-group>
+      </el-radio-group> -->
       <el-select
         placeholder="视频源"
         v-model="cameraId"
