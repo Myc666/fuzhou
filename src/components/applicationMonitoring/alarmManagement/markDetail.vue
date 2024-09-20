@@ -109,10 +109,9 @@
                     return
                 }
                 img.onload = () => {
-                    this.imgHeight = img.height;
+                    let height = img.height;
                     setTimeout(() => {
-                        console.log(this.$refs)
-                    const ratio = this.$refs['draw_img'+this.Index].offsetHeight / this.imgHeight;
+                    const ratio = this.$refs['draw_img'+this.Index].offsetHeight / height;
                     val.forEach((item) => {
                         let width = (item.position[2] - item.position[0]) * ratio * this.ratio
                         // 创建临时元素
@@ -141,8 +140,6 @@
                             isShow: (txt_width > width) ? true : false
                         });
                     });
-
-
                     }, 100);
                 };
                 });

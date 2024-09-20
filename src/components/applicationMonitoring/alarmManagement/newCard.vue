@@ -31,7 +31,7 @@
           }">
           </div>
           <img id="img_alarm_card" ref="page_image_url" :src="this.fileUrl" style="width: 100%;"/> -->
-          <MarkDetail 
+          <MarkDetail
             :fileUrl="fileUrl"
             :dataList="dataList"
             :ratio="ratio"
@@ -42,7 +42,7 @@
     </div>
     <AlarmDetail :alarmData="alarmData" :dataList="dataList" :originalUrl="originalUrl" :ratio="ratio"
             :Index="index"
-            :dataListAll="roiList" :fileUrl="fileUrl" v-if="alarmDetailVisible" @close="alarmDetailVisible = false" />
+            :dataListAll="roiList" v-if="alarmDetailVisible" @close="closeFun" />
   </div>
 </template>
 <script>
@@ -168,7 +168,13 @@ export default {
         this.isShowPics = false;
       },
       detailFun(){
-        this.alarmDetailVisible = true
+        this.$parent.websocket.close();
+        this.alarmDetailVisible = true;
+        console.log(this.$parent)
+      },
+      closeFun(){
+        this.alarmDetailVisible = false;
+        this.$parent.connectWebsocket();
       }
 
   }

@@ -113,11 +113,12 @@
       <div>
         <div v-if="tableData.length">
           <div :class="'table-sty'+params.limit">
-            <div v-for="item in tableData" :key="item.id" class="item-sty">
+            <div v-for="(item,index) in tableData" :key="item.id" class="item-sty">
               <AlarmCard
                 :fileUrl="VUE_APP_API_BASE_URL+`/report/streamThumb?id=${item.id}`"
                 :originalUrl="$common.handleStream(item.id)"
                 :dataList="handleParams(item.params)"
+                :index="index"
                 :alarmData="item"
                 :isAlarm="true"
               >
