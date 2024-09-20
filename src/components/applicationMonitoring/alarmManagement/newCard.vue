@@ -21,7 +21,7 @@
       </div>
       <div class="img-box" @click="detailFun">
         <div class="img-content" :style="{overflow:'hidden',width:ratio==1?'235px !important':'',height:ratio==1?'132px !important':''}">
-          <div v-for="(item, index) in pointList" :key="index"
+          <!-- <div v-for="(item, index) in pointList" :key="index"
             :class="item.type=='hook'?'xboxA':'xbox'"
             :style="{
             width: item.width,
@@ -29,24 +29,33 @@
             left: item.left,
             top: item.top,
           }">
-            <!-- <div class="text" v-if="ratio==0.5" :style="{ color: '#fff', textAlign:'center',backgroundColor: item.type=='hook'?'green':'red',position:'absolute',minWidth:'100%'}">{{ item.confidence }}</div> -->
           </div>
-          <img id="img_alarm_card" ref="page_image_url" :src="this.fileUrl" style="width: 100%;"/>
+          <img id="img_alarm_card" ref="page_image_url" :src="this.fileUrl" style="width: 100%;"/> -->
+          <MarkDetail 
+            :fileUrl="fileUrl"
+            :dataList="dataList"
+            :ratio="ratio"
+            :Index="index"
+            :dataListAll="roiList"/>
         </div>
       </div>
     </div>
-    <AlarmDetail :alarmData="alarmData" :dataList="dataList" :originalUrl="originalUrl" v-if="alarmDetailVisible" @close="alarmDetailVisible = false" />
+    <AlarmDetail :alarmData="alarmData" :dataList="dataList" :originalUrl="originalUrl" :ratio="ratio"
+            :Index="index"
+            :dataListAll="roiList" :fileUrl="fileUrl" v-if="alarmDetailVisible" @close="alarmDetailVisible = false" />
   </div>
 </template>
 <script>
 import MarkResult from "@/components/markResult";
 import ElImageViewer from "element-ui/packages/image/src/image-viewer";
 import AlarmDetail from "@/components/applicationMonitoring/alarmManagement/alarmDetail/newDetail"
+import MarkDetail from "./markDetail.vue";
 export default {
   components: {
       MarkResult,
       ElImageViewer,
-      AlarmDetail
+      AlarmDetail,
+      MarkDetail
   },
   props: {
     fileUrl: {
@@ -72,6 +81,10 @@ export default {
     originalUrl:{
       type:String,
       default:""
+    },
+    index:{
+      type:Number,
+      default:null
     }
   },
   data() {
@@ -85,6 +98,7 @@ export default {
       currentId: "",
       isShowTooltip:false,
       isShowPics:false,
+      roiList:[],
     };
   },
   methods: {
@@ -106,41 +120,35 @@ export default {
     }
   },
   watch: {
-    dataList: {
+   
+    alarmData:{
       immediate: true,
       deep: true,
       handler(val) {
-        this.$nextTick(() => {
-          this.pointList = [];
-          let img = new Image();
-          img.src = this.fileUrl;
-          if (!this.fileUrl) {
-            return
-          }
-          img.onload = () => {
-            this.imgHeight = img.height;
-
-            setTimeout(() => {
-              const ratio = this.$refs.page_image_url.offsetHeight / this.imgHeight;
-              val.forEach((item) => {
-                if(item.position[3] * this.ratio >this.imgHeight){
-                  item.position[3] = this.imgHeight/this.ratio
-                }
-                this.pointList.push({
-                  ...item,
-                  left: (item.position[0] * ratio * this.ratio) + "px",
-                  top: (item.position[1] * ratio * this.ratio) + "px",
-                  width: ((item.position[2] - item.position[0]) * ratio * this.ratio) + "px",
-                  height: ((item.position[3] - item.position[1]) * ratio * this.ratio) + "px",
+        this.roiList = [];
+        if(val.rois){
+                let roisArr = JSON.parse(val.rois);
+                let newArr = [];
+                roisArr.forEach((item) => {
+                  newArr.push({
+                      pointList: item,
+                  });
                 });
-              });
-
-
-            }, 100);
-          };
-        });
-      },
-    },
+                if(val.lines){
+                let lArr = JSON.parse(val.lines);
+                lArr.forEach((item) => {
+                    newArr.push({
+                      pointList: item,
+                    });
+                });
+                }
+                let obj = {
+                  markPoints:newArr,
+                }
+                this.roiList.push(obj)
+            }
+      }
+    }
   },
   mounted() {
   },

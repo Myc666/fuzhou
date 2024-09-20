@@ -1,12 +1,12 @@
 <template>
   <div class="model-cont">
-    <div class="top-tabs">
+    <!-- <div class="top-tabs">
       <div v-for="(items,index) in tagList" :key="index" :class="[items.isCheck?'tab-check':'tab-item']" @click="checkFun(index)">
         <div :class="[items.isCheck?'tab-name':'']">
           {{ items.name }}
         </div>
       </div>
-    </div>
+    </div> -->
     <div class="head-cont">
       <div class="head-txt">探索人工智能模型</div>
       <div style="display: flex;align-items: center;">

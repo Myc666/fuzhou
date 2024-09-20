@@ -1,7 +1,7 @@
 <template>
   <div class="wrap">
     <el-row :gutter="20">
-      <el-col :span="12">
+      <el-col :span="24">
         <el-card class="box-card">
           <el-row>
             <el-col :span="24" style="margin-bottom: 15px">
@@ -175,22 +175,11 @@
           </el-row>
         </el-card>
       </el-col>
-      <el-col :span="12">
+      <!-- <el-col :span="12">
         <el-card class="box-card">
           <div class="card-title">
             <span>视频巡航</span>
           </div>
-          <!-- <div class="video-box" :class="activeList.length>2?'video' + videoCount:''">
-            <div
-              class="video-item"
-              v-for="(item, index) in activeList"
-              :key="index"
-            >
-              <div style="width: 95%;height: 100%;">
-                <VideoBox :Id="item.id" :index="index" :ref="'video'+index"></VideoBox>
-              </div>
-            </div>
-          </div> -->
           <div class="video-box">
             <div
               class="video-item"
@@ -217,7 +206,7 @@
             </div>
           </div>
         </el-card>
-      </el-col>
+      </el-col> -->
     </el-row>
     <FaceManagement
       :currentFaceType="currentFaceType"
