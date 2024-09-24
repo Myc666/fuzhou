@@ -22,7 +22,7 @@
                   top: item.top,
                 }"
               >
-                <div class="text" :style="{ color: '#fff', textAlign:'center',backgroundColor: item.type=='hook'?'green':'red' }">{{ item.confidence }}</div>
+                <div class="text" :style="{ color: '#fff', textAlign:'center',backgroundColor: item.type=='hook'?'green':'red' }">{{ parseFloat(item.confidence).toFixed(2) }}</div>
               </div>
               <img id="img_alarm_popup" v-if="alarmData.id" :src="fileUrl" class="img" />
             </div>
