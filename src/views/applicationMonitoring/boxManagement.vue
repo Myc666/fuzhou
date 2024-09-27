@@ -169,7 +169,32 @@
               </el-table-column> -->
               <el-table-column align="center" label="使用开关"  width="70">
                 <template slot-scope="scope">
+                  <!-- <el-switch
+                    v-model="scope.row.running"
+                    @change="switchRunning(scope.row)"
+                    :active-value="1"
+                    :inactive-value="0"
+                    :disabled="!btnData.includes('box-run-state')"
+                  ></el-switch> -->
+                    <el-popover
+                    v-if="lenghtNum==6&&scope.row.running==0"
+                    placement="right"
+                    title="无法开启更多路"
+                    width="200"
+                    trigger="click"
+                  >
+                    <div>
+                      <div>最多支持6路同时计算,<br/>请先关闭其他路后再重试。</div>
+                    </div>
+                    <!-- <el-button slot="reference">click 激活</el-button> -->
+                    <el-switch
+                    v-model="scope.row.running"
+                    slot="reference"
+                    disabled
+                  ></el-switch>
+                  </el-popover>
                   <el-switch
+                    v-else
                     v-model="scope.row.running"
                     @change="switchRunning(scope.row)"
                     :active-value="1"
@@ -355,6 +380,7 @@ export default {
       nameEn:'',
       btnData:[],
       btnObjList:[],
+      lenghtNum:null,
     };
   },
   async created() {
@@ -473,6 +499,10 @@ export default {
           item.isShowImg = true;
         })
       }
+      let arr = this.tableData.filter(item=>{
+        return item.running == 1
+      })
+      this.lenghtNum = arr.length;
       this.total = Number(data.count);
       this.loading = false;
     },
