@@ -45,7 +45,7 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="应用场景" prop="tagIds">
+            <!-- <el-form-item label="应用场景" prop="tagIds">
               <el-select
                 v-model="params.tagIds"
                 placeholder="请选择应用场景"
@@ -60,7 +60,7 @@
                   :value="item.id"
                 ></el-option>
               </el-select>
-            </el-form-item>
+            </el-form-item> -->
           </el-form>
         </div>
         <div style="margin-bottom: 16px;">

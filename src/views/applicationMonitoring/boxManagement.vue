@@ -306,6 +306,28 @@
       >
       <AlgorithmUpgrade v-if="dialogVisible" :id="rowId" :algorithmName="algorithmName" :platform="platform" :nameEn="nameEn"/>
     </el-dialog>
+
+    <div class="data-tip">
+      <el-dialog
+      :visible.sync="dataVisible"
+      width="280px"
+      top="40vh"
+      :show-close="false"
+      >
+      <div v-if="dataVisible">
+        <div v-if="isError">
+          <div style="margin-bottom: 10px;">{{ errorCont }}</div>
+          <div>1、请检查摄像头是否可以连接。</div>
+          <div>2、请检查网络是否稳定。</div>
+          <div>3、请检查摄像头账号密码是否正确。</div>
+          <div style="margin-top: 15px;text-align: right;">
+            <el-button @click="closeTip">取消</el-button>
+          </div>
+        </div>
+        <div v-else>数据处理中，请稍等</div>
+      </div>
+    </el-dialog>
+    </div>
   </div>
 </template>
 <script>
@@ -381,6 +403,9 @@ export default {
       btnData:[],
       btnObjList:[],
       lenghtNum:null,
+      dataVisible:false,
+      isError:false,
+      errorCont:''
     };
   },
   async created() {
@@ -589,13 +614,23 @@ export default {
     // 切换运行状态
     async switchRunning(item) {
       this.loading = true;
+      this.dataVisible = true;
       switchRunning({ id: item.id }).then(res=>{
+        this.dataVisible = false;
         setTimeout(()=>{
           this.getListData(1);
         },500)
-      }).catch(()=>{
+      }).catch(res=>{
+        this.errorCont = res;
+        this.isError = true;
         this.loading = false;
+        this.getListData();
       })
+    },
+    closeTip(){
+      this.dataVisible = false;
+      this.isError = false;
+      this.errorCont = '';
     },
     // 删除算法
     async deleteData(item) {
@@ -824,6 +859,11 @@ export default {
   border-radius: 6px;
   :deep(.el-table--border .el-table__cell:first-child .cell){
     padding: 0px !important;
+  }
+}
+.data-tip{
+  :deep(.el-dialog__header){
+    padding: 0px;
   }
 }
 </style>

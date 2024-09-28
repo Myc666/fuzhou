@@ -237,6 +237,27 @@
             <el-button type="primary" @click="saveFun" :loading="btnLoading">提交</el-button>
             </span>
         </el-dialog>
+
+        <div class="data-tip">
+            <el-dialog
+            :visible.sync="dataVisible"
+            width="280px"
+            top="40vh"
+            :show-close="false"
+            append-to-body
+            >
+                <div v-if="dataVisible">
+                    <div v-if="isError">
+                    <div>提交失败,是否重试？</div>
+                    <div style="margin-top: 15px;text-align: right;">
+                        <el-button @click="closeTip(1)">取消</el-button>
+                        <el-button type="primary" @click="closeTip">重试</el-button>
+                    </div>
+                    </div>
+                    <div v-else>数据处理中，请稍等</div>
+                </div>
+            </el-dialog>
+        </div>
     </div>
   </template>
   <script>
@@ -307,6 +328,8 @@
             timeVisible:false,
             imageHeight:null,
             isHide:true,
+            dataVisible:false,
+            isError:false,
         };
     },
     async created() {
@@ -422,6 +445,7 @@
         saveData() {
             // 处理缩放参数
             this.btnLoading = true;
+            this.dataVisible = true;
             let arr = [];
             this.tableData.forEach((item) => {
                 if (item.checked) {
@@ -439,12 +463,23 @@
             this.detail.locationId = this.detail.locationId ? this.detail.locationId : this.currentData?.id
             submitCamera(this.detail).then((data)=>{
                 this.$message.success("保存成功");
+                this.dataVisible = false;
                 this.dialogVisible = false;
                 this.btnLoading = false;
             }).catch(() => {
                 this.btnLoading = false;
+                this.isError = true;
             });
             
+        },
+        closeTip(type){
+            this.dataVisible = false;
+            this.isError = false;
+            if(type == 1){
+                this.dialogVisible = false;
+                return
+            }
+            this.saveData();
         },
         // 拍照
         async takePhoto() {
@@ -670,6 +705,11 @@
     // width: 380px;
     .el-input__inner{
       text-align: left !important;
+    }
+  }
+  .data-tip{
+    :deep(.el-dialog__header){
+        padding: 0px;
     }
   }
   </style>
