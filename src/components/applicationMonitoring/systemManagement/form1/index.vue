@@ -13,18 +13,18 @@
         </div>
       </el-form-item>
       <el-divider></el-divider>
-      <el-form-item label="推理地址">
+      <!-- <el-form-item label="推理地址">
         <el-input v-model="form1.algorithmUrl"></el-input>
         <div class="tip__text">
           模型测试时调用的推理地址，一般由算法模型方提供
         </div>
       </el-form-item>
-      <el-divider></el-divider>
-      <el-form-item label="流媒体视频流类型" prop="streamType">
+      <el-divider></el-divider> -->
+      <!-- <el-form-item label="流媒体视频流类型" prop="streamType">
         <el-radio v-model="form1.streamType" label="rtsp">rtsp视频流</el-radio>
         <el-radio v-model="form1.streamType" label="algo">算法视频流</el-radio>
       </el-form-item>
-      <el-divider></el-divider>
+      <el-divider></el-divider> -->
       <el-form-item label="流媒体服务器地址">
         <el-input v-model="form1.mediaUrl"></el-input>
         <div class="tip__text">
