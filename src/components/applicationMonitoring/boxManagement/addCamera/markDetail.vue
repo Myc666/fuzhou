@@ -60,7 +60,7 @@
                 :y="pointItem.y - 3"
                 width="6"
                 height="6"
-                :fill=items.color
+                fill='#ff1d23'
               ></rect>
             </g>
           </g>
@@ -215,6 +215,7 @@
                       name:item.name,
                     })
                   })
+                  console.log(this.svgListAll)
                 },50)
               }
             })
@@ -243,7 +244,7 @@
         //   this.$message.warning("请删除之后再重新绘制");
         //     return
         // }
-        if(this.svgList.length-1 >0 && this.nameEn == "person_tracker"){
+        if(this.svgList.length-1 >0 && (this.nameEn == "person_tracker" || this.nameEn == 'peopleTrack')){
           if(this.svgList[this.svgList.length-1].pointList.length == 2){
             this.$message.warning("画线只允许画两个点");
             return
