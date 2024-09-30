@@ -204,9 +204,9 @@
                 </template>
               </el-table-column>
               <el-table-column align="center" label="运行状态">
-                <template slot-scope="scope">
+                <div :class="[scope.row.aiboxExecStatus==1000?'green':'']">
                   {{ getStatus(scope.row.aiboxExecStatus) }}
-                </template>
+                </div>
               </el-table-column>
               <el-table-column align="center" label="最后心跳时间">
                 <template slot-scope="scope">
@@ -860,6 +860,12 @@ export default {
   :deep(.el-table--border .el-table__cell:first-child .cell){
     padding: 0px !important;
   }
+}
+.green{
+  color: #67c23a;
+}
+.red{
+  color: red;
 }
 .data-tip{
   :deep(.el-dialog__header){
