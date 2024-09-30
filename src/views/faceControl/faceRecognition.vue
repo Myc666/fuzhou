@@ -277,6 +277,11 @@ export default {
   },
   destroyed() {
     clearInterval(this.timeObj);
+    this.timeObj = null;
+  },
+  beforeDestroy(){
+    clearInterval(this.timeObj);
+    this.timeObj = null;
   },
   methods: {
     getTabs(id, name) {

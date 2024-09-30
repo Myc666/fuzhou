@@ -149,8 +149,8 @@ export default {
                 }
                 let form = new FormData();
                 form.append("countType", this.params.countType);
-                form.append("startTimie",start);
-                form.append("endTimie", end);
+                form.append("startTime",start);
+                form.append("endTime", end);
                 exportData(form).then(res=>{
                     this.dowloadLoading = false;
                     var blob = new Blob([res.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });

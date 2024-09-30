@@ -52,6 +52,7 @@
                     v-model="times"
                     style="width: 330px;"
                     :picker-options="filerData.pickerOptions"
+                    :default-time="['00:00:00', '23:59:59']"
                     type="datetimerange"
                     range-separator="至"
                     format="yyyy-MM-dd HH:mm:ss"
