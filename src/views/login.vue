@@ -59,7 +59,7 @@
                 </el-input>
               </el-form-item>
               <el-form-item prop="password">
-                <el-input
+                <!-- <el-input
                   type="password"
                   show-password
                   auto-complete="off"
@@ -69,6 +69,20 @@
                   size="medium"
                 >
                   <i slot="prefix" class="el-input__icon el-icon-lock" />
+                </el-input> -->
+                <el-input
+                  :type="showPassword ? 'text':'password'"
+                  auto-complete="off"
+                  placeholder="密码"
+                  style="margin-bottom: 65px;"
+                  v-model="params.password"
+                  size="medium"
+                >
+                  <i slot="prefix" class="el-input__icon el-icon-lock" />
+                  <i slot="suffix" @click="changeIconState()">
+                    <img v-if="showPassword" src="@/assets/images/login/open.png" style="width: 26px;margin-top: 10px;"/>
+                    <img v-else src="@/assets/images/login/close.png" style="width: 32px;margin-top: 10px;"/>
+                  </i>
                 </el-input>
               </el-form-item>
               <el-form-item>
@@ -355,6 +369,7 @@ export default {
         password: "",
       },
       appInfo: {},
+      showPassword:false,
     };
   },
   created() {},
@@ -362,6 +377,9 @@ export default {
     window.addEventListener("keydown", this.keyDown);
   },
   methods: {
+    changeIconState(){
+      this.showPassword = !this.showPassword;
+    },
     keyDown(e) {
       // 回车则执行登录方法 enter键的ASCII是13
       if (e.key == "Enter") {
