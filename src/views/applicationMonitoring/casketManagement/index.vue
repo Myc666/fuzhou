@@ -53,6 +53,7 @@
                     <el-button type="text"  v-if="btnData.includes('caske-edit')" @click="editData(row)">编辑</el-button>
                     <el-button type="text"  v-if="btnData.includes('caske-detail')" @click="detailFun(row)">详情</el-button>
                     <el-button type="text"  v-if="btnData.includes('caske-restart')"  @click="restartFun(row)">重启</el-button>
+                    <!-- <el-button type="text"  @click="activationFun(row)" >激活</el-button> -->
                     <el-button type="text"  v-if="btnData.includes('caske-delete')" @click="delFun(row)" style="color: #f56c6c !important">删除</el-button>
                     <!-- <el-button type="text" style="color: #f56c6c !important" @click="ceaseFun(row)">停止</el-button> -->
                     <!-- <el-button type="text" @click="synchronizeFun(row)">同步时间</el-button>
@@ -112,6 +113,8 @@
         <DetailInfo v-if="detailVisible" :rowId="rowId" @close="closeHandle"/>
         <!-- 资源监控 -->
         <ResourceMonitor v-if="resourceVisible" :rowId="rowId" @close="closeR"/>
+        <!-- 激活 -->
+        <Activation v-if="activationVisible" :rowId="rowId" @close="closeA"/>
     </div>
 </template>
 <script>
@@ -130,9 +133,11 @@ import {
  import {saveBasic,listTree} from "@/api/applicationMonitoring/boxManagement";
 import DetailInfo from './components/detail.vue';
 import ResourceMonitor from './components/resourceMonitor.vue';
+import Activation from "./components/activation.vue"
 export default {
    data() {
      return {
+        activationVisible:false,
         detailVisible:false,
         resourceVisible:false,
         rowId:'',
@@ -205,6 +210,18 @@ export default {
                 }
             },
             {
+                key: "activeStatus",
+                title: "激活状态",
+                align: "center",
+                render(h,{value}){
+                    const str = {
+                        0: '未激活',
+                        1: '已激活',
+                    }[value]
+                    return h('span', [str])
+                }
+            },
+            {
                 key: "boxHeartTime",
                 title: "心跳时间",
                 align: "center",
@@ -231,7 +248,8 @@ export default {
     components:{
         Tables,
         DetailInfo,
-        ResourceMonitor
+        ResourceMonitor,
+        Activation
     },
     created() {
         this.getBtn();
@@ -502,6 +520,15 @@ export default {
                 }
             })
             .catch(() => {});
+        },
+        // 激活
+        activationFun(row){
+            this.rowId = row.id;
+            this.activationVisible = true;
+        },
+        closeA(){
+            this.activationVisible = false;
+            this.rowId = ""
         }
     },
 };

@@ -73,3 +73,29 @@ export function basicDelete(data) {
   })
 }
 
+// 获取机器码
+export function getSn(data) {
+  return request({
+    url: '/location/getSn',
+    method: 'post',
+    data
+  })
+}
+
+// 获取激活状态
+export function getActived(data) {
+  return request({
+    url: '/location/getActived',
+    method: 'post',
+    data
+  })
+}
+
+// 激活
+export function actived(data) {
+  return request({
+    url: '/location/actived',
+    method: 'post',
+    data
+  })
+}
