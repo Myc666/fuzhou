@@ -48,10 +48,11 @@
               </el-col>
               <el-col :span="9">
                 <el-form-item label="日期">
+                  <!-- :picker-options="filerData.pickerOptions" -->
                   <el-date-picker
                     v-model="times"
                     style="width: 330px;"
-                    :picker-options="filerData.pickerOptions"
+                    
                     :default-time="['00:00:00', '23:59:59']"
                     type="datetimerange"
                     range-separator="至"

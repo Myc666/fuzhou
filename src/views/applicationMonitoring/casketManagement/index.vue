@@ -53,7 +53,7 @@
                     <el-button type="text"  v-if="btnData.includes('caske-edit')" @click="editData(row)">编辑</el-button>
                     <el-button type="text"  v-if="btnData.includes('caske-detail')" @click="detailFun(row)">详情</el-button>
                     <el-button type="text"  v-if="btnData.includes('caske-restart')"  @click="restartFun(row)">重启</el-button>
-                    <!-- <el-button type="text"  @click="activationFun(row)" >激活</el-button> -->
+                    <el-button type="text"  v-if="row.activeStatus !=1" @click="activationFun(row)" >激活</el-button>
                     <el-button type="text"  v-if="btnData.includes('caske-delete')" @click="delFun(row)" style="color: #f56c6c !important">删除</el-button>
                     <!-- <el-button type="text" style="color: #f56c6c !important" @click="ceaseFun(row)">停止</el-button> -->
                     <!-- <el-button type="text" @click="synchronizeFun(row)">同步时间</el-button>
