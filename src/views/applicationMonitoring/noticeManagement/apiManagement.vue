@@ -173,6 +173,31 @@ export default {
           illustrate:'告警位置坐标',
           type:'string',
           remarks:'JSON字符串',
+        },{
+          name:'webUrl',
+          illustrate:'',
+          type:'string',
+          remarks:'',
+        },{
+          name:'box_sn',
+          illustrate:'',
+          type:'string',
+          remarks:'',
+        },{
+          name:'box_id',
+          illustrate:'盒子id',
+          type:'string',
+          remarks:'',
+        },{
+          name:'box_ip',
+          illustrate:'盒子ip',
+          type:'string',
+          remarks:'',
+        },{
+          name:'alarm_count',
+          illustrate:'',
+          type:'string',
+          remarks:'',
         },
       ]
     };
