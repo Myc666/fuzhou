@@ -175,12 +175,12 @@ export default {
           remarks:'JSON字符串',
         },{
           name:'webUrl',
-          illustrate:'',
+          illustrate:'访问前缀',
           type:'string',
           remarks:'',
         },{
           name:'box_sn',
-          illustrate:'',
+          illustrate:'盒子编号',
           type:'string',
           remarks:'',
         },{
@@ -195,7 +195,7 @@ export default {
           remarks:'',
         },{
           name:'alarm_count',
-          illustrate:'',
+          illustrate:'报警框数量',
           type:'string',
           remarks:'',
         },
