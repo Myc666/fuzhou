@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    title="分组管理"
+    title="批量上传"
     :visible.sync="visible"
     width="40%"
     @update:visible="(val) => $emit('update:visible', val)"
@@ -43,6 +43,17 @@
           <el-button size="small" type="primary">点击上传</el-button>
   <div slot="tip" class="el-upload__tip">只能上传zip文件，且不超过100M</div>
           </el-upload>
+        </el-form-item>
+        <el-form-item label="Zip结构示例">
+          <div style="font-size: 12px;color: #000;">
+            <div style="line-height: 22px;">
+              文件夹1 (注册人脸1)<br/> + 图片1<br/> + 图片2<br/>  
+            </div>
+            <div style="line-height: 22px;margin-top: 15px;">文件夹2 (注册人脸2)<br/> + 图片1<br/> + 图片2</div>
+            <div style="line-height: 22px;margin-top: 15px;">文件夹3 (注册人脸3)<br/>  + 图片1<br/>  + 图片2<br/>  + 图片3</div>
+            <div style="line-height: 22px;margin-top: 15px;"> ...更多人脸</div>
+            <div style="color: #606266;line-height: 22px;margin-top: 15px;">Zip内可添加多个文件夹，每个文件夹的名称即人脸的名称，单个文件夹最多三张图片，支持JPG、JPEG、PNG图片格式，单张不大于2m。</div>
+          </div>
         </el-form-item>
       </el-form>
 
