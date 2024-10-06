@@ -17,14 +17,14 @@
                         <span style="margin-left: 5px;">最近更新 {{ $moment(params.updatedAt).format("YYYY-MM-DD") }}</span>
                     </div>
                     <div class="tip-cont">{{ params.description }}</div>
-                    <div class="button-flex">
+                    <!-- <div class="button-flex">
                         <el-tooltip content="请扫码屏幕右侧二维码" placement="top-start">
                             <div class="btn-sty">
                                 <span class="el-icon-service"></span>
                                 <span style="padding-left: 10px;">联系我们</span>
                             </div>
                         </el-tooltip>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="right-txt">
                     <div class="base-txt" style="margin-right: 50px;">

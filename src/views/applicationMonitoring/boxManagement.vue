@@ -204,9 +204,11 @@
                 </template>
               </el-table-column>
               <el-table-column align="center" label="运行状态">
+                <template slot-scope="scope">
                 <div :class="[scope.row.aiboxExecStatus==1000?'green':'']">
                   {{ getStatus(scope.row.aiboxExecStatus) }}
                 </div>
+              </template>
               </el-table-column>
               <el-table-column align="center" label="最后心跳时间">
                 <template slot-scope="scope">
