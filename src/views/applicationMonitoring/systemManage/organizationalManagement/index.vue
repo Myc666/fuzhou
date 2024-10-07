@@ -52,7 +52,7 @@
                                     <el-form label-position="right" label-width="80px">
                                         <el-row>
                                             <el-col :span="8">
-                                                <el-form-item label="用户名称">
+                                                <el-form-item label="">
                                                     <el-input v-model="formatData.name"  placeholder="请输入"></el-input>
                                                 </el-form-item>
                                             </el-col>
@@ -66,7 +66,7 @@
                                                     <el-cascader
                                                         v-model="formatData.departIds"
                                                         :options="depList"
-                                                        :props="{ value: 'id', label: 'name',multiple: true,checkStrictly: true}"
+                                                        :props="{ value: 'id', label: 'name',multiple: true}"
                                                         :show-all-levels="false"
                                                         clearable>
                                                     </el-cascader>
@@ -334,9 +334,9 @@ export default {
         // 点击tree节点
         handleNodeClick(node) {
             this.isDefault = false;
-            let arr = [];
-            arr.push(node.id)
-            this.formatData.departIds = [arr];
+            // let arr = [];
+            // arr.push(node.id)
+            // this.formatData.departIds = [arr];
             this.getTable()
         },
         // 点击全部
