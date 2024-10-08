@@ -17,8 +17,8 @@
                 </el-form-item>
                 <el-form-item label="授权码" v-if="activeType!=1">
                     <div style="display: flex;">
-                        <div>
-                        <el-input placeholder="请输入内容" v-model="activeCode" clearable></el-input>
+                        <div style="flex:1;">
+                        <el-input placeholder="请输入内容" type="textarea" :rows="2" v-model="activeCode" clearable></el-input>
                         </div>
                         <div v-if="activeCode" style="margin-left: 20px;cursor: pointer;color: #EB3A2F;" @click="activeFun">激活</div>
                     </div>
