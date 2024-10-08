@@ -52,7 +52,7 @@
                                     <el-form label-position="right" label-width="80px">
                                         <el-row>
                                             <el-col :span="8">
-                                                <el-form-item label="">
+                                                <el-form-item label="姓名">
                                                     <el-input v-model="formatData.name"  placeholder="请输入"></el-input>
                                                 </el-form-item>
                                             </el-col>
