@@ -36,3 +36,23 @@ export function exportData(data) {
         responseType: 'blob',
     })
 }
+
+
+/************************************* */
+// 获取总统计
+export function summaryV2(data) {
+    return request({
+        url: '/tracker/report/summary/v2',
+        method: 'post',
+        data
+    })
+}
+
+// 获取统计图数据
+export function timelineV2(data) {
+    return request({
+        url: '/tracker/report/timeline/v2',
+        method: 'post',
+        data
+    })
+}
