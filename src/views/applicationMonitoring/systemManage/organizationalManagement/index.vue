@@ -334,9 +334,9 @@ export default {
         // 点击tree节点
         handleNodeClick(node) {
             this.isDefault = false;
-            // let arr = [];
-            // arr.push(node.id)
-            // this.formatData.departIds = [arr];
+            let arr = [];
+            arr.push(node.id)
+            this.formatData.departIds = [arr];
             this.getTable()
         },
         // 点击全部
