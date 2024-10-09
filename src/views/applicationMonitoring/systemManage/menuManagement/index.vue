@@ -23,12 +23,12 @@
           </template>
         </el-table-column>
         <el-table-column prop="auth" align="center" label="菜单编码"></el-table-column>
-        <el-table-column label="操作" align="center" width="100">
+        <!-- <el-table-column label="操作" align="center" width="100">
           <template slot-scope="scope">
             <el-button type="text"  @click.stop="edit(scope.row)">编辑</el-button>
             <el-button type="text"  style="color: #f56c6c !important" @click.stop="del(scope.row)">删除</el-button>
           </template>
-        </el-table-column>
+        </el-table-column> -->
       </el-table>
     </div>
     <AddAccount
