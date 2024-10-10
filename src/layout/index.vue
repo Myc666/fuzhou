@@ -27,7 +27,7 @@
             <i v-else @click="isCollapse = !isCollapse" style="margin-right: 14px;font-size: 18px;" class="el-icon-s-fold"></i>
             <div v-if="!isCollapse">
 
-                <div>版本：{{ versionNum?versionNum:'1.2.6' }}</div>
+                <div>版本：{{ versionNum?versionNum:'1.2.7' }}</div>
               <div class="tip-icon" v-if="isNew&&versionNum" @click="versionFun()">有更新</div>
           <div v-else>
             <el-popover
