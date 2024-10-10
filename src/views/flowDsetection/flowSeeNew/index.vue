@@ -357,14 +357,7 @@ export default {
         },
         // 重置
         refreshData() {
-            let dateList=[
-                new Date(),
-                new Date(),
-            ]
-            this.date = [
-                this.$moment(new Date(dateList[0].setHours(0, 0, 0))).format("YYYY-MM-DD HH:mm:ss"),
-                this.$moment(new Date(dateList[1].setHours(23, 59, 59))).format("YYYY-MM-DD HH:mm:ss"),
-            ];
+            this.date = [];
             let len = this.params.limit;
             Object.assign(this.params, {
                 cameraId: "",
