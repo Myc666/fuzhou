@@ -56,3 +56,21 @@ export function timelineV2(data) {
         data
     })
 }
+
+// 获取组织机构树
+export function listTree(data) {
+    return request({
+        url: '/ap/depart/listTree',
+        method: 'post',
+        data
+    })
+}
+
+// 获取摄像头树
+export function treeForCass(params) {
+    return request({
+        url: '/location/treeForCass',
+        method: 'get',
+        params
+    })
+}

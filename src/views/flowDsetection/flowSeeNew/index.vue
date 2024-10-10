@@ -1,49 +1,47 @@
 <template>
     <div class="flow-see">
         <div class="seach-sty">
-           <div style="flex: 1;display: flex;">
-                <div class="seach-flex" style="margin-right: 35px;">
-                    <div style="margin-right: 5px;color: #202B3D;">摄像头:</div>
-                    <div style="flex: 1;">
-                        <el-select
-                            placeholder="摄像头"
-                            clearable
-                            filterable
-                            v-model="params.cameraId"
-                            style="width: 150px;"
-                        >
-                            <el-option
-                            v-for="(item, index) in cameraOptions"
-                            :key="index"
-                            :label="item.name"
-                            :value="item.id"
-                            ></el-option>
-                        </el-select>
-                    </div>
-                </div>
-                <div class="seach-flex" style="margin-right: 15px;">
-                    <div style="margin-right: 5px;">日期时间:</div>
-                    <div  style="flex: 1;">
-                        <el-date-picker
-                            v-model="date"
-                            :default-time="['00:00:00', '23:59:59']"
-                            type="datetimerange"
-                            range-separator="至"
-                            start-placeholder="开始日期"
-                            end-placeholder="结束日期"
-                            value-format="yyyy-MM-dd HH:mm:ss"
-                            format="yyyy-MM-dd HH:mm:ss"
-                            style="width: 330px;"
-                            :clearable="false"
-                            :picker-options="pickerOptions"
-                        >
-                        </el-date-picker>
-                    </div>
-                </div>
+            <el-form label-position="right" label-width="80px" style="flex:1;display: flex;">
+                <el-form-item label="所属组织:">
+                    <el-cascader
+                        v-model="params.departIds"
+                        :options="depList"
+                        :props="{ value: 'id', label: 'name',multiple: true}"
+                        collapse-tags
+                        clearable>
+                    </el-cascader>
+                </el-form-item>
+                <el-form-item label="摄像头:">
+                    <el-cascader
+                        v-model="params.cameraId"
+                        :options="cameraOptions"
+                        :props="{ value: 'id', label: 'name',multiple: true}"
+                        collapse-tags
+                        clearable>
+                    </el-cascader>
+                </el-form-item>
+                <el-form-item label="日期时间:">
+                    <el-date-picker
+                        v-model="date"
+                        :default-time="['00:00:00', '23:59:59']"
+                        type="datetimerange"
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        format="yyyy-MM-dd HH:mm:ss"
+                        style="width: 330px;"
+                        :clearable="false"
+                        :picker-options="pickerOptions"
+                    >
+                    </el-date-picker>
+                </el-form-item>
+            </el-form>
+            <div>
+                <el-button size="mini" style="height: 34px;padding: 0px 15px;" type="primary" icon="el-icon-search" @click="queryFun()">查询</el-button>
+                <el-button size="mini" style="height: 34px;padding: 0px 15px;" icon="el-icon-refresh" @click="refreshData">重置</el-button>
+                <el-button size="mini" style="height: 34px;padding: 0px 15px;" type="primary" icon="el-icon-download" @click="downloadFun">导出统计数据</el-button>
             </div>
-            <el-button size="mini" style="height: 34px;padding: 0px 15px;" type="primary" icon="el-icon-search" @click="queryFun()">查询</el-button>
-            <el-button size="mini" style="height: 34px;padding: 0px 15px;" icon="el-icon-refresh" @click="refreshData">重置</el-button>
-            <el-button size="mini" style="height: 34px;padding: 0px 15px;" type="primary" icon="el-icon-download" @click="downloadFun">导出统计数据</el-button>
         </div>
         <div style="display: flex;">
             <div class="left-list">
@@ -128,7 +126,7 @@
     </div>
 </template>
 <script>
-import { summaryV2,listPage,timelineV2 } from "./api"
+import { summaryV2,listPage,timelineV2,listTree,treeForCass } from "./api"
 import {
   getCameraListData,
 } from "@/api/applicationMonitoring/alarmManagement";
@@ -142,10 +140,12 @@ export default {
         return {
             countType:0,
             date: [],
+            depList:[],
             params: {
                 cameraId: "",
                 startDate: "",
                 endDate: "",
+                departIds:'',
                 limit: 9,
                 page: 1,
             },
@@ -209,6 +209,7 @@ export default {
         };
     },
     async created() {
+        this.getListTree();
         await this.getOptions();
         await this.getSummaryData();
         await this.getLine();
@@ -225,6 +226,26 @@ export default {
         }, 5000);
     },
     methods: {
+        //获取组织树
+        getListTree(){
+            this.treeData = [];
+            listTree().then(res=>{
+                if(res.data&&res.data.length>0){
+                    this.treeData = res.data;
+                    this.depList = this.getData(res.data);
+                }
+            })
+        },
+        getData(data) {
+            data.forEach(item=>{
+                if(item.children.length < 1){
+                    item.children = undefined;
+                }else{
+                    this.getData(item.children);
+                }
+            })
+            return data;
+        },
         // 获取统计图数据
         async getLine(){
             let formData = new FormData();
@@ -326,9 +347,9 @@ export default {
             };
             myChart.setOption(option);
         },
-        // 获取下拉
+        // 获取摄像头下拉
         async getOptions() {
-            const res = await getCameraListData();
+            const res = await treeForCass();
             this.cameraOptions = res.data;
         },
         handleSelect() {
@@ -361,6 +382,7 @@ export default {
             let len = this.params.limit;
             Object.assign(this.params, {
                 cameraId: "",
+                departIds:'',
                 limit: len,
                 page: 1,
             });
@@ -422,10 +444,23 @@ export default {
         },
         // 获取表格数据
         async getListData(){
+            let cameraIds = [];
+            if(this.params.cameraId&&this.params.cameraId.length>0){
+                this.params.cameraId.forEach(item=>{
+                    cameraIds.push(item[item.length - 1])
+                })
+            }
+            let departIds = [];
+            if(this.params.departIds&&this.params.departIds.length>0){
+                this.params.departIds.forEach(item=>{
+                    departIds.push(item[item.length - 1])
+                })
+            }
             let formData = new FormData();
             formData.append("page", this.params.page);
             formData.append("limit", this.params.limit);
-            formData.append("cameraId", this.params.cameraId);
+            formData.append("cameraIds", cameraIds.toString());
+            formData.append("departIds", departIds.toString());
             if(this.date&&this.date.length>0){
                 formData.append("startTime", this.date[0]);
                 formData.append("endTime", this.date[1]);

@@ -68,6 +68,7 @@
                                                         :options="depList"
                                                         :props="{ value: 'id', label: 'name',multiple: true}"
                                                         :show-all-levels="false"
+                                                        collapse-tags
                                                         clearable>
                                                     </el-cascader>
                                                 </el-form-item>
