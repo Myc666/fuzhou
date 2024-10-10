@@ -73,7 +73,7 @@
                             <el-radio-button :label="0">当日</el-radio-button>
                             <el-radio-button :label="1">当周</el-radio-button>
                             <el-radio-button :label="2">当月</el-radio-button>
-                            <el-radio-button :label="3">所有（自定义）</el-radio-button>
+                            <el-radio-button :label="3">自定义</el-radio-button>
                         </el-radio-group>
                     </div>
                 </div>
@@ -141,10 +141,7 @@ export default {
     data() {
         return {
             countType:0,
-            date: [
-                new Date(),
-                new Date(),
-            ],
+            date: [],
             params: {
                 cameraId: "",
                 startDate: "",
@@ -212,10 +209,6 @@ export default {
         };
     },
     async created() {
-        this.date = [
-            this.$moment(new Date(this.date[0].setHours(0, 0, 0))).format("YYYY-MM-DD HH:mm:ss"),
-            this.$moment(new Date(this.date[1].setHours(23, 59, 59))).format("YYYY-MM-DD HH:mm:ss"),
-        ];
         await this.getOptions();
         await this.getSummaryData();
         await this.getLine();
@@ -463,7 +456,7 @@ export default {
                 0: '当日',
                 1: '当周',
                 2: '当月',
-                3: '所有时段（自定义）',
+                3: '自定义',
             }[type]
             return str
         }
