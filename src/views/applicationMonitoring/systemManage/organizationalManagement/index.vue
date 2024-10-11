@@ -66,7 +66,7 @@
                                                     <el-cascader
                                                         v-model="formatData.departIds"
                                                         :options="depList"
-                                                        :props="{ value: 'id', label: 'name',multiple: true}"
+                                                        :props="{ value: 'id', label: 'name',multiple: true,checkStrictly: true}"
                                                         :show-all-levels="false"
                                                         collapse-tags
                                                         clearable>
