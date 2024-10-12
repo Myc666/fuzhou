@@ -19,7 +19,7 @@
         </div>
       </div>
       <div class="flex-btn">
-        <div class="level-btn" @click="addData">
+        <div class="level-btn" v-if="btnData.includes('algorithm-add')" @click="addData">
           <!-- <span class="el-icon-plus"></span> -->
           <span>新增算法</span>
         </div>
@@ -91,10 +91,10 @@
                           更多<i class="el-icon-arrow-down el-icon--right"></i>
                         </span>
                         <el-dropdown-menu slot="dropdown">
-                          <el-dropdown-item v-if="items.hasLocalFile&&items.downloadState!='下载中'" command="1" icon="el-icon-delete">卸载算法</el-dropdown-item>
-                          <el-dropdown-item command="2" icon="el-icon-upload2">导入模型文件</el-dropdown-item>
+                          <el-dropdown-item v-if="(items.hasLocalFile&&items.downloadState!='下载中')&&btnData.includes('algorithm-unload')" command="1" icon="el-icon-delete">卸载算法</el-dropdown-item>
+                          <el-dropdown-item v-if="btnData.includes('algorithm-import')" command="2" icon="el-icon-upload2">导入模型文件</el-dropdown-item>
                           <el-dropdown-item v-if="(items.hasLocalFile&&items.downloadState!='下载中')&&btnData.includes('algorithm-version')" command="3" icon="el-icon-coin">版本管理</el-dropdown-item>
-                          <el-dropdown-item command="4" icon="el-icon-circle-close">删除卡片</el-dropdown-item>
+                          <el-dropdown-item v-if="btnData.includes('algorithm-delete')" command="4" icon="el-icon-circle-close">删除卡片</el-dropdown-item>
                         </el-dropdown-menu>
                       </el-dropdown>
                     </div>
