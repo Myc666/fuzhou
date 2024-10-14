@@ -376,6 +376,10 @@
         // 删除
         delFun(index){
             this.svgList.splice(index, 1)
+            if(this.svgList.length==0){
+              this.isDisabled = false;
+              this.finish = true;
+            }
             this.svgIndexList = [];
             this.svgList.map((item)=>{
               item.dragging = false;
