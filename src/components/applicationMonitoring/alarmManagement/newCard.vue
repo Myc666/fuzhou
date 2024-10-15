@@ -33,14 +33,14 @@
           <img id="img_alarm_card" ref="page_image_url" :src="this.fileUrl" style="width: 100%;"/> -->
           <MarkDetail
             :fileUrl="fileUrl"
-            :dataList="dataList"
+            :dataList="JSON.parse(JSON.stringify(dataList))"
             :ratio="ratio"
             :Index="index"
             :dataListAll="roiList"/>
         </div>
       </div>
     </div>
-    <AlarmDetail :alarmData="alarmData" :dataList="dataList" :originalUrl="originalUrl" :ratio="ratio"
+    <AlarmDetail :alarmData="alarmData" :dataList="JSON.parse(JSON.stringify(dataList))" :originalUrl="originalUrl" :ratio="ratio"
             :Index="index"
             :dataListAll="roiList" v-if="alarmDetailVisible" @close="closeFun" />
   </div>

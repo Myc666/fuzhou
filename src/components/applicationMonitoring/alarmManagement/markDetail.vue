@@ -112,7 +112,7 @@
                     let height = img.height;
                     setTimeout(() => {
                     const ratio = this.$refs['draw_img'+this.Index].offsetHeight / height;
-                    val.forEach((item) => {
+                    val.forEach((item,index) => {
                         let width = (item.position[2] - item.position[0]) * ratio * this.ratio
                         // 创建临时元素
                         const _span = document.createElement('span')
@@ -126,8 +126,11 @@
                         let txt_width = _span.offsetWidth + 18
                         // 从body中删除该span
                         document.body.removeChild(_span)
-                        if(item.position[3] * this.ratio >height){
-                        item.position[3] = height/this.ratio
+                        if(item.position[3] >height){
+                          item.position[3] = height - 10
+                        }
+                        if(item.position[1] >height){
+                          item.position[1] = height - 10
                         }
                         this.pointList.push({
                             left: (item.position[0] * ratio * this.ratio) + "px",
