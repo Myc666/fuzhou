@@ -679,7 +679,7 @@
   
   .image-box {
     // width: 100%;
-    // min-height: 200px;
+    min-height: 290px;
     border: 1px solid #EBEEF5;
   }
   .img-cont{
