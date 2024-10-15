@@ -146,7 +146,8 @@ export default {
         // 返回上一级
         goBack(){
             // this.$emit('close')
-            this.$router.go(-1);
+            // this.$router.go(-1);
+            this.$router.replace("/algorithmManagement/modelTesting");
         },
         // 鼠标移入
         onHover(type){
