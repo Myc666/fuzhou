@@ -126,11 +126,11 @@
                         let txt_width = _span.offsetWidth + 18
                         // 从body中删除该span
                         document.body.removeChild(_span)
-                        if(item.position[3] >height){
-                          item.position[3] = height - 10
+                        if(item.position[3] >height* this.ratio){
+                          item.position[3] = height* this.ratio - 10
                         }
-                        if(item.position[1] >height){
-                          item.position[1] = height - 10
+                        if(item.position[1] >height* this.ratio){
+                          item.position[1] = height* this.ratio - 10
                         }
                         this.pointList.push({
                             left: (item.position[0] * ratio * this.ratio) + "px",
