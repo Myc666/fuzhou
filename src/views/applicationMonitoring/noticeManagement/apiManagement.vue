@@ -72,7 +72,7 @@
       </el-form-item>
       <el-divider></el-divider>
       <el-form-item label="推送数据范围">
-        <el-table
+        <!-- <el-table
         :data="listData"
         border
         style="width: 100%">
@@ -80,7 +80,8 @@
           <el-table-column prop="illustrate" label="参数中文说明"></el-table-column>
           <el-table-column prop="type" label="参数类型"></el-table-column>
           <el-table-column prop="remarks" label="备注"></el-table-column>
-        </el-table>
+        </el-table> -->
+        <div style="cursor: pointer;color: #EB3A2F;" @click="DownloadFun()">示例文档下载</div>
       </el-form-item>
     </el-form>
   </div>
@@ -207,6 +208,15 @@ export default {
     this.getInfo()
   },
   methods: {
+    DownloadFun(){
+      var a = document.createElement('a') // 创建一个<a></a>标签
+      a.href = '/static/third_part_data.docx' 
+      a.download = 'third_part_data.docx' // 设置下载文件文件名
+      a.style.display = 'none' // 隐藏a标签
+      document.body.appendChild(a) // 将a标签追加到文档对象中
+      a.click() // 模拟点击了a标签，会触发a标签的href的读取，浏览器就会自动下载了
+      a.remove() // 一次性的，用完就删除a标签
+    },
     async getInfo(){
       const data = await getInfo();
       this.form2 = data.data.forms.form2 || {};
