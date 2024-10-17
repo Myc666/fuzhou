@@ -37,12 +37,12 @@
           }">
             <div v-if="pageType=='detail'">
                 <div class="text" v-if="!item.isShow">
-                    <span style="margin-right: 5px;">{{ item.type }}</span>
+                    <span style="margin:0px 5px;">{{ item.type }}</span>
                     <span>{{ item.confidence }}</span>
                 </div>
                 <div v-else class="text_P" :style="{'width':item.txt_width}">
                     <div class="textA">
-                        <span style="margin-right: 5px;">{{ item.type }}</span>
+                        <span style="margin:0px 5px;">{{ item.type }}</span>
                         <span>{{ item.confidence }}</span>
                     </div>
                 </div>
@@ -123,7 +123,7 @@
                         // span放入body中
                         document.body.appendChild(_span)
                         // 获取span的宽度
-                        let txt_width = _span.offsetWidth + 18
+                        let txt_width = _span.offsetWidth + 10
                         // 从body中删除该span
                         document.body.removeChild(_span)
                         if(item.position[3] * this.ratio >height){
@@ -237,14 +237,14 @@
       font-size: 12px;
       color: #fff;
       background-color: rgba(255, 0, 0, 0.4);
-      padding: 0 5px;
+      // padding: 0 5px;
     }
     .textA{
       line-height: 20px;
       font-size: 12px;
       color: #fff;
       background-color: rgba(255, 0, 0, 0.4);
-      padding: 0 5px;
+      // padding: 0 5px;
     }
     .text_P{
       position: absolute;

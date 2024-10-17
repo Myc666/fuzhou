@@ -268,6 +268,7 @@ export default {
 
     this.timeObj = setInterval(function () {
       that.getNewLy();
+      that.getGroup();
     }, 2000);
     that.getNewLy();
 
@@ -336,7 +337,6 @@ export default {
       // });
     },
     changeCameraId(){
-      console.log(this.$refs,"=========this.$refs")
       this.$refs.video1.cameraId = this.cameraId
       this.$refs.video1.getPlayUrl()
     },
