@@ -62,7 +62,13 @@ export default {
         },
         // 复制
         copyFun(){
-            navigator.clipboard.writeText(this.sn)
+            // navigator.clipboard.writeText(this.sn)
+            const textarea = document.createElement('textarea');
+            textarea.value = this.sn;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
         },
         // 获取激活状态
         async getActive(){
