@@ -203,7 +203,7 @@ export default {
     this.getBtn();
     // this.checkVersion();
     // this.getListData();
-    this.getTagListData()
+    // this.getTagListData()
   },
   mounted(){
     window.addEventListener('resize', this.handleResize); // 添加窗口大小改变事件监听器
