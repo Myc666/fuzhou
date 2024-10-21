@@ -404,7 +404,7 @@ export default {
     handleClose(){
       this.dialogVisible = false;
       this.getListData();
-      this.getTagListData()
+      // this.getTagListData()
     },
     // 新增算法
     addData(){
