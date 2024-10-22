@@ -24,7 +24,7 @@ export default {
      // const res  = await reportImage({filepath:this.imgUrl})
       let that = this
       axios({
-        url: VUE_APP_API_BASE_URL+'/tracker/report/image?filepath='+this.imgUrl,
+        url: VUE_APP_API_BASE_URL+'/face/report/image?filepath='+this.imgUrl,
         method:'get',  //默认get方法，可以不写
         responseType:'arraybuffer',  //或者是blob
         headers:{

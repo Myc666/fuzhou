@@ -112,7 +112,7 @@
             <div class="flexbg" ref="flexbg" v-if="dataSource.length">
               <div class="flexItem" v-for="item in dataSource" :key="item.id">
                 <div>
-                  <el-image style="width: 150px;height: 200px;" :preview-src-list="[VUE_APP_API_BASE_URL+'/tracker/report/image?filepath='+item.filePath]" :src="VUE_APP_API_BASE_URL+'/tracker/report/image?filepath='+item.filePath">
+                  <el-image style="width: 150px;height: 200px;" :preview-src-list="[VUE_APP_API_BASE_URL+'/face/report/image?filepath='+item.filePath]" :src="VUE_APP_API_BASE_URL+'/face/report/image?filepath='+item.filePath">
                     <div slot="error" class="image-slot">
                       <i class="el-icon-picture-outline"></i>
                     </div>
@@ -190,7 +190,7 @@
         <div class="flexbg" v-if="cameraUser.length" style="justify-content: flex-start;">
           <div class="flexItem" v-for="item in cameraUser" :key="item.id" style="margin-left: 10px;">
             <div>
-              <el-image style="width: 150px;height: 200px;" :preview-src-list="[VUE_APP_API_BASE_URL+'/tracker/report/image?filepath='+item.filePath]" :src="VUE_APP_API_BASE_URL+'/tracker/report/image?filepath='+item.filePath">
+              <el-image style="width: 150px;height: 200px;" :preview-src-list="[VUE_APP_API_BASE_URL+'/face/report/image?filepath='+item.filePath]" :src="VUE_APP_API_BASE_URL+'/face/report/image?filepath='+item.filePath">
                 <div slot="error" class="image-slot">
                   <i class="el-icon-picture-outline"></i>
                 </div>
