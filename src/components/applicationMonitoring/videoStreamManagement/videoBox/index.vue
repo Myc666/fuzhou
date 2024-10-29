@@ -125,6 +125,11 @@ export default {
     getPlayCx(){
       playCx({cameraId:this.cameraId}).then(res=>{
 
+      }).catch(()=>{
+        if(this.timerObj){
+            clearInterval(this.timerObj);
+            this.timerObj = null;
+          }
       })
     },
     // 切换原始流、合成流
