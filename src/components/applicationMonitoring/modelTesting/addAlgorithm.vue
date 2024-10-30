@@ -127,6 +127,18 @@
             name:'超星',
             id:'chaoxing',
           },
+          {
+            name:'算能SE5',
+            id:'1684',
+          },
+          {
+            name:'算能SE7',
+            id:'1684x',
+          },
+          {
+            name:'算能SE9',
+            id:'1688',
+          },
         ],
         loading: false,
         title: this.hasLocalFile ? "算法编辑" : "算法下载",
