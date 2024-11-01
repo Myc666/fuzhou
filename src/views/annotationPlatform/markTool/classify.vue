@@ -3,50 +3,119 @@
     <ToolBar ref="toolBar" @setMode="setMode" @changeImg="changeImg" />
     <div class="content">
       <div class="pagination">
-        <el-button v-if="$route.query.type == 1" type="primary" @click="goClassify">去批量<template v-if="$route.query.type == 1">标注</template><template
-            v-else>质检</template></el-button>
-        <el-pagination background layout="prev, pager, next, jumper, total" :current-page="currentPage" :page-size="1"
-          :pager-count="5" @current-change="handleCurrentChange" :total="total" />
+        <el-button
+          v-if="$route.query.type == 1"
+          type="primary"
+          @click="goClassify"
+          >去批量<template v-if="$route.query.type == 1">标注</template
+          ><template v-else>质检</template></el-button
+        >
+        <el-pagination
+          background
+          layout="prev, pager, next, jumper, total"
+          :current-page="currentPage"
+          :page-size="1"
+          :pager-count="5"
+          @current-change="handleCurrentChange"
+          :total="total"
+        />
         <span>
           <el-button type="primary" @click="back">返回</el-button>
-          <el-button type="primary" @click="submit" v-if="$route.query.type == 1">提交</el-button>
-          <el-button type="primary" @click="submitReview(null)" v-if="$route.query.type == 2">通过</el-button>
+          <el-button
+            type="primary"
+            @click="submit"
+            v-if="$route.query.type == 1"
+            >提交</el-button
+          >
+          <el-button
+            type="primary"
+            @click="submitReview(null)"
+            v-if="$route.query.type == 2"
+            >通过</el-button
+          >
         </span>
       </div>
-      <div id="map" ref="dragWrap" @mouseenter="isHover = true" @mouseleave="isHover = isMousedown = false"
-        @mousemove="dragMousemove" v-loading="loading" element-loading-text="加载中...">
+      <div
+        id="map"
+        ref="dragWrap"
+        @mouseenter="isHover = true"
+        @mouseleave="isHover = isMousedown = false"
+        @mousemove="dragMousemove"
+        v-loading="loading"
+        element-loading-text="加载中..."
+      >
         <el-tooltip class="item" effect="dark" placement="bottom">
-          <div slot="content">{{ currentImgData.needReview ? '质检通过' : '质检未通过' }}</div>
-          <i v-if="currentImgData.review && currentImgData.review.reviewAction == 1" class="el-icon-success hege"
-            style="color: #19B400;"></i>
-          <i v-if="currentImgData.review && currentImgData.review.reviewAction == 3" class="el-icon-error hege"
-            style="color: #fa5555;"></i>
+          <div slot="content">
+            {{ currentImgData.needReview ? "质检通过" : "质检未通过" }}
+          </div>
+          <i
+            v-if="
+              currentImgData.review && currentImgData.review.reviewAction == 1
+            "
+            class="el-icon-success hege"
+            style="color: #19b400"
+          ></i>
+          <i
+            v-if="
+              currentImgData.review && currentImgData.review.reviewAction == 3
+            "
+            class="el-icon-error hege"
+            style="color: #fa5555"
+          ></i>
         </el-tooltip>
-        <div v-if="currentTagData.tagName && tagVisible" class="tag" :style="{ background: currentTagData.color }">
+        <div
+          v-if="currentTagData.tagName && tagVisible"
+          class="tag"
+          :style="{ background: currentTagData.color }"
+        >
           {{ currentTagData.tagName
           }}<template v-if="currentTagData.tagName != currentTagData.name">
-            - {{ currentTagData.name }}</template>
+            - {{ currentTagData.name }}</template
+          >
         </div>
-        <div class="drag-inner" ref="dragElement" :style="{ cursor: mouseType, width: '100%' }" @mousedown="dragMousedown"
-          @mouseup.stop="isMousedown = false">
+        <div
+          class="drag-inner"
+          ref="dragElement"
+          :style="{ cursor: mouseType, width: '100%' }"
+          @mousedown="dragMousedown"
+          @mouseup.stop="isMousedown = false"
+        >
           <slot>
-            <img v-if="currentImgData.id" class="bg-img" draggable="false" :src="$common.handleDataset(currentImgData.id)"
-              :style="imgStype" ref="img" />
+            <img
+              v-if="currentImgData.id"
+              class="bg-img"
+              draggable="false"
+              :src="$common.handleDataset(currentImgData.id)"
+              :style="imgStype"
+              ref="img"
+            />
           </slot>
         </div>
       </div>
     </div>
     <div class="right-wrap">
       <ul class="right-tab">
-        <li v-for="(item, index) in rightTabList" :key="index" :class="{ active: rightActive == item }"
-          @click="rightActive = item">
+        <li
+          v-for="(item, index) in rightTabList"
+          :key="index"
+          :class="{ active: rightActive == item }"
+          @click="rightActive = item"
+        >
           <span>{{ item }}</span>
         </li>
       </ul>
-      <Tab1 :attributeList="projectDetail.labels" :currentImgData="currentImgData" @changeAttribute="changeAttribute"
-        v-show="rightActive == '标签'" />
-      <Tab2 :currentImgId="currentImgData.id" :formData="currentImgData.review" @submit="submitReview"
-        v-show="rightActive == '质检结果'" />
+      <Tab1
+        :attributeList="projectDetail.labels"
+        :currentImgData="currentImgData"
+        @changeAttribute="changeAttribute"
+        v-show="rightActive == '标签'"
+      />
+      <Tab2
+        :currentImgId="currentImgData.id"
+        :formData="currentImgData.review"
+        @submit="submitReview"
+        v-show="rightActive == '质检结果'"
+      />
     </div>
   </div>
 </template>
@@ -64,7 +133,7 @@ import {
   getHistory,
   saveCommit,
   saveReview,
-  release
+  release,
 } from "@/api/annotationPlatform/projectManagement";
 export default {
   components: {
@@ -122,7 +191,7 @@ export default {
       ], // 问题列表
       currentIssueId: "", // 当前问题id
       issueStype: {}, // 新问题样式
-      timer: null
+      timer: null,
     };
   },
   watch: {
@@ -164,13 +233,13 @@ export default {
       const data = await getDetail({ id: this.projectId });
       this.projectDetail = data.data;
       if (this.projectDetail.labelTaskTimeOut) {
-        let time = 0
+        let time = 0;
         this.timer = setInterval(() => {
-          time = time + 1000
+          time = time + 1000;
           if (time >= this.projectDetail.labelTaskTimeOut * 60000) {
-            clearInterval(this.timer)
-            this.$alert('标注操作已超时', '温馨提示', {
-              confirmButtonText: '确定',
+            clearInterval(this.timer);
+            this.$alert("标注操作已超时", "温馨提示", {
+              confirmButtonText: "确定",
               showClose: false,
               callback: async () => {
                 const res = await release({
@@ -178,9 +247,9 @@ export default {
                   imageIds: [this.currentImgData.id],
                 });
                 this.$router.push({
-                  path: '/annotationPlatform/projectManagement'
-                })
-              }
+                  path: "/annotationPlatform/projectManagement",
+                });
+              },
             });
           }
         }, 1000);
@@ -199,11 +268,11 @@ export default {
         this.currentImgData = this.imgList[0];
       } else {
         if (this.total == this.currentPage) {
-          this.$message.error('当前没有可以操作的图片，即将跳转至项目页')
+          this.$message.error("当前没有可以操作的图片，即将跳转至项目页");
           setTimeout(() => {
             this.$router.push({
-              path: '/annotationPlatform/projectManagement'
-            })
+              path: "/annotationPlatform/projectManagement",
+            });
           }, 50);
         } else {
           this.total = Number(data.data.total) + this.imgList.length;
@@ -223,11 +292,11 @@ export default {
         this.currentImgData = this.imgList[0];
       } else {
         if (this.total == this.currentPage) {
-          this.$message.error('当前没有可以操作的图片，即将跳转至项目页')
+          this.$message.error("当前没有可以操作的图片，即将跳转至项目页");
           setTimeout(() => {
             this.$router.push({
-              path: '/annotationPlatform/projectManagement'
-            })
+              path: "/annotationPlatform/projectManagement",
+            });
           }, 1000);
         } else {
           this.total = Number(data.data.total) + this.imgList.length;
@@ -246,10 +315,10 @@ export default {
       if (data.data.length) {
         this.currentImgData = data.data[0];
       } else {
-        this.$message.error('当前没有可以操作的图片，即将跳转至项目页');
+        this.$message.error("当前没有可以操作的图片，即将跳转至项目页");
         setTimeout(() => {
           this.$router.push({
-            path: '/annotationPlatform/projectManagement'
+            path: "/annotationPlatform/projectManagement",
           });
         }, 1000);
       }
@@ -266,7 +335,6 @@ export default {
         case "HIDETAG":
           this.tagVisible = false;
           break;
-
         case "ZOOMOUT":
           this.handleScroll({ wheelDelta: -120 }, "event");
           break;
@@ -279,6 +347,31 @@ export default {
           break;
         case "DELETETAG":
           break;
+        case "PREVIOUS":
+          if (this.currentPage > 1) {
+            this.currentPage--;
+            this.handleCurrentChange(this.currentPage);
+          } else {
+            this.$message.warning("已经是第一张了");
+          }
+          break;
+        case "NEXT":
+          if (this.currentPage < this.total) {
+            this.currentPage++;
+            this.handleCurrentChange(this.currentPage);
+          } else {
+            this.$message.warning("已经是最后一张了");
+          }
+          break;
+        case "REFRESH":
+          this.$refs.dragElement.style.transform = `scale(1) translate(0px, 0px)`;
+          break;
+        case "DRAG":
+          this.mouseType = "pointer";
+          this.modeType = val;
+          break;
+        // case "MOUSELEFT":
+        //   break;
         default:
           this.modeType = "";
           this.mouseType = "auto";
@@ -310,11 +403,24 @@ export default {
         this.moveStart.x = event.clientX;
         this.moveStart.y = event.clientY;
       }
+      if (this.modeType == "DRAG") {
+        this.moveStart.x = event.clientX;
+        this.moveStart.y = event.clientY;
+      }
       this.isMousedown = true;
     },
     // 拖拽中
     dragMousemove(event) {
       if (this.modeType == "MOVE") {
+        if (this.isMousedown) {
+          this.translate.x += (event.clientX - this.moveStart.x) / this.scale;
+          this.translate.y += (event.clientY - this.moveStart.y) / this.scale;
+          this.$refs.dragElement.style.transform = `scale(${this.scale}) translate(${this.translate.x}px, ${this.translate.y}px)`;
+          this.moveStart.x = event.clientX;
+          this.moveStart.y = event.clientY;
+        }
+      }
+      if (this.modeType == "DRAG") {
         if (this.isMousedown) {
           this.translate.x += (event.clientX - this.moveStart.x) / this.scale;
           this.translate.y += (event.clientY - this.moveStart.y) / this.scale;
@@ -335,12 +441,13 @@ export default {
       this.currentSvgData = val;
     },
     // 改变隐藏
-    changeVisible(val) { },
+    changeVisible(val) {},
     // 改变图片样式
     changeImg(val) {
       this.imgStype = {
-        filter: `brightness(${val.imgNum1}%) contrast(${val.imgNum2
-          }%) saturate(${val.imgNum3}%) opacity(${100 - val.imgNum4}%) `,
+        filter: `brightness(${val.imgNum1}%) contrast(${
+          val.imgNum2
+        }%) saturate(${val.imgNum3}%) opacity(${100 - val.imgNum4}%) `,
       };
     },
     async submit() {
@@ -364,15 +471,21 @@ export default {
         ],
       };
       await saveCommit(params);
-      this.$message.success('提交成功');
+      this.$message.success("提交成功");
+      if (this.currentPage < this.total) {
+          this.currentPage++;
+      }
+      if (this.currentPage == this.total) {
+        this.currentPage = this.total
+      }
       this.getAssign();
     },
     async submitReview(obj) {
       const reviewAction = obj ? 3 : 7;
       const comment = {
-        issue: obj ? obj.issue : '',
-        text: obj ? obj.text : ''
-      }
+        issue: obj ? obj.issue : "",
+        text: obj ? obj.text : "",
+      };
       const annotations = [
         {
           annotationType: 1,
@@ -391,27 +504,31 @@ export default {
             annotations: annotations,
             commitId: this.currentImgData.commitId,
             comment: JSON.stringify(comment),
-            reviewAction
-          }
-        ]
+            reviewAction,
+          },
+        ],
       };
       const data = await saveReview(params);
-      this.$message.success('质检结果提交成功');
+      this.$message.success("质检结果提交成功");
       this.getAssignReview();
     },
     async back() {
-      await this.$confirm('放弃当前标注任务则该任务释放回标注池, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      });
+      await this.$confirm(
+        "放弃当前标注任务则该任务释放回标注池, 是否继续?",
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        }
+      );
       const res = await release({
         projectId: this.projectId,
         imageIds: [this.currentImgData.id],
       });
       this.$router.push({
-        path: '/annotationPlatform/projectManagement'
-      })
+        path: "/annotationPlatform/projectManagement",
+      });
     },
     // 分页
     handleCurrentChange(val) {
@@ -431,14 +548,14 @@ export default {
         path: "/annotationPlatform/projectManagement/markTool/classifyBatch",
         query: {
           id: this.projectId,
-          type: this.$route.query.type
+          type: this.$route.query.type,
         },
-      })
-    }
+      });
+    },
   },
   beforeDestroy() {
-    clearInterval(this.timer)
-  }
+    clearInterval(this.timer);
+  },
 };
 </script>
 <style scoped lang="scss">

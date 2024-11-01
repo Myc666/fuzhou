@@ -14,6 +14,7 @@
       </g>
       <g v-for="(item, index) in svgData.boxList" :key="index">
         <rect
+          @mousedown="mouseFun"
           :x="item[0] - 3"
           :y="item[1] - 3"
           width="6"
@@ -94,7 +95,16 @@ export default {
       },
     },
   },
-  methods: {},
+  methods: {
+    mouseFun(event){
+      // console.log(12312)
+      // this.$parent.modeType = "RECT"
+      // // console.log( this.$parent)
+      // this.$parent.mouseType = "crosshair";
+      this.$parent.isAgain = true
+      //this.$parent.dragMousedown(event)
+    }
+  },
 };
 </script>
 <style scoped lang="scss"></style>

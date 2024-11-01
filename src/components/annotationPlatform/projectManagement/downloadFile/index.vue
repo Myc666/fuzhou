@@ -5,12 +5,14 @@
         <el-form ref="form" :model="params" label-width="80px">
           <el-form-item label="导出格式" prop="type">
             <el-radio-group v-model="params.type">
-              <el-radio label="1">VOC ( 点击查看：<el-link target="_blank"
+              <el-radio label="1" v-if="currentProjectType!=3">VOC ( 点击查看：<el-link target="_blank"
                   href="https://github.com/IndustryEssentials/label-free/wiki/VOC%E6%95%B0%E6%8D%AE%E9%9B%86">VOC格式说明</el-link>
                 )</el-radio>
+              <el-radio label="3" v-if="currentProjectType==3">TXT ( 特指paddle OCR )</el-radio>
               <el-radio label="2">COCO ( 点击查看：<el-link target="_blank"
                   href="https://github.com/IndustryEssentials/label-free/wiki/COCO%E6%95%B0%E6%8D%AE%E9%9B%86">COCO格式说明</el-link>
                 )</el-radio>
+              <el-radio label="4" v-if="currentProjectType==3">Excel</el-radio>
             </el-radio-group>
           </el-form-item>
           <el-form-item label="导出图片" prop="exportImage">
@@ -32,6 +34,8 @@
             <template slot-scope="scope">
               <template v-if="scope.row.type == 1">VOC</template>
               <template v-if="scope.row.type == 2">COCO</template>
+              <template v-if="scope.row.type == 3">TXT</template>
+              <template v-if="scope.row.type == 4">Excel</template>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="exportImage" label="导出图片">
@@ -73,6 +77,10 @@ export default {
     currentId: {
       type: String,
       default: ''
+    },
+    currentProjectType:{
+      type:Number,
+      default:null,
     }
   },
   data() {
@@ -89,6 +97,9 @@ export default {
     };
   },
   created() {
+    if(this.currentProjectType == 3){
+      this.params.type="3"
+    }
     this.dowloadList()
   },
   methods: {

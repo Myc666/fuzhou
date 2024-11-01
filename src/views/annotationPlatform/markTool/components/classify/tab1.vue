@@ -77,12 +77,14 @@ export default {
     name: {
       deep: true,
       handler(val) {
-        this.$emit("changeAttribute", {
-          color: this.color,
-          name: val,
-          tagName: this.tagName,
-          labelTree: this.labelTree,
-        });
+        if(val){
+          this.$emit("changeAttribute", {
+            color: this.color,
+            name: val,
+            tagName: this.tagName,
+            labelTree: this.labelTree,
+          });
+        }
       },
     },
   },

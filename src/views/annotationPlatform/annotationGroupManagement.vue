@@ -61,8 +61,8 @@
             "
           >
             <span>
-              <span v-if="currentSelectGroup?.name">
-                {{ currentSelectGroup?.name }}：
+              <span v-if="currentSelectGroup&&currentSelectGroup.name">
+                {{ currentSelectGroup.name }}：
               </span>
               人员管理
             </span>
@@ -149,6 +149,7 @@ import {
 } from "@/api/annotationPlatform/annotationGroupManagement";
 import AddGroup from "@/components/annotationPlatform/annotationGroupManagement/addGroup";
 import AddPerson from "@/components/annotationPlatform/annotationGroupManagement/addPerson";
+import Cookies from "js-cookie";
 export default {
   components: {
     AddGroup,
@@ -168,6 +169,13 @@ export default {
   },
   created() {
     this.getListData("init");
+  },
+  computed:{
+    isexport() {
+      if (Cookies.get("powerId").search("10000") > -1 || Cookies.get("powerId").search("10001") > -1) {
+        return false;
+      }
+    }
   },
   methods: {
     async getListData(source) {

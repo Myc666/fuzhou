@@ -39,6 +39,10 @@ export default {
       type: String,
       default: "",
     },
+    currentSvgDatas: {
+      type: Object,
+      default: {},
+    },
   },
   data() {
     return {
@@ -96,6 +100,7 @@ export default {
     },
   },
   mounted() {
+   
     this.$parent.$refs.svgRef.addEventListener(
       "mousedown",
       this.svgMousedown,
@@ -114,15 +119,24 @@ export default {
     document.addEventListener("keydown", this.handleWatchEnter);
   },
   methods: {
+    
     // 画框开始
     svgMousedown(e) {
       const { offsetX, offsetY, buttons } = e;
       if (this.modeType == "RECT") {
         this.isMousedown = true;
-        Object.assign(this.currentSvgData, {
-          startX: offsetX,
-          startY: offsetY,
-        });
+        if(this.$parent.isAgain){
+          Object.assign(this.currentSvgData, {
+            startX: this.currentSvgDatas.boxList[0][0],
+            startY: this.currentSvgDatas.boxList[0][1],
+          });
+        } else {
+          Object.assign(this.currentSvgData, {
+            startX: offsetX,
+            startY: offsetY,
+          });
+        }
+        
       }
       if (this.modeType == "POLYGON") {
         if (buttons == 1) {

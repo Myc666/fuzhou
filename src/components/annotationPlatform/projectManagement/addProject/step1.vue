@@ -12,6 +12,7 @@
           placeholder="请输入项目名称"
           maxlength="64"
           show-word-limit
+          @blur="nameBlur"
         ></el-input>
       </el-form-item>
       <el-form-item label="标注类型" prop="projectType">
@@ -20,6 +21,7 @@
             :label="item.value"
             v-for="(item, index) in projectTypeOptions"
             :key="index"
+            :disabled="item.value==4"
             >{{ item.name }}</el-radio-button
           >
         </el-radio-group>
@@ -47,12 +49,13 @@
 </template>
 <script>
 import { projectType } from "@/utils/commonData";
+import {checkName} from "@/api/annotationPlatform/projectManagement.js"
 export default {
   data() {
     return {
       projectTypeOptions: projectType,
       step1Form: {
-        projectName: "",
+        projectName: "BZ"+this.$moment(new Date()).format("YYYYMMDDHHmmssSSS"),
         projectType: 1,
         projectDetail: "",
       },
@@ -65,15 +68,34 @@ export default {
         ],
       },
       submitData: {},
+      isRepeat:false
     };
   },
-  async created() {},
+  async created() {
+  },
   methods: {
+    async nameBlur(){
+      const res = await checkName({projectName:this.step1Form.projectName})
+      if(!res.data){
+        this.isRepeat = true;
+        this.$message.error('项目名称不能重复')
+      }
+    },
     async submit() {
       try {
-        await this.$refs.step1Form.validate();
-        this.submitData = this.step1Form;
-        return true;
+        if(!this.isRepeat){
+          const res = await checkName({projectName:this.step1Form.projectName})
+          if(!res.data){
+            this.isRepeat = true;
+            this.$message.error('项目名称不能重复')
+            return false;
+          }
+          await this.$refs.step1Form.validate();
+          this.submitData = this.step1Form;
+          return true;
+        }else{
+          this.$message.error('项目名称不能重复')
+        }
       } catch (error) {
         this.$message.error('信息不完善')
         return false;

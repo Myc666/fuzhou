@@ -31,7 +31,7 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="预标注" v-if="$parent.$parent.$refs.step1.step1Form.projectType != 1">
+      <!-- <el-form-item label="预标注" v-if="$parent.$parent.$refs.step1.step1Form.projectType != 1">
         <el-select
           v-model="step3Form.algorithmIds"
           placeholder="请选择预标注模型"
@@ -46,7 +46,7 @@
             :value="item.id"
           ></el-option>
         </el-select>
-      </el-form-item>
+      </el-form-item> -->
     </el-form>
   </div>
 </template>

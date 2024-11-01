@@ -15,6 +15,7 @@
               v-model="params.roleIds"
               placeholder="请选择角色"
               multiple
+              :multiple-limit="1"
             >
               <el-option
                 v-for="(item, index) in roleOptions"
@@ -80,6 +81,10 @@ export default {
     saveBatchPerson() {
       this.$refs.form.validate(async (valid) => {
         if (valid) {
+          if(this.params.roleIds.length>1){
+            this.$message.error('角色只能选择一个，请修改');
+            return
+          }
           await saveBatchPerson(this.params);
           this.$message.success("新增成功");
           this.dialogVisible = false;

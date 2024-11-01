@@ -16,19 +16,21 @@
               @change="getPreview">
             </el-input-number>
           </span>
+          <span>共有图像{{ step4Form.imageNum }}张</span>
         </div>
         <div style="color: #2099fa;">以最新生成的告警图像为1，选取图像创建范围。</div>
       </el-form-item>
       <el-form-item label="抽取间隔">
         <div>
+          从每
           <el-input-number :controls="false" v-model="step4Form.interval" style="width: 100px"
             @change="getPreview"></el-input-number>
-          张
+            张图片中抽取一张
         </div>
-        <div style="color: #2099fa;">基于“抽取范围”得到的图像，支持设置抽取间隔进行二次筛选。</div>
+        <!-- <div style="color: #2099fa;">基于“抽取范围”得到的图像，支持设置抽取间隔进行二次筛选。</div> -->
       </el-form-item>
       <el-form-item label="抽取结果" prop="name">
-        {{ total }}
+        共抽取图像{{ total }}张
       </el-form-item>
     </el-form>
     <div class="dataList">

@@ -65,7 +65,7 @@
           <i class="icon-aios_xianshileibie" v-if="!tagVisible"></i>
         </li>
       </el-tooltip>
-      <li><i class="icon-aios_delT"></i></li>
+      <!-- <li><i class="icon-aios_delT"></i></li> -->
       <el-tooltip class="item" effect="dark" placement="right">
         <div slot="content">
           隐藏选中:（快捷键H）<br />将隐藏当前选中的标注框，便于暂时清洁屏幕,以更好的观察待标注图片
@@ -213,6 +213,36 @@
           <SvgIcon icon-name="image" />
         </li>
       </el-popover>
+      <el-tooltip class="item" effect="dark" placement="right">
+        <div slot="content">切换上一张（快捷键左键）</div>
+        <li
+          :class="{ active: modeType == 'PREVIOUS' }"
+          @click="setMode('PREVIOUS')"
+        >
+          <i class="el-icon-back"></i>
+        </li>
+      </el-tooltip>
+      <el-tooltip class="item" effect="dark" placement="right">
+        <div slot="content">切换下一张（快捷键右键）</div>
+        <li :class="{ active: modeType == 'NEXT' }" @click="setMode('NEXT')">
+          <i class="el-icon-right"></i>
+        </li>
+      </el-tooltip>
+      <!-- <el-tooltip class="item" effect="dark" placement="right">
+        <div slot="content">选中可以拖动图片（快捷键A）</div>
+        <li :class="{ active: modeType == 'DRAG' }" @click="setMode('DRAG')">
+          <i class="el-icon-rank"></i>
+        </li>
+      </el-tooltip> -->
+      <el-tooltip class="item" effect="dark" placement="right">
+        <div slot="content">还原尺寸（快捷键上键）</div>
+        <li
+          :class="{ active: modeType == 'REFRESH' }"
+          @click="setMode('REFRESH')"
+        >
+          <i class="el-icon-refresh-right"></i>
+        </li>
+      </el-tooltip>
     </ul>
     <!-- <el-tooltip
       class="item"
@@ -234,7 +264,7 @@
 
 <script>
 import SvgIcon from "@/components/svgIcon";
-import { connect } from 'echarts';
+import { connect } from "echarts";
 export default {
   components: {
     SvgIcon,
@@ -258,7 +288,7 @@ export default {
         imgNum3: 100,
         imgNum4: 0,
       },
-      list: []
+      list: [],
     };
   },
   watch: {
@@ -272,16 +302,17 @@ export default {
     dataList: {
       deep: true,
       handler(val) {
-        console.info(val)
+        console.info(val);
         this.list = val.filter((item) => {
-          return !item.svgVisible || !item.tagVisible
-        })
+          return !item.svgVisible || !item.tagVisible;
+        });
       },
     },
   },
   created() {},
   mounted() {
     document.addEventListener("keydown", this.handleWatchEnter);
+    // window.addEventListener("mousedown", this.handleMousedown); //监听鼠标按下
   },
   methods: {
     handleWatchEnter(e) {
@@ -306,10 +337,10 @@ export default {
       }
       if (key == 70) {
         if (this.tagVisible) {
-            this.setMode("HIDETAG");
-          } else {
-            this.setMode("SHOWTAG");
-          }
+          this.setMode("HIDETAG");
+        } else {
+          this.setMode("SHOWTAG");
+        }
       }
       if (key == 72) {
         this.setMode("HIDECURRENT");
@@ -338,9 +369,30 @@ export default {
       if (key == 67) {
         this.setMode("DELETEALL");
       }
+      if (key == 37) {
+        this.setMode("PREVIOUS");
+      }
+      if (key == 39) {
+        this.setMode("NEXT");
+      }
+      if (key == 38) {
+        this.setMode("REFRESH");
+      }
+      if (key == 65) {
+        this.setMode("DRAG");
+      }
     },
+    // handleMousedown(e) {
+    //   if (e.button == 2) {
+    //     console.log("鼠标右键按下");
+    //     this.setMode("DRAG");
+    //   }
+    //   // if (e.button == 0) {
+    //   //   this.setMode("MOUSELEFT");
+    //   // }
+    // },
     setMode(val) {
-      console.info(val)
+      console.info(val,"=================");
       switch (val) {
         case "RECT":
           if (this.modeType == "RECT") {
@@ -413,12 +465,45 @@ export default {
             this.modeType = val;
           }
           break;
+        case "PREVIOUS":
+          if (this.modeType == "PREVIOUS") {
+            this.modeType = "";
+          } else {
+            this.modeType = val;
+          }
+          break;
+        case "NEXT":
+          if (this.modeType == "NEXT") {
+            this.modeType = "";
+          } else {
+            this.modeType = val;
+          }
+          break;
+        case "DRAG":
+          this.modeType = val;
+          break;
+        // case "MOUSELEFT":
+        //   this.modeType = "";
+        //   break;
+        case "REFRESH":
+          if (this.modeType == "REFRESH") {
+            this.modeType = "";
+          } else {
+            this.modeType = val;
+          }
+          break;
         default:
           this.modeType = "";
           break;
       }
       this.$emit("setMode", this.modeType);
     },
+    delFun(){
+      document.removeEventListener("keydown", this.handleWatchEnter);
+    },
+    addFun(){
+      document.addEventListener("keydown", this.handleWatchEnter);
+    }
   },
 };
 </script>

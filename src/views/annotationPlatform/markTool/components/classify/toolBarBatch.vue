@@ -48,6 +48,36 @@
           <i class="icon-aios_yincang"></i>
         </li>
       </el-tooltip>
+      <!-- <el-tooltip class="item" effect="dark" placement="right">
+        <div slot="content">切换上一张（快捷键左键）</div>
+        <li
+          :class="{ active: modeType == 'PREVIOUS' }"
+          @click="setMode('PREVIOUS')"
+        >
+          <i class="el-icon-back"></i>
+        </li>
+      </el-tooltip>
+      <el-tooltip class="item" effect="dark" placement="right">
+        <div slot="content">切换下一张（快捷键右键）</div>
+        <li :class="{ active: modeType == 'NEXT' }" @click="setMode('NEXT')">
+          <i class="el-icon-right"></i>
+        </li>
+      </el-tooltip>
+      <el-tooltip class="item" effect="dark" placement="right">
+        <div slot="content">选中可以拖动图片（右键）</div>
+        <li :class="{ active: modeType == 'DRAG' }" @click="setMode('DRAG')">
+          <i class="el-icon-rank"></i>
+        </li>
+      </el-tooltip>
+      <el-tooltip class="item" effect="dark" placement="right">
+        <div slot="content">还原尺寸（快捷键上键）</div>
+        <li
+          :class="{ active: modeType == 'REFRESH' }"
+          @click="setMode('REFRESH')"
+        >
+          <i class="el-icon-refresh-right"></i>
+        </li>
+      </el-tooltip> -->
     </ul>
   </div>
 </template>
@@ -79,8 +109,32 @@ export default {
       },
     };
   },
+  mounted() {
+    // document.addEventListener("keydown", this.handleWatchEnter);
+    // window.addEventListener("mousedown", this.handleMousedown); //监听鼠标按下
+  },
   created() {},
   methods: {
+    // handleWatchEnter(e) {
+    //   var key = window.event ? e.keyCode : e.which;
+    //   if (key == 37) {
+    //     this.setMode("PREVIOUS");
+    //   }
+    //   if (key == 39) {
+    //     this.setMode("NEXT");
+    //   }
+    //   if (key == 38) {
+    //     this.setMode("REFRESH");
+    //   }
+    // },
+    // handleMousedown(e) {
+    //   if (e.button == 2) {
+    //     this.setMode("DRAG");
+    //   }
+    //   if (e.button == 0) {
+    //     this.setMode("MOUSELEFT");
+    //   }
+    // },
     setMode(val) {
       console.info(val);
       switch (val) {
@@ -110,7 +164,7 @@ export default {
         case "DELETETAG":
           this.modeType = val;
           break;
-        default:
+          default:
           this.modeType = "";
           break;
       }

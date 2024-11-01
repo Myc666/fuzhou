@@ -74,8 +74,8 @@ export default {
     };
   },
   async created() {
+    await this.getListData();
     await this.getOptions();
-    this.getListData();
   },
   methods: {
     // 获取下拉
@@ -98,6 +98,7 @@ export default {
       this.currentParams = {
         algorithmId: item.algorithmId,
         cameraId: item.cameraId,
+        imageNum:item.imageNum,
         begin: 1,
         end: 10,
         interval: 10
@@ -109,6 +110,7 @@ export default {
       this.currentParams = {
         algorithmId: item.algorithmId,
         cameraId: item.cameraId,
+        imageNum:item.imageNum,
         begin: 1,
         end: 10,
         interval: 10

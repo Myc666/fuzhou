@@ -6,6 +6,7 @@
           <el-option v-for="(item, index) in labelStatusOptions" :key="index" :label="item.label"
             :value="item.value"></el-option>
         </el-select>
+        <el-input v-model="params.imageName" style="width: 150px;margin-right: 10px" placeholder="请输入名字" clearable></el-input>
         <!-- <el-select
           v-model="params.labelUserId"
           placeholder="标注员"
@@ -25,20 +26,26 @@
       </div>
       <div style="width: 180px; flex-shrink: 0">
         <el-checkbox label="全选" style="margin-right: 10px" :indeterminate="isIndeterminate" v-model="checkAll"
-          @change="handleCheckAllChange"></el-checkbox>
-        <el-button type="primary" style="margin-right: 10px" @click="release">批量释放</el-button>
+          @change="handleCheckAllChange"  :disabled="isexport"></el-checkbox>
+        <el-button type="primary" style="margin-right: 10px" :disabled="isexport" @click="release">批量释放</el-button>
       </div>
     </div>
-    <el-checkbox-group v-model="checkedList" @change="handleCheckedImgChange">
+    
+    <el-checkbox-group v-model="checkedList" @change="handleCheckedImgChange" >
       <el-row :gutter="20">
-        <el-col :span="48" v-for="(item, index) in imgList" :key="index">
-          <div class="dataset-item">
+        <el-col :span="48" v-for="(item, index) in imgList" :key="item.id">
+          <!-- <div class=""> {{ JSON.stringify() }} </div> -->
+          <div>
+             
             <el-checkbox class="checkbox" :label="item.id">
-              <br />
+             <div class="img-name" :title="item.imageName"> {{  item.imageName || "--" }}</div>
             </el-checkbox>
+            </div>
+          <div class="dataset-item">
+            
             <div style="display: inline-block; height: 200px">
               <ClassifyDetail v-if="projectDetail.projectType == 1" :currentImgData="item" />
-              <AnnotateDetail v-if="projectDetail.projectType == 2 || projectDetail.projectType == 4"
+              <AnnotateDetail v-if="projectDetail.projectType == 2 || projectDetail.projectType == 4 || projectDetail.projectType == 3"
                 :currentImgData="item" />
               <div class="invalid" v-if="item.commit && item.commit.isValid == 0">
                 <img src="@/assets/images/markTool/invalid.png" />
@@ -70,6 +77,7 @@ import {
 import { annotationType } from "@/utils/commonData";
 import { color } from "echarts";
 import colorList from "@/utils/colorList";
+import Cookies from "js-cookie";
 export default {
   components: {
     SvgIcon,
@@ -78,6 +86,7 @@ export default {
   },
   data() {
     return {
+      isimgList:false,
       labelStatusOptions: [
         {
           label: "未标注",
@@ -114,6 +123,43 @@ export default {
     await this.getDetail();
     this.getData();
   },
+  computed:{
+    isMark() {
+      if (Cookies.get("powerId").search("10003") > -1) {
+        return false;
+      }
+    },
+    isCheck() {
+      if (Cookies.get("powerId").search("10004") > -1) {
+        console.log(1123);
+        return false;
+      }
+    },
+    isexport() {
+      if (Cookies.get("powerId").search("10000") > -1 || Cookies.get("powerId").search("10001") > -1) {
+        return false;
+      }
+    },
+    isDel() {
+
+      return (item)=>{
+        if(Cookies.get("powerId").search("10000") > -1){
+          if(item.status == 99 || item.reviewNum == 0){
+            return false
+          } else {
+            return true
+          }
+        }
+        if(Cookies.get("powerId").search("10001") > -1){
+          if(item.reviewNum == 0){
+            return false
+          } else {
+            return true
+          }
+        }
+      }
+    },
+  },
   methods: {
     async getDetail() {
       const data = await getDetail({ id: this.params.projectId });
@@ -121,6 +167,7 @@ export default {
     },
     // 获取图片列表
     async getData() {
+      this.imgList=[]
       const data = await getImageList(this.params);
       const res = new Map();
       const tagList = data.data.filter((item) => {
@@ -245,6 +292,7 @@ export default {
     top: 10px;
     right: 10px;
     z-index: 10;
+    
   }
 
   .img {
@@ -280,4 +328,10 @@ export default {
     font-size: 20px !important;
   }
 }
+.img-name{
+      width: 200px;
+      overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+    }
 </style>

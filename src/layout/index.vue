@@ -285,7 +285,8 @@ export default {
   .aside {
     // background: #041335;
     overflow: hidden;
-    padding-top: 60px;
+    margin: 60px 0px;
+    overflow-y: scroll;
 
     // .scrollbar-wrapper {
     //   height: calc(100vh - 100px);

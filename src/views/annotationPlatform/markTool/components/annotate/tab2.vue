@@ -1,5 +1,5 @@
 <template>
-  <div class="tab-wrap">
+  <div class="tab-wrap" ref="tab-wrap">
     <ul class="tag-list">
       <li
         v-for="(item, index) in attributeList"
@@ -15,7 +15,41 @@
         {{ item.name }}
       </li>
     </ul>
+    <div v-if="currentProjectType==3" style="margin-top: 10px;">
+      <div v-for="(item,index) in list" :key="index" @click="handleChange(item)" class="list-item">
+        <div :class="[item.check?'item-flex bj':'item-flex']">
+          <div style="width: 60px;text-align: center;">{{ index+1 }}</div>
+          <div style="width: calc(100% - 15px);padding: 0px 10px;">{{ item.name }}</div>
+          <div class="button-list" style="width: 60px;text-align: center;">
+            <i
+              class="icon-aios_eye"
+              v-if="item.svgVisible && item.tagVisible"
+              @click.stop="clickVisible(item)"
+            ></i>
+            <i
+              class="icon-aios_eyeclose"
+              v-if="!item.svgVisible || !item.tagVisible"
+              @click.stop="clickVisible(item)"
+            ></i>
+            <i class="icon-aios_shanchu" @click="clickDelete(item)"></i>
+          </div>
+        </div>
+        <div style="padding: 5px 0px 5px 30px;">
+          <el-input
+            type="textarea"
+            :rows="2"
+            placeholder="请输入"
+            v-model="item.annotationValue"
+            @click.native.stop
+            @focus="focusFun(item,index)"
+            @blur="blurFun(item,index)"
+          >
+          </el-input>
+        </div>
+      </div>
+    </div>
     <el-table
+      v-else
       :data="list"
       :show-header="false"
       highlight-current-row
@@ -29,7 +63,7 @@
           {{ scope.$index + 1 }}
         </template>
       </el-table-column>
-      <el-table-column prop="tagName"></el-table-column>
+      <el-table-column prop="name"></el-table-column>
       <el-table-column align="center">
         <template slot-scope="scope">
           <div class="button-list">
@@ -62,11 +96,16 @@ export default {
       type: Array,
       default: () => [],
     },
+    currentProjectType:{
+      type:Number,
+      default:null,
+    }
   },
   data() {
     return {
       currentTagList: [],
-      list: []
+      list: [],
+      defaultList:[],
     };
   },
   watch: {
@@ -81,14 +120,50 @@ export default {
     dataList: {
       deep: true,
       handler(val) {
-        console.info(val)
-        this.list = val
+        if(val){
+          this.list = JSON.parse(JSON.stringify(val))
+
+          if(this.currentProjectType==3){
+            this.list.forEach((item,i)=>{
+              item.check = false;
+              // if(i == this.list.length-1){
+              //   item.check = true
+              // }
+              this.defaultList.forEach((items)=>{
+                if(item.id == items.id){
+                  item.check = items.check;
+                }
+              })
+            })
+          }
+          
+        }else{
+          this.list = []
+        }
       },
     },
   },
   created() {
   },
   methods: {
+    // 输入框获取焦点
+    focusFun(val){
+      this.list.forEach((item)=>{
+        item.check=false;
+      })
+      if(val){
+        val.check = true;
+      }
+      this.$forceUpdate()
+      this.$parent.$refs.tab1.delFun();
+      this.$parent.$refs.toolBar.delFun();
+    },
+    // 输入框失去焦点
+    blurFun(item){
+      this.$emit("changesave", item);
+      this.$parent.$refs.tab1.addFun();
+      this.$parent.$refs.toolBar.addFun();
+    },
     // 点击标签
     clickTag(obj) {
       const i = this.currentTagList.indexOf(obj.name);
@@ -120,6 +195,7 @@ export default {
     },
     // 点击删除
     clickDelete(item) {
+      this.$emit("delCurrent", item);
       for (let i = 0; i < this.list.length; i++) {
         if (item.id == this.list[i].id) {
           this.list.splice(i, 1);
@@ -148,12 +224,30 @@ export default {
         this.$emit("changeCurrent", val);
       }
     },
+    handleChange(val){
+      this.list.forEach((item)=>{
+        item.check=false;
+        if(item.id == val.id){
+          item.check = true;
+        }
+      })
+      this.defaultList = JSON.parse(JSON.stringify(this.list))
+      if (val) {
+        // val.check = true
+        val.svgVisible = true
+        val.tagVisible = true
+        this.$emit("changeCurrent", val);
+      }
+      this.$forceUpdate()
+    }
   },
 };
 </script>
 <style scoped lang="scss">
 .tab-wrap {
   padding: 20px;
+  height: calc(100vh - 150px);
+  overflow-y: scroll;
   .tag-list {
     display: flex;
     flex-wrap: wrap;
@@ -174,6 +268,18 @@ export default {
   i {
     cursor: pointer;
     margin: 0 5px;
+  }
+}
+.list-item{
+  padding: 0px 16px;
+  .item-flex{
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 8px 0px;
+  }
+  .bj{
+    background: #ecf5ff;
   }
 }
 </style>

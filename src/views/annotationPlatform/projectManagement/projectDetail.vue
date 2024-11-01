@@ -7,22 +7,23 @@
         <el-tag v-if="projectDetail.status == 99">已交付</el-tag>
       </div>
       <div v-if="projectDetail.status == 11">
-        <el-button type="primary" @click="clickAnnotation">去标注</el-button>
-        <el-button type="primary" @click="clickSubmit">交付</el-button>
+        <el-button type="primary" @click="clickAnnotation" :disabled="isMark">去标注</el-button>
+        <el-button type="primary" @click="clickReview" :disabled="isCheck">去质检</el-button>
+        <el-button type="primary" @click="clickSubmit" :disabled="!isexport">交付</el-button>
       </div>
     </div>
     <div class="ai_table">
       <el-tabs v-model="active">
-        <el-tab-pane label="总览" name="1">
+        <el-tab-pane label="总览" name="1" v-if="isexport">
           <Overview v-if="active == 1" />
         </el-tab-pane>
-        <el-tab-pane label="数据集" name="2">
+        <el-tab-pane label="数据集" name="2" v-if="isexport">
           <Dataset v-if="active == 2" />
         </el-tab-pane>
         <el-tab-pane label="文档" name="3">
           <Document v-if="active == 3" />
         </el-tab-pane>
-        <el-tab-pane label="设置" name="4">
+        <el-tab-pane label="设置" name="4" v-if="isexport">
           <Setup v-if="active == 4" />
         </el-tab-pane>
       </el-tabs>
@@ -35,6 +36,7 @@ import Dataset from '@/components/annotationPlatform/projectManagement/projectDe
 import Document from '@/components/annotationPlatform/projectManagement/projectDetail/document';
 import Setup from '@/components/annotationPlatform/projectManagement/projectDetail/setup';
 import { getDetail, submitProject } from '@/api/annotationPlatform/projectManagement';
+import Cookies from 'js-cookie';
 export default {
   components: {
     Overview,
@@ -52,10 +54,54 @@ export default {
   async created() {
     this.getDetail();
   },
+  computed:{
+    isexport() {
+      if (Cookies.get("powerId").search("10000") > -1 || Cookies.get("powerId").search("10001") > -1) {
+        return true;
+      }else{
+        return false
+      }
+    },
+    isMark(){
+      if (Cookies.get("powerId").search("10003") > -1) {
+        return false;
+      }else{
+        return true
+      }
+    },
+    isCheck() {
+      if (Cookies.get("powerId").search("10004") > -1) {
+        return false;
+      }else{
+        return true
+      }
+    },
+    
+  },
   methods: {
+
     async getDetail() {
       const data = await getDetail({ id: this.projectId });
       this.projectDetail = data.data;
+    },
+    clickReview() {
+      if (this.projectDetail.projectType == 1) {
+        this.$router.push({
+          path: "/annotationPlatform/projectManagement/markTool/classify",
+          query: {
+            id: this.projectDetail.id,
+            type: 2,
+          },
+        });
+      } else {
+        this.$router.push({
+          path: "/annotationPlatform/projectManagement/markTool/annotate",
+          query: {
+            id: this.projectDetail.id,
+            type: 2,
+          },
+        });
+      }
     },
     clickAnnotation() {
       if (this.projectDetail.projectType == 1) {

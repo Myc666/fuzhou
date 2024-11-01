@@ -60,7 +60,7 @@ export default {
   data() {
     return {
       projectOptions: [],
-      labelList: defaultLabel,
+      labelList: [],//JSON.parse(JSON.stringify(defaultLabel)),
       defaultProps: {
         children: "children",
         label: "name",

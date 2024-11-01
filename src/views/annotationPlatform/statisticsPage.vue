@@ -2,11 +2,11 @@
   <div>
     <div class="head-container">
       <div>
-        <el-select placeholder="请选择项目" clearable v-model="params.projectId" class="head-container-input">
+        <el-select placeholder="请选择项目" v-if="active=='1'" clearable v-model="params.projectId" class="head-container-input">
           <el-option v-for="(item, index) in projectOptions" :key="index" :label="item.projectName"
             :value="item.id"></el-option>
         </el-select>
-        <el-select placeholder="请选择团队" clearable v-model="params.teamId" class="head-container-input">
+        <el-select placeholder="请选择团队"  v-if="active=='2'" clearable v-model="params.teamId" class="head-container-input">
           <el-option v-for="(item, index) in teamOptions" :key="index" :label="item.name" :value="item.id"></el-option>
         </el-select>
         <el-date-picker v-model="date" :picker-options="pickerOptions" type="daterange" range-separator="至"
@@ -19,7 +19,7 @@
       <div style="width: 120px; flex-shrink: 0">
         <el-radio-group v-model="active" @input="getData(1)">
           <el-radio-button label="1">项目</el-radio-button>
-          <el-radio-button label="2">团队</el-radio-button>
+          <el-radio-button label="2" :disabled="isexport">团队</el-radio-button>
         </el-radio-group>
       </div>
     </div>
@@ -57,6 +57,8 @@ import Chart1 from '@/components/annotationPlatform/statisticsPage/chart1';
 import Chart2 from '@/components/annotationPlatform/statisticsPage/chart2';
 import ProjectTable from '@/components/annotationPlatform/statisticsPage/projectTable';
 import TeamTable from '@/components/annotationPlatform/statisticsPage/teamTable';
+// import { disableValidation } from 'schema-utils';
+import Cookies from 'js-cookie';
 export default {
   components: {
     Chart1,
@@ -89,6 +91,16 @@ export default {
       tableData: [],
     };
   },
+  computed:{
+    isexport() {
+      if (Cookies.get("powerId").search("10001") > -1) {
+        return true;
+      }else{
+        return false
+      }
+    },
+  },
+
   created() {
     this.getProjectList();
     this.getTeamList();
@@ -113,13 +125,15 @@ export default {
       this.params.endTime = this.date[1];
       console.info(this.params);
       let data1, data2;
-      if (this.active == 1) {
-        data1 = await getProjectData(this.params);
-        data2 = await getProjectPage(this.params);
-      } else {
-        data1 = await getTeamData(this.params);
-        data2 = await getTeamPage(this.params);
-      }
+      // if (this.active == 1) {
+      //   data1 = await getProjectData(this.params);
+      //   data2 = await getProjectPage(this.params);
+      // } else {
+      //   data1 = await getTeamData(this.params);
+      //   data2 = await getTeamPage(this.params);
+      // }
+      data1 = await getProjectData(this.params);
+      data2 = await getProjectPage(this.params);
       this.chartData = data1.data;
       this.tableData = data2.data;
       this.total = Number(data2.count);

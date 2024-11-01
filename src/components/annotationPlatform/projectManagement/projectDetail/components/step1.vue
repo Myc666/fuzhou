@@ -40,6 +40,7 @@
         <div class="demo">
           <p>1. 仅支持word格式文件上传</p>
           <p>2. 若不上传，默认使用当前项目分组下已有示例</p>
+          <p>3. 新上传的标注示例会替换旧的标注示例</p>
         </div>
       </el-form-item>
       <el-form-item>

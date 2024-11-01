@@ -42,6 +42,7 @@
           type="primary"
           icon="el-icon-plus"
           @click="addData"
+          v-if="!isexport"
           style="float: right"
           >新建项目</el-button
         >
@@ -85,11 +86,7 @@
             <template v-else>{{ scope.row.noPassImageNum }}</template>
           </template>
         </el-table-column>
-        <el-table-column
-          align="center"
-          prop="status"
-          label="项目状态"
-        >
+        <el-table-column align="center" prop="status" label="项目状态">
           <template slot-scope="scope">
             <template v-if="scope.row.status == 99">已交付</template>
             <template v-else>标注中</template>
@@ -105,17 +102,23 @@
             <el-button
               type="text"
               @click="clickAnnotation(scope.row)"
-              :disabled="scope.row.status == 99"
+              :disabled="scope.row.status == 99 || isMark"
               >进入标注</el-button
             >
             <el-button
               type="text"
               @click="clickReview(scope.row)"
-              :disabled="!Boolean(scope.row.needReview) || scope.row.status == 99"
+              :disabled="
+                !Boolean(scope.row.needReview) ||
+                scope.row.status == 99 ||
+                isCheck
+              "
               >进入质检</el-button
             >
-            <el-button type="text" @click="dowloadData(scope.row)">导出</el-button>
-            <el-button type="text" class="danger" @click="deleteData(scope.row)"
+            <el-button type="text" :disabled="isexport" @click="dowloadData(scope.row)"
+              >导出</el-button
+            >
+            <el-button type="text" class="danger" :disabled="isDel(scope.row)" @click="deleteData(scope.row)"
               >删除</el-button
             >
           </template>
@@ -140,6 +143,7 @@
     <DownloadFile
       v-if="downloadFileVisible"
       :currentId="currentId"
+      :currentProjectType="currentProjectType"
       @close="(downloadFileVisible = false), getListData()"
     />
   </div>
@@ -148,15 +152,16 @@
 import {
   getListData,
   deleteData,
-  dowloadData
+  dowloadData,
 } from "@/api/annotationPlatform/projectManagement";
 import { projectType } from "@/utils/commonData";
 import AddProject from "@/components/annotationPlatform/projectManagement/addProject";
 import DownloadFile from "@/components/annotationPlatform/projectManagement/downloadFile";
+import Cookies from "js-cookie";
 export default {
   components: {
     AddProject,
-    DownloadFile
+    DownloadFile,
   },
   data() {
     return {
@@ -192,10 +197,59 @@ export default {
       tableData: [],
       total: 0,
       currentId: 0,
+      currentProjectType:null,
+      powerId: Cookies.get("powerId"),
     };
   },
   async created() {
     this.getListData();
+  },
+  computed: {
+    isMark() {
+      if (Cookies.get("powerId").search("10003") > -1) {
+        return false;
+      }else{
+        return true
+      }
+    },
+    isCheck() {
+      if (Cookies.get("powerId").search("10004") > -1) {
+        return false;
+      }else{
+        return true
+      }
+    },
+    isexport() {
+      if (Cookies.get("powerId").search("10000") > -1 || Cookies.get("powerId").search("10001") > -1) {
+        return false;
+      }else{
+        return true
+      }
+    },
+    isDel() {
+
+      return (item)=>{
+        if(Cookies.get("powerId").search("10000") > -1){
+          if(item.status == 99 || item.reviewNum == 0){
+            return false
+          } else {
+            return true
+          }
+        }
+        if(Cookies.get("powerId").search("10001") > -1){
+          if(item.reviewNum == 0){
+            return false
+          } else {
+            return true
+          }
+        }
+        if(Cookies.get("powerId").search("10000") > -1 || Cookies.get("powerId").search("10001") > -1){
+          return false
+        }else {
+          return true
+        }
+      }
+    },
   },
   methods: {
     // 获取项目列表
@@ -226,7 +280,7 @@ export default {
           path: "/annotationPlatform/projectManagement/markTool/classifyBatch",
           query: {
             id: item.id,
-            type: 1
+            type: 1,
           },
         });
       } else {
@@ -234,7 +288,7 @@ export default {
           path: "/annotationPlatform/projectManagement/markTool/annotate",
           query: {
             id: item.id,
-            type: 1
+            type: 1,
           },
         });
       }
@@ -246,7 +300,7 @@ export default {
           path: "/annotationPlatform/projectManagement/markTool/classify",
           query: {
             id: item.id,
-            type: 2
+            type: 2,
           },
         });
       } else {
@@ -254,14 +308,15 @@ export default {
           path: "/annotationPlatform/projectManagement/markTool/annotate",
           query: {
             id: item.id,
-            type: 2
+            type: 2,
           },
         });
       }
     },
     async dowloadData(item) {
-      this.currentId = item.id
-      this.downloadFileVisible = true
+      this.currentId = item.id;
+      this.currentProjectType = item.projectType;
+      this.downloadFileVisible = true;
     },
     // 删除项目
     async deleteData(item) {

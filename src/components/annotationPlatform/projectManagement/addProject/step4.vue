@@ -38,6 +38,9 @@
           <p>
             4.压缩包文件内图片文件需放入images文件夹内，标注文件需放入annotations文件夹内
           </p>
+          <p>
+            5.images 和 annotations 文件夹必须位于压缩包的首层子目录中。
+          </p>
         </div>
       </el-form-item>
       <el-form-item label="标注示例">
