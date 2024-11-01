@@ -231,3 +231,12 @@ export function submitProject(params) {
     params
   });
 }
+
+// 检测项目名称是否重复
+export function checkName(data) {
+  return request({
+    url: '/ap/project/checkName',
+    method: 'post',
+    data
+  });
+}
