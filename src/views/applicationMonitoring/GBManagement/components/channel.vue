@@ -15,17 +15,17 @@
                 @pageChange="pageChange"
                 :rowSelection="false"
             >
-                <div slot="operate" slot-scope="{ row }">
+                <!-- <div slot="operate" slot-scope="{ row }">
                     <el-button type="text">播放</el-button>
                     <el-button type="text" @click="insertFun(row)">接入</el-button>
                     <el-button type="text" @click="configFun(row)">配置</el-button>
-                </div>
+                </div> -->
             </Tables>
         </div>
         <!-- 接入 -->
-         <AddCamera v-if="addVisible" :channelObj="channelObj" @close="(addVisible = false), getList()"/>
+         <!-- <AddCamera v-if="addVisible" :channelObj="channelObj" @close="(addVisible = false), getList()"/> -->
          <!-- 配置信息 -->
-        <ConfigInfo v-if="configVisible" :currentId="channelId" @close="(configVisible = false), getList()"/>
+        <!-- <ConfigInfo v-if="configVisible" :currentId="channelId" @close="(configVisible = false), getList()"/> -->
     </el-dialog>
 </template>
 <script>
@@ -88,12 +88,12 @@ export default {
                         return h("span", [obj[value]]);
                     },
                 },
-                {
-                    key: "Base",
-                    title: "操作",
-                    align: "center",
-                    slot: "operate",
-                },
+                // {
+                //     key: "Base",
+                //     title: "操作",
+                //     align: "center",
+                //     slot: "operate",
+                // },
             ]),
             status:'',
             addVisible:false,

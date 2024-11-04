@@ -159,10 +159,22 @@ routers.beforeEach(async (to, from, next) => {
                     ]
                   }
                   let gb = {
-                        icon: 'el-icon-video-camera-solid',
-                        name: '国标设备管理',
-                        path: '/GB/equipmentManagement',
-                        component: () => import('@/views/applicationMonitoring/GBManagement/index'),
+                    icon: 'el-icon-video-camera-solid',
+                    name: '国标管理',
+                    path: '/GBManagement',
+                    component: () => import('@/views/applicationMonitoring/GBManagement/index'),
+                    children:[
+                      {
+                        name: '设备管理',
+                        path: '/GBManagement/equipmentManagement',
+                        component: () => import('@/views/applicationMonitoring/GBManagement/equipmentManagement'),
+                      },
+                      {
+                        name: '设备通道管理',
+                        path: '/GBManagement/channelManagement',
+                        component: () => import('@/views/applicationMonitoring/GBManagement/channelManagement'),
+                      },
+                    ]
                   }
                 sessionStorage.setItem('menuTree', JSON.stringify(res.data));
                 // 过滤动态路由菜单
