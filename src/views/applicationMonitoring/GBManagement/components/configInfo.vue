@@ -1,7 +1,7 @@
 <template>
     <el-dialog
         :close-on-click-modal="false"
-        title="配置信息"
+        title="国标平台配置信息"
         :visible.sync="dialogVisible"
         width="80%"
         @close="closed"
@@ -64,6 +64,7 @@ export default {
         getConfig(){
             this.loading = true;
             getConfigInfo().then(res=>{
+                console.log(res)
                 this.params = res.data;
                 this.loading = false;
             }).catch(()=>{

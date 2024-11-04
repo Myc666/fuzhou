@@ -1,29 +1,44 @@
 <template>
-    <div class="channel-cont">
-        <Tables
-            :pagination="pagination"
-            :columns="columns"
-            :dataSource="dataSource"
-            :loading="loading"
-            @pageChange="pageChange"
-            :rowSelection="false"
-        >
-            <div slot="operate" slot-scope="{ row }">
-                <el-button type="text" @click="channelFun(row)">通道</el-button>
-            </div>
-        </Tables>
+    <div>
+        <div class="platform-info">
+            <el-button type="primary" icon="el-icon-setting" @click="showPlatform">国标平台信息</el-button>
+        </div>
+        <div class="channel-cont">
+            <Tables
+                :pagination="pagination"
+                :columns="columns"
+                :dataSource="dataSource"
+                :loading="loading"
+                @pageChange="pageChange"
+                :rowSelection="false"
+            >
+                <div slot="onLine" slot-scope="{ row }">
+                    <el-tag :type="row.onLine == '1' ? 'success' : 'danger'">
+                        {{ row.onLine == '1' ? '在线' : '离线' }}
+                    </el-tag>
+                </div>
+
+                <div slot="operate" slot-scope="{ row }">
+                    <el-button type="text" @click="channelFun(row)">通道信息</el-button>
+                </div>
+            </Tables>
+        </div>
         <!-- 通道 -->
         <ChannelManagement v-if="channelVisible" :currentId="currentId" @close="closeChannel"></ChannelManagement>
+        <!-- 配置信息 -->
+        <ConfigInfo v-if="configVisible" :currentId="channelId" @close="(configVisible = false)"/>
     </div>
 </template>
 <script>
-import { deviceList } from "./api"
+import { deviceList, getAccessInfo } from "./api"
 import Tables from "@/components/Table/index.vue";
 import ChannelManagement from "./components/channel.vue";
+import ConfigInfo from "./components/configInfo.vue";
 export default {
     components:{
         Tables,
-        ChannelManagement
+        ChannelManagement,
+        ConfigInfo
     },
     data() {
         return {
@@ -44,6 +59,7 @@ export default {
                     key: "deviceId",
                     title: "设备编号",
                     align: "center",
+                    width: 180
                 },
                 {
                     key: "hostAddress",
@@ -66,25 +82,31 @@ export default {
                     align: "center",
                 },
                 {
+                    key: "channelNums",
+                    title: "通道数",
+                    align: "center",
+                },
+                {
                     key: "onLine",
                     title: "状态",
                     align: "center",
-                    render(h, { value }) {
-                        const obj = {
-                            0:'离线',
-                            1:'在线',
-                        }
-                        return h("span", [obj[value]]);
-                    },
-                },
-                {
-                    key: "keepaliveTime",
-                    title: "最近心跳",
-                    align: "center",
+                    slot: "onLine"
+                    // render(h, { value }) {
+                    //     const obj = {
+                    //         0:'离线',
+                    //         1:'在线',
+                    //     }
+                    //     return h("span", [obj[value]]);
+                    // },
                 },
                 {
                     key: "registerTime",
-                    title: "最近注册",
+                    title: "注册时间",
+                    align: "center",
+                },
+                {
+                    key: "keepaliveTime",
+                    title: "心跳时间",
                     align: "center",
                 },
                 {
@@ -96,6 +118,7 @@ export default {
             ]),
             currentId:'',
             channelVisible:false,
+            configVisible: false,
         };
     },
     created() {
@@ -123,7 +146,7 @@ export default {
         },
         // 点击通道
         channelFun(row){
-            this.currentId = row.id;
+            this.currentId = row.deviceId;
             this.channelVisible = true;
         },
         // 关闭通道弹窗
@@ -132,10 +155,18 @@ export default {
             this.currentId = "";
             this.getList()
         },
+        // 展示国标平台信息
+        showPlatform() {
+            this.channelId = '';
+            this.configVisible = true;
+        }
     },
 };
 </script>
 <style scoped lang="scss">
+.platform-info {
+    margin-bottom: 10px;
+}
 .equipment-cont{
     background: #FFF;
     border-radius: 6px;

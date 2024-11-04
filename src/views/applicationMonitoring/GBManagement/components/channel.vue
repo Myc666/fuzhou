@@ -15,6 +15,11 @@
                 @pageChange="pageChange"
                 :rowSelection="false"
             >
+                <div slot="status" slot-scope="{ row }">
+                    <el-tag :type="row.status == '1' ? 'success' : 'default'">
+                        {{ row.status == '1' ? '在线' : '离线' }}
+                    </el-tag>
+                </div>
                 <!-- <div slot="operate" slot-scope="{ row }">
                     <el-button type="text">播放</el-button>
                     <el-button type="text" @click="insertFun(row)">接入</el-button>
@@ -72,21 +77,22 @@ export default {
                     align: "center",
                 },
                 {
-                    key: "manufacturer",
+                    key: "manufacture",
                     title: "厂家",
                     align: "center",
                 },
                 {
-                    key: "onLine",
+                    key: "status",
                     title: "状态",
                     align: "center",
-                    render(h, { value }) {
-                        const obj = {
-                            0:'离线',
-                            1:'在线',
-                        }
-                        return h("span", [obj[value]]);
-                    },
+                    slot: "status"
+                    // render(h, { value }) {
+                    //     const obj = {
+                    //         0:'离线',
+                    //         1:'在线',
+                    //     }
+                    //     return h("span", [obj[value]]);
+                    // },
                 },
                 // {
                 //     key: "Base",

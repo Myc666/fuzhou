@@ -8,28 +8,38 @@
             @pageChange="pageChange"
             :rowSelection="false"
         >
+            <div slot="status" slot-scope="{ row }">
+                <el-tag :type="row.status == '1' ? 'success' : 'danger'">
+                    {{ row.status == '1' ? '在线' : '离线' }}
+                </el-tag>
+            </div>
+            <div slot="hasAccess" slot-scope="{ row }">
+                <el-tag :type="row.accessCameraId > 0 ? 'success' : 'info'">
+                    {{ row.accessCameraId > 0 ? '已接入' : '未接入' }}
+                </el-tag>
+            </div>
             <div slot="operate" slot-scope="{ row }">
-                <el-button type="text">播放</el-button>
-                <el-button type="text" @click="insertFun(row)">接入</el-button>
-                <el-button type="text" @click="configFun(row)">配置</el-button>
+                <!-- <el-button type="text">播放</el-button> -->
+                <block v-if="row.accessCameraId == 0">
+                    <el-button type="text" @click="insertFun(row)">接入</el-button>
+                </block>
+                <block v-else>
+                    无操作
+                </block>
             </div>
         </Tables>
         <!-- 接入 -->
         <AddCamera v-if="addVisible" :channelObj="channelObj" @close="(addVisible = false), getList()"/>
-        <!-- 配置信息 -->
-        <ConfigInfo v-if="configVisible" :currentId="channelId" @close="(configVisible = false), getList()"/>
     </div>
 </template>
 <script>
 import { channelList,getAccessInfo } from "./api"
 import Tables from "@/components/Table/index.vue";
 import AddCamera from "@/components/applicationMonitoring/boxManagement/addCamera/newAdd.vue";
-import ConfigInfo from "./components/configInfo.vue"
 export default {
     components:{
         Tables,
-        AddCamera,
-        ConfigInfo
+        AddCamera
     },
     props:{
         currentId:{
@@ -49,13 +59,13 @@ export default {
             dataSource: [{}],
             columns: Object.freeze([
                 {
-                    key: "channelId",
-                    title: "通道编号",
+                    key: "deviceId",
+                    title: "设备编号",
                     align: "center",
                 },
                 {
-                    key: "deviceId",
-                    title: "设备编号",
+                    key: "channelId",
+                    title: "通道编号",
                     align: "center",
                 },
                 {
@@ -64,21 +74,35 @@ export default {
                     align: "center",
                 },
                 {
-                    key: "manufacturer",
+                    key: "manufacture",
                     title: "厂家",
                     align: "center",
                 },
                 {
-                    key: "onLine",
+                    key: "status",
                     title: "状态",
                     align: "center",
-                    render(h, { value }) {
-                        const obj = {
-                            0:'离线',
-                            1:'在线',
-                        }
-                        return h("span", [obj[value]]);
-                    },
+                    slot: "status"
+                    // render(h, { value }) {
+                    //     const obj = {
+                    //         0:'离线',
+                    //         1:'在线',
+                    //     }
+                    //     return h("span", [obj[value]]);
+                    // },
+                },
+                {
+                    key: "hasAccess",
+                    title: "接入状态",
+                    align: "center",
+                    slot: "hasAccess"
+                    // render(h, { value }) {
+                    //     const obj = {
+                    //         0:'离线',
+                    //         1:'在线',
+                    //     }
+                    //     return h("span", [obj[value]]);
+                    // },
                 },
                 {
                     key: "Base",
@@ -91,7 +115,6 @@ export default {
             addVisible:false,
             channelObj:{},
             channelId:'',
-            configVisible:false,
         };
     },
     created() {
@@ -131,11 +154,6 @@ export default {
         },
         closed(){
             this.$emit("close")
-        },
-        // 配置信息
-        configFun(row){
-            this.channelId = row.id;
-            this.configVisible = true;
         }
     },
 };
