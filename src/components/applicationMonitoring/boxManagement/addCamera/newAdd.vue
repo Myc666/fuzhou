@@ -7,7 +7,7 @@
             width="1400px"
             top="5vh"
             @closed="closed"
-            
+            append-to-body
         >
             <div class="tip-txt">在添加摄像头之前，请确保您已知晓该摄像机的品牌、型号，后台账号、密码和所在局域网内的IP地址。</div>
             <div ref="dialogCont">
@@ -288,6 +288,10 @@
             type: Object,
             default: () => {},
         },
+        channelObj:{
+            type: Object,
+            default: () => {},
+        }
     },
     data() {
         return {
@@ -336,6 +340,10 @@
         await this.getAlgorithmListData();
         if (this.currentId) {
             await this.getListDataDetail();
+        }
+        if(JSON.stringify(this.channelObj) != "{}"){
+            this.$set(this.detail, 'rtspUrl', this.channelObj.rtspUrl);
+            this.$set(this.detail, 'channelId', this.channelObj.channelId);
         }
         this.getSoundColumnList();
     },
@@ -432,6 +440,7 @@
             this.tableData = data.data;
         },
         saveFun(){
+            console.log(this.detail,"===========this.detail")
             this.$refs.detailForm.validate((valid) => {
                 if (valid) {
                     this.saveData();
