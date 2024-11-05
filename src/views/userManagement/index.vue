@@ -1,6 +1,7 @@
 <template>
     <div class="user-cont">
         <div class="left-cont">
+            <div class="title">第三方组织结构</div>
             <el-tree
                 class="filter-tree"
                 :data="treeData"
@@ -13,9 +14,7 @@
             </el-tree>
         </div>
         <div class="right-cont">
-            <div class="flex-item">
-                <el-button type="primary" @click="addUserFun()">新增用户</el-button>
-            </div>
+            <div class="title">第三方用户列表</div>
             <el-table
               :data="dataSource"
               border
@@ -121,6 +120,10 @@ export default {
 <style scoped lang="scss">
 .user-cont{
     display: flex;
+    .title{
+        font-size: 16px;
+        font-weight: bold;
+    }
     .left-cont{
         width: 280px;
         border-radius: 8px;
