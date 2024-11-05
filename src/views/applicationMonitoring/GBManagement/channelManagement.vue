@@ -29,7 +29,7 @@
             </div>
         </Tables>
         <!-- 接入 -->
-        <AddCamera v-if="addVisible" :channelObj="channelObj" @close="(addVisible = false), getList()"/>
+        <AddCamera v-if="addVisible" :channelObj="channelObj" pageType="channel" @close="(addVisible = false), getList()"/>
     </div>
 </template>
 <script>
