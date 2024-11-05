@@ -158,7 +158,10 @@ export default {
     },
     // 获取详情
     async getDetail() {
-        const res = await detailData({ id: this.currentId });
+        let formData = new FormData();
+        formData.append("accountId", this.currentId);
+        const res = await detailData(formData);
+        // const res = await detailData({ id: this.currentId });
         let arr = [];
         if(res.data.roles&&res.data.roles.length>0){
           res.data.roles.forEach((item=>{
