@@ -15,7 +15,7 @@
             style="max-height: 30px"
           />
         </div>
-        <div class="big-title">{{ this.$store.state.appInfo.screenName }} <i class="el-icon-s-unfold" @click="changePath"></i></div>
+        <div class="big-title" v-if="this.type!='1'">{{ this.$store.state.appInfo.screenName }} <i class="el-icon-s-unfold" @click="changePath"></i></div>
         <div class="title-right">
           <div
             style="
@@ -57,9 +57,13 @@
         time: "",
         second: "",
         timer: "",
+        type:"",
       };
     },
     components: { mainLeft, MainRight },
+    created(){
+      this.type = this.$route.query.type;
+    },
     mounted() {
       let that = this;
       this.getDate();

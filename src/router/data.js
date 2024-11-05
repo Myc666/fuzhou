@@ -178,6 +178,11 @@ const allRoutess = [
       hidden: true
     },
     {
+      path: '/ivLogin',
+      component: () => import('@/views/ivLogin'),
+      hidden: true
+    },
+    {
       path: '/bigScreen',
       component: () => import('@/bigScreen/index'),
       hidden: true

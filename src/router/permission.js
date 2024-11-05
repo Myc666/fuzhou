@@ -11,7 +11,7 @@ import ElementUI from 'element-ui'
 
 routers.beforeEach(async (to, from, next) => {
 
-  if (to.path === '/login') {
+  if (to.path === '/login' || to.path === '/ivLogin') {
     next();
   } else {
     //其余访问请求判断用户是否登录
@@ -176,10 +176,16 @@ routers.beforeEach(async (to, from, next) => {
                       },
                     ]
                   }
+                  let user = {
+                        icon: 'el-icon-user-solid',
+                        name: '用户管理',
+                        path: '/userManagement/index',
+                        component: () => import('@/views/userManagement/index'),
+                  }
                 sessionStorage.setItem('menuTree', JSON.stringify(res.data));
                 // 过滤动态路由菜单
                 let menu = fnAddDynamicMenuRoutes(r);
-                menu.push(obj,aa,gb)
+                menu.push(obj,aa,gb,user)
                 if(menu.length){
                   // routers.options.routes[0].redirect = menu[0].path
                   menu.forEach(element => {
