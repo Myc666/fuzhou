@@ -69,6 +69,7 @@ export default {
     },
     created() {
         this.getListTree();
+        this.getTable();
     },
     methods: {
         //获取组织树
