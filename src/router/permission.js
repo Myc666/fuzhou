@@ -26,166 +26,104 @@ routers.beforeEach(async (to, from, next) => {
               if (res.code == 0) {
                 //动态路由源信息
                 let r = res.data;
-                let obj = {
-                    icon: 'el-icon-s-platform',
-                    name: '安全管理',
-                    path: '/secureManagement',
-                    component: () => import('@/views/secureManagement/index'),
-                    children:[
-                      // {
-                      //   name: '组织架构管理',
-                      //   path: '/secureManagement/organizationalStructure',
-                      //   component: () => import('@/views/secureManagement/organizationalStructure/index'),
-                      // },
-                      // {
-                      //   name: '人员管理',
-                      //   path: '/secureManagement/userManagent',
-                      //   component: () => import('@/views/secureManagement/userManagent/index'),
-                      // },
-                      // {
-                      //   name: '角色管理',
-                      //   path: '/secureManagement/roleManagent',
-                      //   component: () => import('@/views/secureManagement/roleManagent/index'),
-                      // },
-                      {
-                        name: '密码模板配置',
-                        path: '/secureManagement/passwordTemplate',
-                        component: () => import('@/views/secureManagement/passwordTemplate/index'),
-                      },
-                      // {
-                      //   name: '菜单管理',
-                      //   path: '/secureManagement/menuManagent',
-                      //   component: () => import('@/views/secureManagement/menuManagent/index'),
-                      // },
-                      {
-                        name: '系统日志',
-                        path: '/secureManagement/logManagent',
-                        component: () => import('@/views/secureManagement/logManagent/index'),
-                      },
-                    ]
-                  }
-                  let aa = {
-                    icon: 'el-icon-s-claim',
-                    name: '标注平台',
-                    path: '/annotationPlatform',
-                    component: () => import('@/views/annotationPlatform/index'),
-                    children: [
-                      {
-                        component: () => import('@/views/annotationPlatform/projectManagement'),
-                        name: '项目管理',
-                        path: '/annotationPlatform/projectManagement'
-                      },
-                      {
-                        component: () => import('@/views/annotationPlatform/projectManagement/projectDetail'),
-                        name: '项目详情',
-                        path: '/annotationPlatform/projectManagement/projectDetail',
-                        meta: {
-                          hideMenu: true
-                        }
-                      },
-                      {
-                        component: () => import('@/views/annotationPlatform/annotationGroupManagement'),
-                        name: '标注组管理',
-                        path: '/annotationPlatform/annotationGroupManagement'
-                      },
-                      {
-                        component: () => import('@/views/annotationPlatform/teamManagement'),
-                        name: '团队管理',
-                        path: '/annotationPlatform/teamManagement'
-                      },
-                      {
-                        component: () => import('@/views/annotationPlatform/teamManagement/teamDetail'),
-                        name: '团队详情',
-                        path: '/annotationPlatform/teamManagement/teamDetail',
-                        meta: {
-                          hideMenu: true
-                        }
-                      },
-                      {
-                        component: () => import('@/views/annotationPlatform/statisticsPage'),
-                        name: '统计页面',
-                        path: '/annotationPlatform/statisticsPage'
-                      },
-                      {
-                        component: () => import('@/views/annotationPlatform/incrementalRraining'),
-                        name: '增量训练',
-                        path: '/annotationPlatform/incrementalRraining'
-                      },
-                      {
-                        component: () => import('@/views/annotationPlatform/markTool/annotate'),
-                        name: '目标检测',
-                        path: '/annotationPlatform/projectManagement/markTool/annotate',
-                        meta: {
-                          noPadding: true,
-                          hideMenu: true
-                        }
-                      },
-                      {
-                        component: () => import('@/views/annotationPlatform/markTool/classifyBatch'),
-                        name: '图像分类-批量',
-                        path: '/annotationPlatform/projectManagement/markTool/classifyBatch',
-                        meta: {
-                          noPadding: true,
-                          hideMenu: true
-                        }
-                      },
-                      {
-                        component: () => import('@/views/annotationPlatform/markTool/classify'),
-                        name: '图像分类',
-                        path: '/annotationPlatform/projectManagement/markTool/classify',
-                        meta: {
-                          noPadding: true,
-                          hideMenu: true
-                        }
-                      },
-                      {
-                        component: () => import('@/views/annotationPlatform/markTool/annotate'),
-                        name: 'ocr',
-                        path: '/annotationPlatform/markTool/ocr',
-                        meta: {
-                          noPadding: true,
-                          hideMenu: true
-                        }
-                      },
-                      {
-                        component: () => import('@/views/annotationPlatform/markTool/incrementalRraining'),
-                        name: '增量训练',
-                        path: '/annotationPlatform/markTool/incrementalRraining',
-                        meta: {
-                          noPadding: true,
-                          hideMenu: true
-                        }
-                      }
-                    ]
-                  }
-                  let gb = {
-                    icon: 'el-icon-video-camera-solid',
-                    name: '国标管理',
-                    path: '/GBManagement',
-                    component: () => import('@/views/applicationMonitoring/GBManagement/index'),
-                    children:[
-                      {
-                        name: '设备管理',
-                        path: '/GBManagement/equipmentManagement',
-                        component: () => import('@/views/applicationMonitoring/GBManagement/equipmentManagement'),
-                      },
-                      {
-                        name: '设备通道管理',
-                        path: '/GBManagement/channelManagement',
-                        component: () => import('@/views/applicationMonitoring/GBManagement/channelManagement'),
-                      },
-                    ]
-                  }
-                  let user = {
-                        icon: 'el-icon-user-solid',
-                        name: '用户管理',
-                        path: '/userManagement/index',
-                        component: () => import('@/views/userManagement/index'),
-                  }
+                  // let aa = {
+                  //   icon: 'el-icon-s-claim',
+                  //   name: '标注平台',
+                  //   path: '/annotationPlatform',
+                  //   component: () => import('@/views/annotationPlatform/index'),
+                  //   children: [
+                  //     {
+                  //       component: () => import('@/views/annotationPlatform/projectManagement'),
+                  //       name: '项目管理',
+                  //       path: '/annotationPlatform/projectManagement'
+                  //     },
+                  //     {
+                  //       component: () => import('@/views/annotationPlatform/projectManagement/projectDetail'),
+                  //       name: '项目详情',
+                  //       path: '/annotationPlatform/projectManagement/projectDetail',
+                  //       meta: {
+                  //         hideMenu: true
+                  //       }
+                  //     },
+                  //     {
+                  //       component: () => import('@/views/annotationPlatform/annotationGroupManagement'),
+                  //       name: '标注组管理',
+                  //       path: '/annotationPlatform/annotationGroupManagement'
+                  //     },
+                  //     {
+                  //       component: () => import('@/views/annotationPlatform/teamManagement'),
+                  //       name: '团队管理',
+                  //       path: '/annotationPlatform/teamManagement'
+                  //     },
+                  //     {
+                  //       component: () => import('@/views/annotationPlatform/teamManagement/teamDetail'),
+                  //       name: '团队详情',
+                  //       path: '/annotationPlatform/teamManagement/teamDetail',
+                  //       meta: {
+                  //         hideMenu: true
+                  //       }
+                  //     },
+                  //     {
+                  //       component: () => import('@/views/annotationPlatform/statisticsPage'),
+                  //       name: '统计页面',
+                  //       path: '/annotationPlatform/statisticsPage'
+                  //     },
+                  //     {
+                  //       component: () => import('@/views/annotationPlatform/incrementalRraining'),
+                  //       name: '增量训练',
+                  //       path: '/annotationPlatform/incrementalRraining'
+                  //     },
+                  //     {
+                  //       component: () => import('@/views/annotationPlatform/markTool/annotate'),
+                  //       name: '目标检测',
+                  //       path: '/annotationPlatform/projectManagement/markTool/annotate',
+                  //       meta: {
+                  //         noPadding: true,
+                  //         hideMenu: true
+                  //       }
+                  //     },
+                  //     {
+                  //       component: () => import('@/views/annotationPlatform/markTool/classifyBatch'),
+                  //       name: '图像分类-批量',
+                  //       path: '/annotationPlatform/projectManagement/markTool/classifyBatch',
+                  //       meta: {
+                  //         noPadding: true,
+                  //         hideMenu: true
+                  //       }
+                  //     },
+                  //     {
+                  //       component: () => import('@/views/annotationPlatform/markTool/classify'),
+                  //       name: '图像分类',
+                  //       path: '/annotationPlatform/projectManagement/markTool/classify',
+                  //       meta: {
+                  //         noPadding: true,
+                  //         hideMenu: true
+                  //       }
+                  //     },
+                  //     {
+                  //       component: () => import('@/views/annotationPlatform/markTool/annotate'),
+                  //       name: 'ocr',
+                  //       path: '/annotationPlatform/markTool/ocr',
+                  //       meta: {
+                  //         noPadding: true,
+                  //         hideMenu: true
+                  //       }
+                  //     },
+                  //     {
+                  //       component: () => import('@/views/annotationPlatform/markTool/incrementalRraining'),
+                  //       name: '增量训练',
+                  //       path: '/annotationPlatform/markTool/incrementalRraining',
+                  //       meta: {
+                  //         noPadding: true,
+                  //         hideMenu: true
+                  //       }
+                  //     }
+                  //   ]
+                  // }
                 sessionStorage.setItem('menuTree', JSON.stringify(res.data));
                 // 过滤动态路由菜单
                 let menu = fnAddDynamicMenuRoutes(r);
-                menu.push(obj,aa,gb,user)
+                // menu.push(obj,aa,gb,user)
                 if(menu.length){
                   // routers.options.routes[0].redirect = menu[0].path
                   menu.forEach(element => {
