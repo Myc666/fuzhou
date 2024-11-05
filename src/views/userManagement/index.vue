@@ -33,7 +33,7 @@
               </el-table-column>
               <el-table-column align="center" label="操作" width="80">
                 <template slot-scope="scope">
-                    <el-button type="text" v-if="scope.row.hasAccount" @click="accessFun(scope.row)">接入</el-button>
+                    <el-button type="text" @click="accessFun(scope.row)">接入</el-button>
                 </template>
               </el-table-column>
             </el-table>
