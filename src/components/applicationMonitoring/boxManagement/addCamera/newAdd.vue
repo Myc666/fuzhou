@@ -118,7 +118,7 @@
                             </el-select>
                             <div class="tip-item">控制现场音柱播放警报音频</div>
                         </el-form-item>
-                        <el-form-item label="选择分组" v-if="pageType == 'channel'" prop="locationId">
+                        <el-form-item label="关联计算资源" v-if="pageType == 'channel'" prop="locationId">
                             <el-select v-model="detail.locationId" clearable placeholder="请选择">
                                 <el-option
                                 v-for="item in groupingOptions"
