@@ -66,7 +66,7 @@ export default {
                 label: 'deptName'
             },
             deptCode:'',
-            dataSource:[{}],
+            dataSource:[],
             loading:false,
             drawer:false,
             direction: 'rtl',

@@ -56,7 +56,7 @@ export default {
                 total: 0,
             },
             loading: false,
-            dataSource: [{}],
+            dataSource: [],
             columns: Object.freeze([
                 {
                     key: "deviceId",
