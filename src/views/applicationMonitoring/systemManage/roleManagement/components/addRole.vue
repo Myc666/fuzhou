@@ -3,7 +3,7 @@
         <el-form ref="form" :model="params" :rules="rules" label-width="80px">
             <el-form-item label="角色编码" prop="nameEn">
                 <el-input v-model="params.nameEn" :disabled="pageType=='view'"></el-input>
-                <div style="font-size: 12px;color: #939393;">请输入4至26位字符，确保仅包含小写英文字母与数字，不包含任何特殊符号。</div>
+                <!-- <div style="font-size: 12px;color: #939393;">请输入4至26位字符，确保仅包含小写英文字母与数字，不包含任何特殊符号。</div> -->
             </el-form-item>
             <el-form-item label="角色名称" prop="nameCh">
                 <el-input v-model="params.nameCh" :disabled="pageType=='view'"></el-input>
@@ -23,7 +23,7 @@
               <el-checkbox-group v-model="params.locationIds">
                 <div v-for="(item,inx) in locationList" :key="inx">
                   <div style="font-size: 14px;" v-if="item.locationList.length>0">{{ item.name }}</div>
-                  <el-checkbox v-for="(items,index) in item.locationList" :label="items.id" :disabled="pageType=='view'">{{ items.name }}</el-checkbox>
+                  <el-checkbox v-for="items in item.locationList" :label="items.id" :key="items.id" :disabled="pageType=='view'">{{ items.name }}</el-checkbox>
                 </div>
             </el-checkbox-group>
             </el-form-item>
@@ -76,19 +76,20 @@ export default {
           { required: true, message: "请输入角色编码", trigger: "blur" },
           {
             validator: function(rule, value, callback) {
-                const regex = /^[a-z0-9]{4,26}$/;
-                if (!regex.test(value)) {
-                    callback(new Error('请输入正确格式的角色编码'));
-                } else {
-                    callback();
-                }
+                // const regex = /^[a-z0-9]{4,26}$/;
+                // if (!regex.test(value)) {
+                //     callback(new Error('请输入正确格式的角色编码'));
+                // } else {
+                //     callback();
+                // }
+                callback()
             },
             trigger: 'blur',
           },
         ],
         nameCh: [{ required: true, message: "请输入角色名称", trigger: "blur" }],
         menusIds: [{ required: true, message: "请选择关联菜单", trigger: "change" }],
-        locationIds: [{ required: true, message: "请选择数据", trigger: "change" }],
+        // locationIds: [{ required: true, message: "请选择数据", trigger: "change" }],
       },
       locationList:[],
     };
