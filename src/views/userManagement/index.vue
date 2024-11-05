@@ -31,18 +31,23 @@
                     {{ scope.row.hasAccount?'是':'否' }}
                 </template>
               </el-table-column>
+              <el-table-column align="center" label="操作" width="80">
+                <template slot-scope="scope">
+                    <el-button type="text" v-if="scope.row.hasAccount" @click="accessFun(scope.row)">接入</el-button>
+                </template>
+              </el-table-column>
             </el-table>
         </div>
 
         <!-- 新增用户 -->
         <el-drawer
-            :title="title"
+            title="新增"
             :visible.sync="drawer"
             :wrapperClosable="false"
             :close-on-press-escape="false"
             :direction="direction"
             :before-close="handleClose">
-            <UserAdd v-if="drawer" @close="handleClose"/>
+            <UserAdd v-if="drawer" :empName="empName" pageType="access" @close="handleClose"/>
         </el-drawer>
     </div>
 </template>
@@ -61,10 +66,11 @@ export default {
                 label: 'deptName'
             },
             deptCode:'',
-            dataSource:[],
+            dataSource:[{}],
             loading:false,
             drawer:false,
             direction: 'rtl',
+            empName:'',
         };
     },
     created() {
@@ -99,8 +105,13 @@ export default {
             this.drawer = true;
         },
         handleClose() {
+            this.empName = ''
             this.drawer = false;
             this.getTable();
+        },
+        accessFun(row){
+            this.empName = row.empName;
+            this.drawer = true;
         }
     },
 };

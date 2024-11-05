@@ -1,18 +1,34 @@
 <template>
     <div class="user-add-cont">
         <el-form ref="form" :model="params" :rules="rules" label-width="100px">
-            <el-form-item label="姓名" prop="name">
-                <el-input v-model="params.name"></el-input>
-            </el-form-item>
-            <el-form-item label="所属组织" prop="departId">
-                <el-cascader
-                    v-model="params.departId"
-                    :options="depList"
-                    :props="{ value: 'deptCode', label: 'deptName',checkStrictly: true }"
-                    :show-all-levels="false"
-                    clearable>
-                </el-cascader>
-            </el-form-item>
+            <div v-if="pageType != 'access'">
+                <el-form-item label="员工名称" prop="name">
+                    <el-input v-model="params.name"></el-input>
+                </el-form-item>
+                <el-form-item label="所属组织" prop="departId">
+                    <el-cascader
+                        v-model="params.departId"
+                        :options="depList"
+                        :props="{ value: 'deptCode', label: 'deptName',checkStrictly: true }"
+                        :show-all-levels="false"
+                        clearable>
+                    </el-cascader>
+                </el-form-item>
+            </div>
+            <div v-else>
+                <el-form-item label="员工名称">
+                    {{ empName }}
+                </el-form-item>
+                <el-form-item label="所属组织" prop="departId">
+                    <el-cascader
+                        v-model="params.departId"
+                        :options="depList"
+                        :props="{ value: 'id', label: 'name',checkStrictly: true }"
+                        :show-all-levels="false"
+                        clearable>
+                    </el-cascader>
+                </el-form-item>
+            </div>
             <el-form-item label="所属角色" prop="roleIds">
               <el-select
                 style="width: 100%"
@@ -43,10 +59,15 @@
 </template>
 <script>
 import { listData } from "../../applicationMonitoring/systemManage/roleManagement/api"
+import { listTree } from "../../applicationMonitoring/systemManage/organizationalManagement/api"
 import { deptTree,saveIvUser } from "../api"
 export default {
     props:{
-        currentId:{
+        pageType:{
+            type:String,
+            default:'',
+        },
+        empName:{
             type:String,
             default:'',
         },
@@ -84,9 +105,16 @@ export default {
         },
         // 获取部门树
         async getTree(){
-            const res = await deptTree();
-            if(res.data&&res.data.length>0){
-                this.depList = this.getData(res.data);
+            if(this.pageType == 'access'){
+                const res = await listTree();
+                if(res.data&&res.data.length>0){
+                    this.depList = this.getData(res.data);
+                }
+            }else{
+                const res = await deptTree();
+                if(res.data&&res.data.length>0){
+                    this.depList = this.getData(res.data);
+                }
             }
         },
         getData(data) {
