@@ -47,7 +47,7 @@
             :close-on-press-escape="false"
             :direction="direction"
             :before-close="handleClose">
-            <UserAdd v-if="drawer" :empName="empName" pageType="access" @close="handleClose"/>
+            <UserAdd v-if="drawer" :empName="empName" :empNo="empNo" pageType="access" @close="handleClose"/>
         </el-drawer>
     </div>
 </template>
@@ -71,6 +71,7 @@ export default {
             drawer:false,
             direction: 'rtl',
             empName:'',
+            empNo:''
         };
     },
     created() {
@@ -111,6 +112,7 @@ export default {
         },
         accessFun(row){
             this.empName = row.empName;
+            this.empNo = row.empNo;
             this.drawer = true;
         }
     },

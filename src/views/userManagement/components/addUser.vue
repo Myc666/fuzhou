@@ -71,6 +71,10 @@ export default {
             type:String,
             default:'',
         },
+        empNo:{
+            type:String,
+            default:''
+        }
     },
     data() {
         return {
@@ -137,6 +141,9 @@ export default {
                         state: this.params.state,
                         departId: this.params.departId?this.params.departId[len]:'',
                         roleIds: this.params.roleIds?this.params.roleIds.split(","):'',
+                    }
+                    if(this.pageType == 'access'){
+                        obj.empNo = this.empNo
                     }
                     const res = await saveIvUser(obj);
                     this.$message.success("保存成功")
