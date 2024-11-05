@@ -118,6 +118,16 @@
                             </el-select>
                             <div class="tip-item">控制现场音柱播放警报音频</div>
                         </el-form-item>
+                        <el-form-item label="选择分组" v-if="pageType == 'channel'" prop="locationId">
+                            <el-select v-model="detail.locationId" clearable placeholder="请选择">
+                                <el-option
+                                v-for="item in groupingOptions"
+                                :key="item.id"
+                                :label="item.ipAddr"
+                                :value="item.id">
+                                </el-option>
+                            </el-select>
+                            </el-form-item>
                     </div>
                     <div class="camera-right">
                         <el-form-item style="display: flex;flex-direction: column;" prop="algorithmvos">
@@ -273,6 +283,7 @@
     takePhoto,
   } from "@/api/applicationMonitoring/cameraManagement";
   import { listData } from "@/api/applicationMonitoring/soundColumnManagement"
+  import { listPage } from '@/api/applicationMonitoring/casketManagement'
   export default {
     components: {
         MarkDetail,
@@ -291,6 +302,10 @@
         channelObj:{
             type: Object,
             default: () => {},
+        },
+        pageType:{
+            type:String,
+            default:''
         }
     },
     data() {
@@ -327,6 +342,9 @@
                 alarmInterval:[
                     { required: true, message: '请输入告警间隔', trigger: 'blur' },
                 ],
+                locationId:[
+                    { required: true, message: '请选择关联算法服务', trigger: 'change' },
+                ]
             },
             alarmTimeList:[],
             timeVisible:false,
@@ -334,6 +352,7 @@
             isHide:true,
             dataVisible:false,
             isError:false,
+            groupingOptions:[]
         };
     },
     async created() {
@@ -341,13 +360,23 @@
         if (this.currentId) {
             await this.getListDataDetail();
         }
-        if(JSON.stringify(this.channelObj) != "{}"){
+        if(this.pageType == "channel"){
             this.$set(this.detail, 'rtspUrl', this.channelObj.rtspUrl);
             this.$set(this.detail, 'channelId', this.channelObj.channelId);
+            this.getTable();
         }
         this.getSoundColumnList();
     },
     methods: {
+        // 获取盒子列表
+        async getTable(){
+            let obj = { 
+                limit: 999,
+                page: 1,
+            }
+            const { data } = await listPage(obj)
+            this.groupingOptions = data
+        },
         // 获取图片高度
         getHeight(num){
             if(num){
