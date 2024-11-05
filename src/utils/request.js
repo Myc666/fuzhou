@@ -40,7 +40,9 @@ service.interceptors.response.use(
       Message.error(res.data.msg);
       return Promise.reject(res.data.msg);
     } else {
-      Message.error(res.data.msg);
+      if(res.config.url.indexOf('ivLoginUser') ==-1){
+        Message.error(res.data.msg);
+      }
       return Promise.reject(res.data.msg);
     }
   },

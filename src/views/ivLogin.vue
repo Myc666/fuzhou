@@ -1,6 +1,9 @@
 <template>
-    <div style="width: 100%;height: 100vh;" v-loading="loading">
-        
+    <div style="width: 100%;height: 100vh;display: flex;align-items: center;justify-content: center;" v-loading="loading">
+        <div v-if="errorTip" style="font-size: 18px;">
+            <img src="@/assets/images/error-icon.png" style="width: 300px;"/>
+            <div style="text-align: center;">{{ errorTip }}</div>
+        </div>
     </div>
 </template>
 <script>
@@ -10,6 +13,7 @@ export default {
     data() {
         return {
             loading:true,
+            errorTip:'',
         };
     },
     created() {
@@ -19,9 +23,13 @@ export default {
         loginFun() {
             let isUser = this.$route.query.ivUser || ''
             request.post('/ivLoginUser?ivUser=' + isUser).then(({data}) => {
+                this.loading = false;
                 Cookies.set(data.tokenName, data.tokenValue);
                 this.$store.state.cookies = data.tokenValue;
                 this.$router.push({ path: '/bigScreen', query: { type: '1' }});
+            }).catch(res=>{
+                this.loading = false;
+                this.errorTip = res;
             })
         },
     },
