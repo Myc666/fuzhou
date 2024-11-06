@@ -203,6 +203,7 @@ export default {
       this.$store.state.userInfo = this.$store.state.menu = null;
       this.$store.state.cookies = "";
       Cookies.remove("X-Token");
+      Cookies.remove("roleCodes");
       localStorage.removeItem('nickname')
       localStorage.removeItem('pw')
       sessionStorage.removeItem('VocieSwitch')

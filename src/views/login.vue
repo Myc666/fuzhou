@@ -393,6 +393,7 @@ export default {
       }
       const data = await login(this.params);
       Cookies.set(data.data.tokenName, data.data.tokenValue);
+      Cookies.set('roleCodes', data.data.roleCodes.toString());
       this.$store.state.cookies = data.data.tokenValue;
       this.$message.success("登录成功");
       //this.$router.push("/");

@@ -28,7 +28,7 @@
       <el-table
         :data="tableData"
         border
-        style="width: 100%"
+        style="width: 100%;margin-top: 16px;"
         v-loading="loading"
       >
         <el-table-column align="center" label="所属团队">

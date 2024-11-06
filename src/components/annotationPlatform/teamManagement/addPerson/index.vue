@@ -75,7 +75,9 @@ export default {
   methods: {
     async getRoleList() {
       const data = await getRoleList();
-      this.roleOptions = data.data;
+      this.roleOptions = data.data.filter(item=>{
+        return item.nameEn =='admin' || item.nameEn =='ap_admin' || item.nameEn =='ap_mark' || item.nameEn =='ap_review'
+      });
     },
     // 保存账号
     saveBatchPerson() {

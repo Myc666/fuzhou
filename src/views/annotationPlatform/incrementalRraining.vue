@@ -13,7 +13,7 @@
       </div>
     </div>
     <div class="ai_table">
-      <el-table :data="tableData" border style="width: 100%" v-loading="loading">
+      <el-table :data="tableData" border style="width: 100%;margin-top: 16px;" v-loading="loading">
         <el-table-column align="center" prop="algorithmName" label="模型名称"> </el-table-column>
         <el-table-column align="center" prop="imageNum" label="图片数量"> </el-table-column>
         <el-table-column align="center" prop="cameraName" label="摄像头名称"> </el-table-column>

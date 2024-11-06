@@ -24,7 +24,7 @@
       </div>
     </div>
     <div>
-      <div class="ai_table">
+      <div class="ai_table" style="margin-top: 16px;">
         <el-row :gutter="20">
           <el-col :span="12">
             <Chart1 class="chart" :chartData="chartData.imageVOList" />
@@ -93,7 +93,7 @@ export default {
   },
   computed:{
     isexport() {
-      if (Cookies.get("powerId").search("10001") > -1) {
+      if (Cookies.get("roleCodes").search("10001") > -1) {
         return true;
       }else{
         return false

@@ -48,7 +48,7 @@
         >
       </div>
     </div>
-    <div class="ai_table">
+    <div class="ai_table" style="margin-top: 16px;">
       <el-table
         :data="tableData"
         border
@@ -198,7 +198,6 @@ export default {
       total: 0,
       currentId: 0,
       currentProjectType:null,
-      powerId: Cookies.get("powerId"),
     };
   },
   async created() {
@@ -206,21 +205,21 @@ export default {
   },
   computed: {
     isMark() {
-      if (Cookies.get("powerId").search("10003") > -1) {
+      if (Cookies.get("roleCodes").search("ap_mark") > -1) {
         return false;
       }else{
         return true
       }
     },
     isCheck() {
-      if (Cookies.get("powerId").search("10004") > -1) {
+      if (Cookies.get("roleCodes").search("ap_review") > -1) {
         return false;
       }else{
         return true
       }
     },
     isexport() {
-      if (Cookies.get("powerId").search("10000") > -1 || Cookies.get("powerId").search("10001") > -1) {
+      if (Cookies.get("roleCodes").search("admin") > -1 || Cookies.get("roleCodes").search("ap_admin") > -1) {
         return false;
       }else{
         return true
@@ -229,21 +228,21 @@ export default {
     isDel() {
 
       return (item)=>{
-        if(Cookies.get("powerId").search("10000") > -1){
+        if(Cookies.get("roleCodes").search("admin") > -1){
           if(item.status == 99 || item.reviewNum == 0){
             return false
           } else {
             return true
           }
         }
-        if(Cookies.get("powerId").search("10001") > -1){
+        if(Cookies.get("roleCodes").search("ap_admin") > -1){
           if(item.reviewNum == 0){
             return false
           } else {
             return true
           }
         }
-        if(Cookies.get("powerId").search("10000") > -1 || Cookies.get("powerId").search("10001") > -1){
+        if(Cookies.get("roleCodes").search("admin") > -1 || Cookies.get("roleCodes").search("ap_admin") > -1){
           return false
         }else {
           return true
