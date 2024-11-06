@@ -137,9 +137,10 @@ export default {
         }
         const res = await listData(form);
         if(res.data&&res.data.length>0){
-            this.menuOptions = res.data.filter(item=>{
-              return item.name != '系统管理'
-            });
+            this.menuOptions = res.data
+            // .filter(item=>{
+            //   return item.name != '系统管理'
+            // });
             if(this.currentId){
                 this.checkedKeys=[];
                 this.getCheck(res.data);
