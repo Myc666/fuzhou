@@ -132,7 +132,7 @@ export default {
         secret_adm:()=>{
             let role =  Cookies.get("roleCodes")
             if(role&&role.length>0){
-                return role.includes('secret_adm') 
+                return role.includes('secret_adm')
             }else{
                 return true;
             }
@@ -232,7 +232,7 @@ export default {
                         password: this.params.password,
                         state: this.params.state,
                         departId: this.params.departId?this.params.departId[len]:'',
-                        roleIds: this.params.roleIds?this.params.roleIds.split(","):'',
+                        roleIds: this.params.roleIds?this.params.roleIds.split(","):[],
                         passTemplateId:this.params.passTemplateId
                     }
                     if(this.currentId){
@@ -265,4 +265,3 @@ export default {
     }
 }
 </style>
-  
