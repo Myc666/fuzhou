@@ -1,14 +1,14 @@
 <template>
     <div>
         <el-form ref="form" :model="params" :rules="rules" label-width="80px">
-            <el-form-item label="角色编码" prop="nameEn">
+            <el-form-item label="角色编码" prop="nameEn" v-if="rolesData">
                 <el-input v-model="params.nameEn" :disabled="pageType=='view'"></el-input>
                 <!-- <div style="font-size: 12px;color: #939393;">请输入4至26位字符，确保仅包含小写英文字母与数字，不包含任何特殊符号。</div> -->
             </el-form-item>
-            <el-form-item label="角色名称" prop="nameCh">
+            <el-form-item label="角色名称" prop="nameCh" v-if="rolesData">
                 <el-input v-model="params.nameCh" :disabled="pageType=='view'"></el-input>
             </el-form-item>
-            <el-form-item label="关联菜单" prop="menusIds">
+            <el-form-item label="关联菜单" prop="menusIds" v-if="secret_adm">
                 <el-tree
                 ref="tree"
                 :data="menuOptions"
@@ -19,7 +19,7 @@
                 :props="defaultProps">
                 </el-tree>
             </el-form-item>
-            <el-form-item label="数据管理" prop="locationIds">
+            <el-form-item label="数据管理" prop="locationIds" v-if="secret_adm">
               <el-checkbox-group v-model="params.locationIds">
                 <div v-for="(item,inx) in locationList" :key="inx">
                   <div style="font-size: 14px;" v-if="item.locationList.length>0">{{ item.name }}</div>
@@ -43,6 +43,7 @@
 <script>
 import { saveData,detailData,deleteData,locationData } from "../api"
 import { listData } from "../../menuManagement/api"
+import Cookies from 'js-cookie';
 export default {
   props: {
     currentId: {
@@ -94,7 +95,26 @@ export default {
       locationList:[],
     };
   },
+  computed:{
+    rolesData:()=>{
+      let role =  Cookies.get("roleCodes")
+      if(role&&role.length>0){
+        return (role.includes('admin') || role.includes('sys_user'))
+      }else{
+        return true;
+      }
+    },
+    secret_adm:()=>{
+      let role =  Cookies.get("roleCodes")
+      if(role&&role.length>0){
+        return role.includes('secret_adm') 
+      }else{
+        return true;
+      }
+    }
+  },
   async created() {
+    // console.log(this.rolesData(),"==========")
     this.getMenuList();
     this.getLocation();
     if (this.currentId) {//编辑
@@ -102,6 +122,10 @@ export default {
     }
   },
   methods: {
+    // rolesData(){
+    //   let role =  Cookies.get("roleCodes").length>0?Cookies.get("roleCodes").toString():'';
+    //   return (role.includes('admin') || role.includes('sys_user'))
+    // },
     // 获取角色区域数据
     async getLocation(){
       let form = new FormData();
