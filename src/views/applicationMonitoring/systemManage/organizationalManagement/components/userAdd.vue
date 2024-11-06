@@ -10,6 +10,7 @@
             </el-form-item>
             <el-form-item label="所属组织" prop="departId">
                 <el-cascader
+                    style="width: 100%;"
                     v-model="params.departId"
                     :options="depList"
                     :props="{ value: 'id', label: 'name',checkStrictly: true }"
@@ -31,6 +32,21 @@
                   :value="item.id"
                 ></el-option>
               </el-select>
+            </el-form-item>
+            <el-form-item label="人员密级" prop="passTemplateId">
+                <el-select
+                    style="width: 100%"
+                    v-model="params.passTemplateId"
+                    placeholder="请选择"
+                    clearable
+                >
+                    <el-option
+                    v-for="(item, index) in passTemplateList"
+                    :key="index"
+                    :label="item.name"
+                    :value="item.id"
+                    ></el-option>
+                </el-select>
             </el-form-item>
             <div class="title">账号信息</div>
             <el-form-item  label="账号名称" prop="account">
@@ -55,7 +71,7 @@
 </template>
 <script>
 import { listData } from "../../roleManagement/api"
-import { listTree,saveAccount,updateAccount,accountDetail } from "../api"
+import { listTree,saveAccount,updateAccount,accountDetail,templateList } from "../api"
 export default {
     props:{
         currentId:{
@@ -75,6 +91,7 @@ export default {
                 state: null,
                 departId: [],
                 roleIds: "",
+                passTemplateId:'',
             },
             rules: {
                 name: [{ required: true, message: "请输入人员名称", trigger: "blur" }],
@@ -97,17 +114,25 @@ export default {
                 state: [{ required: true, message: "请选择状态", trigger: "change" }],
                 departId: [{ required: true, message: "请选择所属组织", trigger: "change" }],
                 roleIds: [{ required: true, message: "请选择所属角色", trigger: "change" }],
+                passTemplateId: [{ required: true, message: "请选择密码模板", trigger: "blur" }],
             },
+            passTemplateList:[],
         };
     },
     async created() {
         await this.getRole();
         await this.getTree();
+        await this.getTemplate();
         if(this.currentId){
             await this.getDetail();
         }
     },
     methods: {
+        // 获取密码模板
+        async getTemplate(){
+            const res = await templateList();
+            this.passTemplateList = res.data
+        },
          // 获取详情
         async getDetail() {
             let formData = new FormData();
@@ -128,6 +153,7 @@ export default {
                 state: res.data.state,
                 departId: this.getFathersById(res.data.departId,this.depList),
                 roleIds: str,
+                passTemplateId:res.data.passTemplateId
             });
         },
         // 上级部门回显
@@ -188,6 +214,7 @@ export default {
                         state: this.params.state,
                         departId: this.params.departId?this.params.departId[len]:'',
                         roleIds: this.params.roleIds?this.params.roleIds.split(","):'',
+                        passTemplateId:this.params.passTemplateId
                     }
                     if(this.currentId){
                         obj.id = this.params.id;

@@ -105,3 +105,11 @@ export function updatePassword(data) {
         data
     })
 }
+
+export function templateList(data) {
+    return request({
+        url: '/ap/pass/template/listData',
+        method: 'post',
+        data
+    })
+}
