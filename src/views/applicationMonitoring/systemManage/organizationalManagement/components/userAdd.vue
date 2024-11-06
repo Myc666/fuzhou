@@ -3,12 +3,12 @@
         <el-form ref="form" :model="params" :rules="rules" label-width="100px">
             <div class="title">用户信息</div>
             <el-form-item label="姓名" prop="name">
-                <el-input v-model="params.name"></el-input>
+                <el-input v-model="params.name" :disabled="!rolesData"></el-input>
             </el-form-item>
-            <el-form-item label="手机号" prop="phone">
+            <el-form-item label="手机号" prop="phone" :disabled="!rolesData">
               <el-input v-model="params.phone"></el-input>
             </el-form-item>
-            <el-form-item label="所属组织" prop="departId">
+            <el-form-item label="所属组织" prop="departId" v-if="rolesData">
                 <el-cascader
                     style="width: 100%;"
                     v-model="params.departId"
@@ -18,7 +18,7 @@
                     clearable>
                 </el-cascader>
             </el-form-item>
-            <el-form-item label="所属角色" prop="roleIds">
+            <el-form-item label="所属角色" v-if="secret_adm" prop="roleIds">
               <el-select
                 style="width: 100%"
                 v-model="params.roleIds"
@@ -33,7 +33,7 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="人员密级" prop="passTemplateId">
+            <el-form-item label="人员密级" v-if="secret_adm" prop="passTemplateId">
                 <el-select
                     style="width: 100%"
                     v-model="params.passTemplateId"
@@ -50,13 +50,13 @@
             </el-form-item>
             <div class="title">账号信息</div>
             <el-form-item  label="账号名称" prop="account">
-                <el-input v-model="params.account"></el-input>
+                <el-input v-model="params.account" :disabled="!rolesData"></el-input>
             </el-form-item>
-            <el-form-item  label="账号密码" prop="password" v-if="!currentId">
+            <el-form-item  label="账号密码" prop="password" v-if="!currentId || rolesData">
                 <el-input v-model="params.password"></el-input>
                 <div style="font-size: 12px; color: #939393;">8~26个字符,使用大小写字母、数字和特殊字符的组合</div>
             </el-form-item>
-            <el-form-item label="启用状态" prop="state">
+            <el-form-item label="启用状态" prop="state" v-if="rolesData">
               <el-radio-group v-model="params.state">
                 <el-radio :label="0">是</el-radio>
                 <el-radio :label="1">否</el-radio>
@@ -72,6 +72,7 @@
 <script>
 import { listData } from "../../roleManagement/api"
 import { listTree,saveAccount,updateAccount,accountDetail,templateList } from "../api"
+import Cookies from 'js-cookie';
 export default {
     props:{
         currentId:{
@@ -118,6 +119,24 @@ export default {
             },
             passTemplateList:[],
         };
+    },
+    computed:{
+        rolesData:()=>{
+            let role =  Cookies.get("roleCodes")
+            if(role&&role.length>0){
+                return (role.includes('admin') || role.includes('sys_user'))
+            }else{
+                return true;
+            }
+        },
+        secret_adm:()=>{
+            let role =  Cookies.get("roleCodes")
+            if(role&&role.length>0){
+                return role.includes('secret_adm') 
+            }else{
+                return true;
+            }
+        }
     },
     async created() {
         await this.getRole();
