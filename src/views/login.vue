@@ -80,8 +80,8 @@
                 >
                   <i slot="prefix" class="el-input__icon el-icon-lock" />
                   <i slot="suffix" @click="changeIconState()">
-                    <img v-if="showPassword" src="@/assets/images/login/open.png" style="width: 26px;margin-top: 10px;"/>
-                    <img v-else src="@/assets/images/login/close.png" style="width: 32px;margin-top: 10px;"/>
+                    <img v-if="showPassword" src="@/assets/images/login/open.png" class="open-icon"/>
+                    <img v-else src="@/assets/images/login/close.png" class="close-icon"/>
                   </i>
                 </el-input>
               </el-form-item>
@@ -541,6 +541,14 @@ export default {
 };
 </script>
 <style scoped lang="scss">
+.close-icon{
+  width: px2rem(32px);
+  margin-top: px2rem(10px);
+}
+.open-icon{
+  width: px2rem(26px);
+  margin-top: px2rem(10px);
+}
 .logs{
   width: px2rem(190px);
   height: px2rem(42px);
