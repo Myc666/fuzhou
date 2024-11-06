@@ -114,7 +114,6 @@ export default {
     }
   },
   async created() {
-    // console.log(this.rolesData(),"==========")
     this.getMenuList();
     this.getLocation();
     if (this.currentId) {//编辑
@@ -122,10 +121,6 @@ export default {
     }
   },
   methods: {
-    // rolesData(){
-    //   let role =  Cookies.get("roleCodes").length>0?Cookies.get("roleCodes").toString():'';
-    //   return (role.includes('admin') || role.includes('sys_user'))
-    // },
     // 获取角色区域数据
     async getLocation(){
       let form = new FormData();
