@@ -110,19 +110,19 @@ export default {
       immediate: true,
       deep: true,
       handler(to) {
-        let x = to.path.indexOf("/");
-        for (let i = 0; i < 2; i++) {
-          x = to.path.indexOf("/", x + 1);
-        }
-        if (x > -1) {
-          this.activeIndex = to.path.substring(0, x);
-        } else {
+        // let x = to.path.indexOf("/");
+        // for (let i = 0; i < 2; i++) {
+        //   x = to.path.indexOf("/", x + 1);
+        // }
+        // if (x > -1) {
+        //   this.activeIndex = to.path.substring(0, x);
+        // } else {
           if(to.name=="算法详情"){
             this.activeIndex = "/algorithmManagement/modelTesting";
           }else{
             this.activeIndex = to.path;
           }
-        }
+        // }
         
       },
     },
