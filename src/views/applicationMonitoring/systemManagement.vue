@@ -58,6 +58,7 @@ export default {
         playUrl: "",
         pushIp: "",
         pushPort: "",
+        loginControl:"",
       },
       form2: {
         reportPushUrl: "",
