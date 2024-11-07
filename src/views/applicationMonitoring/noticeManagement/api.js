@@ -40,3 +40,21 @@ export function saveSoundColumnConfig(params) {
     params
   })
 }
+
+// 获取算法列表
+export function listData(data) {
+  return request({
+    url: '/algorithm/listData',
+    method: 'post',
+    data
+  })
+}
+
+// 保存选择算法
+export function algorithmPush(data) {
+  return request({
+    url: '/algorithm/third/push',
+    method: 'post',
+    data
+  })
+}

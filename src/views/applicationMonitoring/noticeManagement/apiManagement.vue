@@ -83,6 +83,26 @@
         </el-table> -->
         <div style="cursor: pointer;color: #EB3A2F;" @click="DownloadFun()">示例文档下载</div>
       </el-form-item>
+      <el-divider></el-divider>
+      <el-form-item label="是否推送告警">
+        <Tables
+          :pagination="false"
+          :columns="columns"
+          :dataSource="dataSource"
+          :loading="loading"
+          :rowSelection="rowSelection"
+          :selections.sync="selectedRowKeys"
+        >
+          <template slot="index" slot-scope="{ $index }">
+            {{ $index + 1 }}
+          </template>
+        </Tables>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="saveFun()"
+          >保存</el-button
+        >
+      </el-form-item>
     </el-form>
   </div>
 </template>
@@ -95,8 +115,12 @@ import {
 import {
   getInfo,
 } from "@/api/applicationMonitoring/systemManagement";
-import { saveAlarmPushConfig } from "./api"
+import { saveAlarmPushConfig,listData,algorithmPush  } from "./api"
+import Tables from "@/components/Table/index.vue";
 export default {
+  components:{
+    Tables
+  },
   props: {
     
   },
@@ -200,14 +224,84 @@ export default {
           type:'string',
           remarks:'',
         },
-      ]
+      ],
+      rowSelection: {
+        type: "checkbox",
+        change: (selectedRowKeys, selectedRows) => {
+          this.selectedRowKeys = selectedRowKeys;
+          this.selectedRows = selectedRows;
+        },
+      },
+      selectedRowKeys: [],
+      selectedRows: [],
+      loading: false,
+      dataSource: [],
+      columns: Object.freeze([
+        {
+          key: "avatar",
+          title: "序号",
+          align: "center",
+          slot: "index",
+          width:80,
+        },
+        {
+          key: "name",
+          title: "算法名称",
+          align: "center",
+          width:300,
+        },
+        {
+          key:'marks',
+          title: "算法描述",
+          align: "center",
+        }
+      ]),
     };
   },
   async created() {
+    await this.getALgorithmlist();
     this.getPhoneList();
     this.getInfo()
   },
   methods: {
+    // 获取算法列表
+    async getALgorithmlist(){
+      this.loading = true;
+      this.selectedRows = [];
+      this.dataSource = [];
+      const formData = new FormData();
+      formData.append("hasLocalFile", 1);
+      const res = await listData(formData);
+      let newArr = [];
+      let arrIndex = [];
+      if(res.data && res.data.length>0){
+        res.data.forEach((item,index) => {
+          if(item.pushEnabled==1){
+            newArr.push(item)
+            arrIndex.push(index)
+          }
+        });
+      }
+      this.selectedRows = newArr;
+      this.selectedRowKeys = arrIndex;
+      this.dataSource = res.data;
+      this.loading = false;
+    },
+    // 保存算法列表
+    async saveFun(){
+      console.log(this.selectedRows,"===========")
+      if(this.selectedRows.length==0){
+        this.$message.error("请选择算法");
+        return
+      }
+      let ids = [];
+      this.selectedRows.forEach(item=>{
+        ids.push(item.id)
+      })
+      const res = await algorithmPush({algorithmIds:ids});
+      this.$message.success('保存成功');
+      this.getALgorithmlist();
+    },
     DownloadFun(){
       var a = document.createElement('a') // 创建一个<a></a>标签
       a.href = '/static/third_part_data.docx' 
