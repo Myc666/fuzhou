@@ -124,7 +124,7 @@ export default {
         rolesData:()=>{
             let role =  Cookies.get("roleCodes")
             if(role&&role.length>0){
-                return (role.includes('admin') || role.includes('sys_user'))
+                return (role.includes('plat_adm') || role.includes('sys_adm'))
             }else{
                 return true;
             }

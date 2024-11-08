@@ -76,7 +76,7 @@ export default {
     async getRoleList() {
       const data = await getRoleList();
       this.roleOptions = data.data.filter(item=>{
-        return item.nameEn =='admin' || item.nameEn =='ap_admin' || item.nameEn =='ap_mark' || item.nameEn =='ap_review'
+        return item.nameEn =='plat_adm' || item.nameEn =='ap_admin' || item.nameEn =='ap_mark' || item.nameEn =='ap_review'
       });
     },
     // 保存账号

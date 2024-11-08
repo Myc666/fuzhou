@@ -172,7 +172,7 @@ export default {
   },
   computed:{
     isexport() {
-      if (Cookies.get("roleCodes").search("admin") > -1 || Cookies.get("roleCodes").search("ap_admin") > -1) {
+      if (Cookies.get("roleCodes").search("plat_adm") > -1 || Cookies.get("roleCodes").search("ap_admin") > -1) {
         return false;
       }
     }

@@ -219,7 +219,7 @@ export default {
       }
     },
     isexport() {
-      if (Cookies.get("roleCodes").search("admin") > -1 || Cookies.get("roleCodes").search("ap_admin") > -1) {
+      if (Cookies.get("roleCodes").search("plat_adm") > -1 || Cookies.get("roleCodes").search("ap_admin") > -1) {
         return false;
       }else{
         return true
@@ -228,7 +228,7 @@ export default {
     isDel() {
 
       return (item)=>{
-        if(Cookies.get("roleCodes").search("admin") > -1){
+        if(Cookies.get("roleCodes").search("plat_adm") > -1){
           if(item.status == 99 || item.reviewNum == 0){
             return false
           } else {
@@ -242,7 +242,7 @@ export default {
             return true
           }
         }
-        if(Cookies.get("roleCodes").search("admin") > -1 || Cookies.get("roleCodes").search("ap_admin") > -1){
+        if(Cookies.get("roleCodes").search("plat_adm") > -1 || Cookies.get("roleCodes").search("ap_admin") > -1){
           return false
         }else {
           return true
