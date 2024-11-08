@@ -12,7 +12,7 @@
     <div class="videoMain">
         <div v-for="(item,key) in videoArr" :key="key"  :class="{ video4: screenNum == 4, video1: screenNum == 1, video6: screenNum == 6}" ref="videobg">
             <div class="video">
-                <VideoItem :cameraId="item.id" :index="key"></VideoItem>
+                <VideoItem :cameraOptions="cameraOptions" :Id="item.id" :index="key" :ref="'video'+key"></VideoItem>
             </div>
             <div class="videoName">
                 {{ item.name }}
@@ -56,6 +56,7 @@ export default {
             xlabelArr: [],
             goToSchoolArr: [],
             pireArr: [],
+            cameraOptions:[],
         }
     },
     components: {
@@ -65,6 +66,7 @@ export default {
         nightingale,
     },
     mounted() {
+        this.getCameraListData();
         this.getActiveCameras();
         this.getCountAlgorithm7Day();
         this.getCountAlgorithmCount7Day();
@@ -74,6 +76,15 @@ export default {
         clearInterval(this.timer);
     },
     methods: {
+        // 获取摄像头列表
+        getCameraListData() {
+            request.post('/camera/listData').then(({data}) => {
+                let Arr = data.filter(item=>{
+                    return item.running == "1"
+                })
+                this.cameraOptions = Arr;
+            })
+        },
         changeSreen(num) {
             this.screenNum = num;
             this.cutSreenData(this.realVideoArr, this.screenNum);

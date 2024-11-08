@@ -1,8 +1,24 @@
 <template>
   <div class="videoItem">
-    <video v-if="cameraId" :id="'video' + index" controls autoplay muted width="100%" height="100%" :ref="'video' + index">
+    <video v-if="Id" :id="'video' + index" controls autoplay muted width="100%" height="100%" :ref="'video' + index">
     </video>
-    <div v-else style="width: 100%; text-align: center;margin-top: 25%;">
+    <div class="dropdown"  v-if="Id">
+      <el-select
+        placeholder="视频源"
+        v-model="cameraId"
+        class="head-container-input"
+        @change="changeSelect()"
+        style="width: 120px"
+      >
+        <el-option
+          v-for="(subItem, subIndex) in cameraOptions"
+          :key="subIndex"
+          :label="subItem.name"
+          :value="subItem.id"
+        ></el-option>
+      </el-select>
+    </div>
+    <div v-if="!Id" style="width: 100%; text-align: center;margin-top: 25%;">
       未接入
     </div>
   </div>
@@ -25,14 +41,29 @@ export default {
       resolutionSel: '1080p(FHD)',
       resolutionOpt: [],
       useCamera: false,
+      cameraId:'',
     };
   },
-  props: ["cameraId", "index"],
+  props: {
+    index:{
+      type:Number,
+      default:null
+    },
+    Id:{
+      type:String,
+      default:'',
+    },
+    cameraOptions:{
+      type:Array,
+      default:[]
+    },
+  },
   created() {
     let param = localStorage.getItem('playType'+this.index)
     if(param !=null){
       this.playType = param
     }
+    this.cameraId = this.Id
     const searchParams = new URL(document.location.href).searchParams;
     let type = searchParams.get('type');
     if (!['echo','push','play'].includes(type)) {
@@ -47,6 +78,10 @@ export default {
     this.stop();
   },
   methods: {
+    // 切换摄像头
+    changeSelect() {
+      this.getPlayUrl('changeSelect')
+    },
     getPlayUrl(id, index) {
       if(!this.cameraId){
         return;
@@ -222,6 +257,13 @@ export default {
 .videoItem {
   width: 100%;
   height: 100%;
+  position: relative;
+  .dropdown {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    z-index: 10;
+  }
 //   .player {
 //     width: 100%;
 //     height: 100%;
