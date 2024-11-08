@@ -21,7 +21,7 @@ export default {
     },
     methods: {
         loginFun() {
-            let isUser = this.$route.query.ivUser || ''
+            let isUser = this.$route.query['iv-user'] || ''
             request.post('/ivLoginUser?ivUser=' + isUser).then(({data}) => {
                 this.loading = false;
                 Cookies.set(data.tokenName, data.tokenValue);
