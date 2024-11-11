@@ -13,7 +13,7 @@
       <!-- 情况二：没子集的情况： -->
       <el-menu-item
         :key="item.path"
-        v-if="(!item.children || item.children.length==0) && !item.meta?.hideMenu"
+        v-if="(!item.children || item.children.length==0) && (item.meta&&!item.meta.hideMenu)"
         :index="item.path"
       >
         <i :class="item.icon"></i>

@@ -16,7 +16,7 @@
                 clearable @change="getPreview">
               </el-input-number>
             </span>
-            <span>共有图像{{ params.trainingBaseVo?.imageNum }}张</span>
+            <span>共有图像{{ params.trainingBaseVo ? params.trainingBaseVo.imageNum:'0' }}张</span>
           </div>
           <div style="color: #2099fa;">以最新生成的告警图像为1，选取图像创建范围。</div>
         </el-form-item>

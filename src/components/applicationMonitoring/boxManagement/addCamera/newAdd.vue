@@ -498,7 +498,7 @@
                 }
             });
             this.detail.algorithms = arr;
-            this.detail.locationId = this.detail.locationId ? this.detail.locationId : this.currentData?.id
+            this.detail.locationId = this.detail.locationId ? this.detail.locationId : this.currentData.id
             submitCamera(this.detail).then((data)=>{
                 this.$message.success("保存成功");
                 this.dataVisible = false;

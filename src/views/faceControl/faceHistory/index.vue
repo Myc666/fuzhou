@@ -119,12 +119,12 @@
                   </el-image>
                 </div>
                 <div class="text" style="width: 100%;" >
-                  <div   v-if="item.group?.name" @click="listByUserId(item)" class="pad-10">
+                  <div   v-if="item.group.name" @click="listByUserId(item)" class="pad-10">
                     <span class="tits">
-                      {{  item.faceUser?.name || '--' }}
+                      {{  item.faceUser.name || '--' }}
                     </span>
                     <span class="tits" style="float: right;">
-                      {{  item.group?.name || '--' }}
+                      {{  item.group.name || '--' }}
                     </span>
                   </div>
                   <div v-else class="pad-10">
@@ -134,7 +134,7 @@
 
                 </div>
                 <div class="text pad-10">
-                  <span class="tits" style="width: 130px;">{{  item.camera?.name  }}</span>
+                  <span class="tits" style="width: 130px;">{{  item.camera.name  }}</span>
 
                 </div>
                 <div class="text pad-10">

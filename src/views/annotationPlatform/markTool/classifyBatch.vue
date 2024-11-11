@@ -289,7 +289,7 @@ export default {
       let count = 0;
       for (let i = 0; i < this.imgList.length; i++) {
         const item = this.imgList[i];
-        if (!item.commit.annotations?.length) {
+        if (!item.commit.annotations.length) {
           count++;
         }
         commits.push({

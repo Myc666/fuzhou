@@ -34,7 +34,7 @@
         </el-col>
         <el-col :span="14">
           <MarkResult
-            v-if="detail.report?.id"
+            v-if="detail.report&&detail.report.id"
             :fileUrl="$common.handleStream(detail.report.id)"
             :dataList="boxList"
           />

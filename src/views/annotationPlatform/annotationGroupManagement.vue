@@ -197,7 +197,7 @@ export default {
     },
     async getGroupPersonList() {
       const data = await getGroupPersonList({
-        groupId: this.currentSelectGroup?.id,
+        groupId: this.currentSelectGroup.id,
       });
       this.personData = data.data;
     },

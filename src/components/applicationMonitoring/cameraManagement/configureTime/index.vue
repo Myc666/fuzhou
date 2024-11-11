@@ -128,7 +128,7 @@ export default {
   },
   computed: {
     addTimeTitle: function () {
-      return this.currentTimeData?.id ? "编辑告警时段" : "新增告警时段";
+      return this.currentTimeData.id ? "编辑告警时段" : "新增告警时段";
     },
   },
   async created() {

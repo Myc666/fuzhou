@@ -75,7 +75,9 @@ export default class ScoketService {
       send(data) {
         if (this.connected) {
           this.sendRetryCounnt = 0;
-          this.ws?.send(JSON.stringify(data));
+          if(this.ws){
+            this.ws.send(JSON.stringify(data));
+          }
         } else {
           this.sendRetryCounnt++;
           setTimeout(() => {
@@ -84,7 +86,9 @@ export default class ScoketService {
         }
       }
       onClose() {
-        this.ws?.close();
+        if(this.ws){
+          this.ws.close();
+        }
         this.manualClose = true;
       }
       // 心跳检测

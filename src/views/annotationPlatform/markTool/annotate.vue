@@ -258,7 +258,7 @@ export default {
   watch: {
     dataList: {
       handler(val) {
-        if (this.currentSvgData?.id) {
+        if (this.currentSvgData&&this.currentSvgData.id) {
           const data = val.find((i) => i.id == this.currentSvgData.id);
           if (!data) {
             this.currentSvgData = JSON.parse(JSON.stringify(emptySvg));

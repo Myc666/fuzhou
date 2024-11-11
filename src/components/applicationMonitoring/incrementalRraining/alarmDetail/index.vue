@@ -8,11 +8,11 @@
       @closed="closed"
     >
       <MarkResult
-        v-if="detail.report?.id"
+        v-if="detail.report&&detail.report.id"
         :fileUrl="$common.handleStream(detail.report.id)"
         :dataList="boxList"
       />
-      <div class="name">算法名称：{{ detail.algorithm?.name }}</div>
+      <div class="name">算法名称：{{ detail.algorithm?detail.algorithm.name:'' }}</div>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="auditData(1)">正确</el-button>
         <el-button type="danger" @click="auditData(2)">错误</el-button>

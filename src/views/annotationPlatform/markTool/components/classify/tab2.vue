@@ -44,7 +44,7 @@ export default {
       immediate: true,
       deep: true,
       handler(val) {
-        if (this.formData?.comment) {
+        if (this.formData.comment) {
           const formData = JSON.parse(this.formData.comment);
           Object.assign(this.form, formData);
         } else {

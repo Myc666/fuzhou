@@ -134,8 +134,8 @@
                 <el-table-column label="告警对象" prop="alarmTime">
                   <template slot-scope="scope">
                     <span>
-                      <span v-if="scope.row.group?.name">
-                        {{ scope.row.faceUser?.name }}
+                      <span v-if="scope.row.group.name">
+                        {{ scope.row.faceUser.name }}
                       </span>
                       <span v-else>陌生人</span>
 
@@ -145,7 +145,7 @@
                 <el-table-column label="所属分组" prop="alarmTime">
                   <template slot-scope="scope">
                     <span>
-                      {{ scope.row.group?.name || '--' }}
+                      {{ scope.row.group.name || '--' }}
                     </span>
                   </template>
                 </el-table-column>

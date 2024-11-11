@@ -52,8 +52,14 @@ export default {
           this.connectWebsocket();
           this.downLoadWebsocketFun();
         }else {
-          this.websocket?.close();
-          this.downLoadWebsocket?.close();
+          if(this.websocket){
+            this.websocket.close();
+          }
+          if(this.downLoadWebsocket){
+            this.downLoadWebsocket.close();
+          }
+          // this.websocket?.close();
+          // this.downLoadWebsocket?.close();
         }
       },
     },
@@ -65,7 +71,10 @@ export default {
           this.connectWebsocket();
           this.downLoadWebsocketFun();
         }else {
-          this.websocket?.close();
+          if(this.websocket){
+            this.websocket.close();
+          }
+          // this.websocket?.close();
         }
       },
     },
@@ -196,8 +205,14 @@ export default {
    
   },
   beforeDestroy() {
-    this.websocket?.close();
-    this.downLoadWebsocket?.close();
+    if(this.websocket){
+      this.websocket.close();
+    }
+    if(this.downLoadWebsocket){
+      this.downLoadWebsocket.close();
+    }
+    // this.websocket?.close();
+    // this.downLoadWebsocket?.close();
   },
 };
 </script>
