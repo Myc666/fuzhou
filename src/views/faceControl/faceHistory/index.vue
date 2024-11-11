@@ -6,14 +6,14 @@
           <!-- <span  style="padding-left:23px;display: block;height: 35px;line-height: 35px;"  @click="handleNodeClick('')">
             <el-radio label="0">全部</el-radio>
           </span> -->
-          
+
           <el-tree
             :data="treeData"
             :props="defaultProps"
             :highlight-current="true"
           >
             <div class="custom-tree-node" slot-scope="{ node, data }" @click="handleNodeClick(data.id)" style="width: 90%;">
-              <div style="white-space: pre-line;word-wrap: break-word;"> 
+              <div style="white-space: pre-line;word-wrap: break-word;">
                 {{ node.label }}
               </div>
               <!-- <span style="margin-left: 10px;" @click="openTreeMenu(data)">
@@ -52,7 +52,7 @@
                   <el-date-picker
                     v-model="times"
                     style="width: 330px;"
-                    
+
                     :default-time="['00:00:00', '23:59:59']"
                     type="datetimerange"
                     range-separator="至"
@@ -64,7 +64,7 @@
               </el-form-item>
 
               </el-col>
-              <el-col :span="7">  
+              <el-col :span="7">
                 <el-button type="primary" icon="el-icon-search" @click="getTable"
                     >查询</el-button
                   >
@@ -72,7 +72,7 @@
                     >重置</el-button
                   >
               </el-col>
-              
+
             </el-form>
           </el-row>
           <div style="display: flex;align-items: center;">
@@ -131,11 +131,11 @@
                     <span>陌生人</span>
                     <span  style="float: right;color: #2099fa;" @click="addHei(item)">人脸入库</span>
                   </div>
-                  
+
                 </div>
                 <div class="text pad-10">
                   <span class="tits" style="width: 130px;">{{  item.camera?.name  }}</span>
-                  
+
                 </div>
                 <div class="text pad-10">
                   {{ getMyDate(item.createdAt)  }}
@@ -144,14 +144,14 @@
               <div class="flexItem" v-for="i in totals" :key="i" style="opacity: 0;">
                 <div>
                   <el-image style="width: 150px;height: 200px;" >
-                    
+
                   </el-image>
                 </div>
                 <div class="text pad-10">
-                 
+
                 </div>
                 <div class="text pad-10">
-                  
+
                 </div>
               </div>
             </div>
@@ -161,7 +161,7 @@
             <!-- <el-row :gutter="12" v-if="dataSource.length">
               <el-col :span="4" style="margin-top: 10px;" v-for="item in dataSource" :key="item.id">
                 <el-card :body-style="{ padding: '0px',border:'0px' }" shadow="hover">
-                  
+
                 </el-card>
               </el-col>
             </el-row> -->
@@ -177,7 +177,7 @@
               ></el-pagination>
             </div>
           </div>
-          
+
         </div>
       </div>
     </div>
@@ -197,7 +197,7 @@
               </el-image>
             </div>
             <div class="text pad-10">
-              <span class="tits" style="width: 130px;" :title="item.camera.name ">{{ item.camera.name || '--' }}</span> 
+              <span class="tits" style="width: 130px;" :title="item.camera.name ">{{ item.camera.name || '--' }}</span>
             </div>
             <div class="text pad-10">
               {{ getMyDate(item.createdAt)  }}
@@ -265,7 +265,7 @@ export default {
          align: "center",
          slot:"img"
        },
-       
+
        {
          key: "hasStranger",
          title: "是否包含陌生人",
@@ -306,6 +306,10 @@ export default {
       nodeLabel:'0',
       timeObj: null,
       clearDayList:[
+        {
+          id:'999',
+          name:'永久保存'
+        },
         {
           id:'30',
           name:'近30天'
@@ -395,15 +399,15 @@ export default {
     },
    async getTable(){
      if(this.times.length){
-       this.formatData.startDate = encodeURIComponent(this.times[0]) 
-       this.formatData.endDate =  encodeURIComponent(this.times[1]) 
+       this.formatData.startDate = encodeURIComponent(this.times[0])
+       this.formatData.endDate =  encodeURIComponent(this.times[1])
      }
-     this.formatData = { 
+     this.formatData = {
       ...this.formatData,
        limit: this.params.limit,
        page: this.params.page,
        hasStranger:0
-       
+
      }
 
      if(this.activeName == '#'){
@@ -451,7 +455,7 @@ export default {
       this.groupList = data;
       this.changeCamera();
     },
-    
+
     changeCamera() {
       this.formatData.groupId = this.activeName == 0 ? '' : this.activeName;
       this.params.page = 1;
@@ -561,7 +565,7 @@ export default {
   justify-content: space-evenly;
   align-items: center;
   flex-wrap: wrap;
-  
+
 
 }
 .title{

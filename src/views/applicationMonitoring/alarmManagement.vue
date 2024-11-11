@@ -199,6 +199,10 @@ export default {
       VUE_APP_API_BASE_URL,
       clearDayList:[
         {
+          id:'999',
+          name:'永久保存'
+        },
+        {
           id:'30',
           name:'近30天'
         },{
@@ -484,7 +488,7 @@ export default {
       }).catch(res=>{
         this.dowloadLoading = false;
       })
-      
+
     },
     // 获取部门树
     getTree(){
