@@ -16,17 +16,6 @@ module.exports = defineConfig({
       AMap: 'AMap'
     },
     plugins: [new NodePolyfillPlugin()],
-    module: {
-      rules: [
-        {
-          test: /\.js$/,
-          exclude: /node_modules/,
-          use: {
-            loader: 'babel-loader'
-          }
-        }
-      ]
-    }
   },
   css: {
     loaderOptions: {
