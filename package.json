@@ -12,6 +12,7 @@
     "@riophae/vue-treeselect": "^0.4.0",
     "@vue-office/docx": "^1.2.3",
     "axios": "^0.18.1",
+    "core-js": "3",
     "echarts": "^4.6.0",
     "element-ui": "^2.15.9",
     "flv.js": "^1.5.0",
