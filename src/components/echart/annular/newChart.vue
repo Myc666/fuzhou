@@ -31,7 +31,7 @@
                 }
             },
             getChart(){
-                
+                var objData = this.array2obj(this.dataArr,'name')
                 const chartDom = document.getElementById("annularChart");
                 const myChart = echarts.init(chartDom,'myTheme');
                 myChart.clear();
@@ -99,9 +99,8 @@
                         series: this.getData(this.dataArr).series
                 };
                 myChart.setOption(option);
-            }
-        },
-        getData(data) {
+            },
+            getData(data) {
                 var res = {
                     series: [],
                     yAxis: [],
@@ -207,7 +206,6 @@
                 return resObj;
             },
             getArrayValue(array, key) {
-                console.log(array,"=============1111111")
                 var _index = key || "value";
                 var res = [];
                 if (array) {
@@ -217,6 +215,7 @@
                 }
                 return res;
             }
+        },
     };
 </script>
 
