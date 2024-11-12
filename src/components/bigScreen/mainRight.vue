@@ -25,14 +25,14 @@
             <div class="border-left-sm"></div>
             <div class="title-font-sm">近7日告警数量趋势分析图</div>
         </div>
-        <LineEchart :xLabel="xlabelArr" :goToSchool="goToSchoolArr" :show="true"/>
+        <LineEchart v-if="xlabelArr.length>0" :xLabel="xlabelArr" :goToSchool="goToSchoolArr"/>
     </div>
     <div>
         <div class="status-title">
             <div class="border-left-sm"></div>
             <div class="title-font-sm">近7日告警类型及数量统计图</div>
         </div>
-        <nightingale :pireArr="pireArr" :show="true"/>
+        <nightingale v-if="pireArr.length>0" :pireArr="pireArr" />
     </div>
   </div>
 </template>
@@ -40,8 +40,8 @@
 <script>
 import Title from './Title';
 import VideoItem from '@/components/bigVideoItem.vue';
-import LineEchart from "@/components/echart/line";
-import nightingale from '@/components/echart/nightingale'
+import LineEchart from "@/components/echart/line/newChart.vue";
+import nightingale from '@/components/echart/nightingale/newChart.vue'
 import request from '@/utils/request.js'
 export default {
     data() {
