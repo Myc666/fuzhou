@@ -1,10 +1,3 @@
-<!--
- * @Description:
- * @Autor: 张健，dhq
- * @Date: 2022-07-09 10:33:16
- * @LastEditors: fengshiqiang-xphl fengshiqiang-xphl@gome.inc
- * @LastEditTime: 2024-05-06 21:59:20
--->
 <template>
   <div id="app">
     <router-view />
