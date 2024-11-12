@@ -34,12 +34,12 @@
             </div>
             <Title name="本日告警情况分析统计图" :isShow="true" />
             <div style="display: flex">
-                <div style="width: 50%;height: 340px;">
+                <!-- <div style="width: 50%;height: 340px;"> -->
                     <!-- <annular :dataArr="countAlgorithm1DayArr" :show="true"/> -->
-                    <annular v-if="countAlgorithm1DayArr.length>0" :dataArr="countAlgorithm1DayArr"/>
-                </div>
+                    <!-- <annular v-if="countAlgorithm1DayArr.length>0" :dataArr="countAlgorithm1DayArr"/> -->
+                <!-- </div> -->
                 <div>
-                    <!-- <Map /> -->
+                    <Map />
                 </div>
             </div>
             <Title name="违规行为截图记录" :isShow="true" />
@@ -56,8 +56,8 @@ import request from '@/utils/request.js'
 import Category from '@/components/echart/earlyWarning/newChart.vue'
 import alarmList from "@/components/alarmListCopy";
 import sysMage from '@/components/systemManageCopy'
-import annular from '@/components/echart/annular/newChart.vue'
-// import Map from '@/components/echart/map/newChart.vue'
+// import annular from '@/components/echart/annular/newChart.vue'
+import Map from '@/components/echart/map/newChart.vue'
 import alarmListPicture from "@/components/alarmListPictureCopy";
 import ScoketService from "@/utils/websocket.js";
 export default {
@@ -127,8 +127,8 @@ export default {
         Category,
         alarmList,
         sysMage,
-        annular,
-        // Map,
+        // annular,
+        Map,
         alarmListPicture
     },
     mounted() {

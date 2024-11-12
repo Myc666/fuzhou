@@ -150,7 +150,7 @@
             var res = [];
             for (var i = 0; i < data.length; i++) {
                 var geoCoord = this.cdata.geoCoordMap[data[i].name];
-                console.log(geoCoord)
+                console.log(geoCoord,"=============")
                 if (geoCoord) {
                     res.push({
                         name: data[i].name,
