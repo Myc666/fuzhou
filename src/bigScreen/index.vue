@@ -96,7 +96,7 @@
   @import "@/assets/scss/index.scss";
   .main {
     background: url("@/assets/images/main.png") no-repeat;
-    height: 100vh;
+    height: 99vh;
     width: 100%;
     .header {
       background: url("@/assets/images/header.png") no-repeat;

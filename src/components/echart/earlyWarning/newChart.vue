@@ -143,7 +143,7 @@
                             position: 'right',
                             formatter: (params)=> {
                                 for (var i = 0,
-                                         l = this.options.series[0].data.length; i < l; i++) {
+                                         l = option.series[0].data.length; i < l; i++) {
                                     var val1 = params.value;
                                     return val1;
                                 }
