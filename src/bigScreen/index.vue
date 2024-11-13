@@ -106,6 +106,9 @@
   </script>
   
   <style lang="scss" scoped>
+  html{
+    overflow: hidden;
+  }
   @import "@/assets/scss/index.scss";
   .main {
     background: url("@/assets/images/main.png") no-repeat;
