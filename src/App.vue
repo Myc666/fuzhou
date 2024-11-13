@@ -219,13 +219,15 @@ export default {
 }
 html {
   font-size: 100px;
-  height: 100%;
-  width: 100%;
+  // height: 100%;
+  // width: 100%;
+  overflow: hidden;
 }
 body {
   font-size: 12px;
-  width: 100%;
-  height: 100%;
+  // width: 100%;
+  // height: 100%;
+  overflow: hidden;
   box-sizing: inherit;
   text-rendering: optimizeLegibility;
   font-family: PingFang SC, Helvetica Neue, Helvetica, Hiragino Sans GB, Arial,
