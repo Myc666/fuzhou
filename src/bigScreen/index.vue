@@ -98,6 +98,7 @@
     background: url("@/assets/images/main.png") no-repeat;
     height: 99vh;
     width: 100%;
+    overflow: hidden;
     .header {
       background: url("@/assets/images/header.png") no-repeat;
       height: 100px;
