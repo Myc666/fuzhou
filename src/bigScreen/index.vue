@@ -1,5 +1,5 @@
 <template>
-    <div style="width: 100%;height:100vh;background: #041335;overflow: hidden;">
+    <div style="width: 100%;height:100vh;background: #041335;">
       <div class="main" id="index" ref="appRef">
       <div class="header">
         <div
