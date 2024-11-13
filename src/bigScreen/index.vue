@@ -65,12 +65,17 @@
       this.type = this.$route.query.type;
     },
     mounted() {
+      this.disableScroll();
       let that = this;
       this.getDate();
       this.timer = setInterval(function () {
         //定时器每秒调用一次getDate()，实现实时更新时间
         that.getDate();
       }, 1000);
+    },
+    beforeDestroy() {
+      // 在组件销毁前启用滚动
+      this.enableScroll();
     },
     methods: {
       getDate() {
@@ -86,8 +91,16 @@
       },
       changePath() {
             this.$router.push('/')
-        }
-
+        },
+      disableScroll() {
+        window.addEventListener('wheel', this.preventScroll, { passive: false });
+      },
+      enableScroll() {
+        window.removeEventListener('wheel', this.preventScroll);
+      },
+      preventScroll(event) {
+        event.preventDefault(); // 阻止滚轮事件的默认行为
+      }
     },
   };
   </script>
