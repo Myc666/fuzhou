@@ -1,5 +1,5 @@
 <template>
-    <div style="width: 100%;height:100vh;background: #041335;">
+    <div style="width: 100%;height:99vh;background: #041335;overflow: hidden;">
       <div class="main" id="index" ref="appRef">
       <div class="header">
         <div
@@ -96,9 +96,8 @@
   @import "@/assets/scss/index.scss";
   .main {
     background: url("@/assets/images/main.png") no-repeat;
-    height: 99vh;
+    height: 100vh;
     width: 100%;
-    overflow: hidden;
     .header {
       background: url("@/assets/images/header.png") no-repeat;
       height: 100px;
