@@ -117,11 +117,10 @@ export default {
         // if (x > -1) {
         //   this.activeIndex = to.path.substring(0, x);
         // } else {
+          sessionStorage.setItem('path',to.path);
           if(to.name=="算法详情"){
             this.activeIndex = "/algorithmManagement/modelTesting";
-            sessionStorage.setItem('path',"/algorithmManagement/modelTesting");
           }else{
-            sessionStorage.setItem('path',to.path);
             this.activeIndex = to.path;
           }
         // }
