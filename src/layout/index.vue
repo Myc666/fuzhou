@@ -119,7 +119,9 @@ export default {
         // } else {
           if(to.name=="算法详情"){
             this.activeIndex = "/algorithmManagement/modelTesting";
+            sessionStorage.setItem('path',"/algorithmManagement/modelTesting");
           }else{
+            sessionStorage.setItem('path',to.path);
             this.activeIndex = to.path;
           }
         // }
