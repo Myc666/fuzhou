@@ -36,7 +36,7 @@ export default {
   mounted(){
     const menuArr = JSON.parse(sessionStorage.getItem('menuTree'));
     let pathUrl = sessionStorage.getItem('path');
-    if(pathUrl){
+    if(pathUrl&&pathUrl!='/'){
       this.$router.push({ path:pathUrl})
     }else{
       if(menuArr&&menuArr.length>0){
