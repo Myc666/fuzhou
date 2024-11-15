@@ -14,8 +14,8 @@
                 <el-form-item label="ip和端口号" prop="ipPort">
                     <el-input v-model="params.ipPort"></el-input>
                 </el-form-item>
-                <el-form-item label="限额人数" prop="limitcount">
-                    <el-input-number v-model="params.limitcount" :controls="false" :precision="0" class="input-num"></el-input-number>
+                <el-form-item label="限额人数" prop="limitCount">
+                    <el-input-number v-model="params.limitCount" :controls="false" :precision="0" class="input-num"></el-input-number>
                 </el-form-item>
                 <el-form-item label="统计区间(天)" prop="zeroDay">
                     <el-input-number v-model="params.zeroDay" :controls="false" :precision="0" class="input-num"></el-input-number>
@@ -55,14 +55,14 @@ export default {
             params:{
                 name:'',
                 ipPort:'',
-                limitcount:'',
+                limitCount:'',
                 zeroDay:'',
                 cameraIds:[],
             },
             rules:{
                 name: [{ required: true, message: "请输入led名称", trigger: "blur" }],
                 ipPort: [{ required: true, message: "请输入ip和端口号", trigger: "blur" }],
-                limitcount: [{ required: true, message: "请输入限额人数", trigger: "blur" }],
+                limitCount: [{ required: true, message: "请输入限额人数", trigger: "blur" }],
                 zeroDay: [{ required: true, message: "请输入统计区间(天)", trigger: "blur" }],
                 cameraIds: [{ required: true, message: "请选择摄像头", trigger: "change" }],
             },

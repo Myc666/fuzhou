@@ -61,7 +61,7 @@ export default {
                     align: "center",
                 },
                 {
-                    key: "limitcount",
+                    key: "limitCount",
                     title: "限额人数",
                     align: "center",
                 },
