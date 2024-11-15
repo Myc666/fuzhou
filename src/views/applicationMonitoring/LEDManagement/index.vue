@@ -62,7 +62,7 @@ export default {
                 },
                 {
                     key: "zeroDay",
-                    title: "查询时间",
+                    title: "统计区间(天)",
                     align: "center",
                 },
                 {

@@ -2,7 +2,7 @@
     <div>
         <el-dialog
             :close-on-click-modal="false"
-            title="新增音柱"
+            title="新增LED设备"
             :visible.sync="dialogVisible"
             width="500px"
             @close="closed"
@@ -14,9 +14,9 @@
                 <el-form-item label="ip和端口号" prop="ipPort">
                     <el-input v-model="params.ipPort"></el-input>
                 </el-form-item>
-                <el-form-item label="查询时间" prop="zeroDay">
+                <el-form-item label="统计区间(天)" prop="zeroDay">
                     <el-input-number v-model="params.zeroDay" :controls="false" :precision="0" class="input-num"></el-input-number>
-                    <div style="font-size: 12px;color: #909399;">查询全部数据填0</div>
+                    <div style="font-size: 12px;color: #909399;">统计所有数据填0</div>
                 </el-form-item>
                 <el-form-item label="摄像头">
                     <el-select v-model="params.cameraIds" multiple placeholder="请选择"  style="width: 100%;">
