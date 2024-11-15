@@ -61,6 +61,11 @@ export default {
                     align: "center",
                 },
                 {
+                    key: "limitcount",
+                    title: "限额人数",
+                    align: "center",
+                },
+                {
                     key: "zeroDay",
                     title: "统计区间(天)",
                     align: "center",
