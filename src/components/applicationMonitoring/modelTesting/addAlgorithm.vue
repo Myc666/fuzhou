@@ -31,6 +31,20 @@
                 ></el-option>
               </el-select>
             </el-form-item>
+            <el-form-item label="共享模式" prop="shareMode">
+              <el-select
+                v-model="params.shareMode"
+                placeholder="请选择共享模式"
+                style="width: 100%"
+              >
+                <el-option
+                  v-for="(item, index) in shareModeList"
+                  :key="index"
+                  :label="item.name"
+                  :value="item.id"
+                ></el-option>
+              </el-select>
+            </el-form-item>
             <el-form-item label="告警等级" prop="alarmLevelId">
               <el-select
                 v-model="params.alarmLevelId"
@@ -140,6 +154,16 @@
             id:'1688',
           },
         ],
+        shareModeList: [
+          {
+            name: '共享模式',
+            id: 0
+          },
+          {
+            name: '独享模式',
+            id: 1
+          }
+        ],
         loading: false,
         title: this.hasLocalFile ? "算法编辑" : "算法下载",
         dialogVisible: true,
@@ -149,7 +173,8 @@
           nameEn: "",
           tagIds: [],
               alarmLevelId: "",
-          platform:''
+          platform:'',
+          shareMode: '0'
         },
         rules: {
           name: [{ required: true, message: "请输入算法名称", trigger: "blur" }],
@@ -193,12 +218,14 @@
       // 获取算法详情
       async getListDataDetail() {
         const data = await getListDataDetail({ id: this.currentId });
+        console.log(data)
         Object.assign(this.params, {
           name: data.data.name,
           nameEn: data.data.nameEn,
           tagIds: data.data.tagIds,
               alarmLevelId: (data.data.alarmLevelId&&data.data.alarmLevelId!='0') ? data.data.alarmLevelId : '',
-          platform:data.data.platform
+          platform:data.data.platform,
+          shareMode: data.data.shareMode
         });
       },
      

@@ -31,6 +31,20 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item label="共享模式" prop="shareMode">
+                    <el-select
+                        v-model="params.shareMode"
+                        placeholder="请选择共享模式"
+                        style="width: 100%"
+                    >
+                        <el-option
+                        v-for="(item, index) in shareModeList"
+                        :key="index"
+                        :label="item.name"
+                        :value="item.id"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
                 <div class="title-sty">卡片信息（可选）</div>
                 <el-form-item label="卡片图片">
                     <el-upload
@@ -85,12 +99,23 @@ export default {
                     id:'1688',
                 },
             ],
+            shareModeList: [
+                {
+                    name: '共享模式',
+                    id: 0
+                },
+                {
+                    name: '独享模式',
+                    id: 1
+                }
+            ],
             params:{
                 name:'',
                 nameEn:'',
                 platform:'',
                 imageFile:'',
                 marks:'',
+                shareMode: 0
             },
             rules:{
                 name: [{ required: true, message: "请输入算法名称", trigger: "blur" }],
@@ -156,6 +181,7 @@ export default {
                     formData.append("platform", this.params.platform);
                     formData.append("imageFile", this.params.imageFile);
                     formData.append("marks", this.params.marks);
+                    formData.append("shareMode", this.params.shareMode);
                     saveOrUpdate(formData).then(res=>{
                         this.btnLoading = false;
                         this.$message.success('创建成功');
