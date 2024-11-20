@@ -121,6 +121,7 @@
                 :index="index"
                 :alarmData="item"
                 :isAlarm="true"
+                @videoFun="getVideoUrl"
               >
               </AlarmCard>
             </div>
@@ -144,6 +145,7 @@
       </div>
     </div>
     <Download v-if="downloadVisible" :seachObj="params" @close="closeHandle"/>
+    <alarmVideo v-if="videoVisible" :videoUrl="videoUrl" @close="videoVisible=false;videoUrl=''"></alarmVideo>
   </div>
 </template>
 <script>
@@ -152,12 +154,14 @@ import {
   getListData,
   getCameraListData,
   saveclearReportDayConfig,
+  getCloudRecord,
   listTabs,
   exportAlarm
 } from "@/api/applicationMonitoring/alarmManagement";
 import { getAfterSales } from "@/api/applicationMonitoring/systemManagement";
 import AlarmDetail from "@/components/applicationMonitoring/alarmManagement/alarmDetail";
 import AlarmCard from "@/components/applicationMonitoring/alarmManagement/newCard";
+import alarmVideo from "@/components/applicationMonitoring/alarmManagement/alarmVideo";
 import {listTree} from "@/api/applicationMonitoring/boxManagement";
 import Download from "@/components/applicationMonitoring/alarmManagement/downLoad"
 export default {
@@ -165,6 +169,7 @@ export default {
     AlarmDetail,
     AlarmCard,
     Download,
+    alarmVideo
   },
   props:{
     isDisabled:{
@@ -232,6 +237,8 @@ export default {
       oldDay:"30",
       dowloadLoading:false,
       downloadVisible:false,
+      videoVisible:false,
+      videoUrl:'',
       btnData:[],
     };
   },
@@ -261,6 +268,18 @@ export default {
     this.websocket.close();
   },
   methods: {
+    getVideoUrl(reportId){
+      console.log(reportId,'reportId')
+      this.videoVisible = true;
+      getCloudRecord({reportId:reportId}).then(res=>{
+        if(res.code==0){
+          this.videoUrl = res.data;
+          this.videoVisible = true;
+        } else{
+          this.$message.error(res.msg)
+        }
+      })
+    },
     getBtn(){
       this.btnData = [];
       const menuArr = JSON.parse(sessionStorage.getItem('menuTree'));

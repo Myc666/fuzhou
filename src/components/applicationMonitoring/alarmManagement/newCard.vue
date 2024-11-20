@@ -4,13 +4,15 @@
       <div class="title-time">
         <div>{{ alarmData.createdStr }}</div>
         <div class="more">
-          <el-dropdown @command="bigImgFun()">
+          <el-dropdown @command="bigImgFun">
             <span class="el-dropdown-link">
               <span class="el-icon-more"></span>
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item style="color: #1e9fff;">查看大图</el-dropdown-item>
+              <el-dropdown-item command="a">查看大图</el-dropdown-item>
+              <el-dropdown-item command="b">查看视频</el-dropdown-item>
             </el-dropdown-menu>
+            <!-- style="color: #1e9fff;" -->
           </el-dropdown>
           <el-image-viewer
             v-if="isShowPics"
@@ -160,9 +162,16 @@ export default {
       //   this.isBigImg = false;
       // },
       // 查看大图
-      bigImgFun(){
+      bigImgFun(e){
+        console.log(e)
+        if(e == 'a'){
+          this.isShowPics = true;
+        } else if(e == 'b'){
+          console.log(this.alarmData.id)
+          this.$emit('videoFun',this.alarmData.id)
+        }
         // this.$refs.page_image_url.clickHandler()
-        this.isShowPics = true;
+        
       },
       closeViewer() {
         this.isShowPics = false;

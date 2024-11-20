@@ -2,8 +2,8 @@
  * @Description:
  * @Autor: 张健，dhq
  * @Date: 2022-08-09 11:19:54
- * @LastEditors: 张健，dhq 327650114@qq.com
- * @LastEditTime: 2022-09-26 14:00:27
+ * @LastEditors: “fengshiqiang” “1239909538@qq.com”
+ * @LastEditTime: 2024-11-20 23:56:11
  */
 import request from '@/utils/request'
 
@@ -16,6 +16,16 @@ export function getListData(params) {
     params
   })
 }
+// 获取视频列表
+export function getCloudRecord(params) {
+  return request({
+    url: '/wvp/cloud/record/getCloudRecord',
+    method: 'get',
+    params
+  })
+}
+
+
 
 // 获取告警详情
 export function getListDataDetail(params) {
