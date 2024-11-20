@@ -13,7 +13,7 @@
             <div ref="dialogCont">
                 <el-form :model="detail" :rules="rules" ref="detailForm" label-width="130px" class="camera-dialog">
                     <div class="camera-left">
-                        <el-form-item label="摄像头名称" prop="name">
+                        <el-form-item label="摄像头名称88" prop="name">
                             <el-input
                                 placeholder="请输入，建议以实际位置命名"
                                 v-model="detail.name"
@@ -118,7 +118,8 @@
                             </el-select>
                             <div class="tip-item">控制现场音柱播放警报音频</div>
                         </el-form-item>
-                        <el-form-item label="关联计算资源" v-if="pageType == 'channel'" prop="locationId">
+                        <!-- <el-form-item label="关联计算资源" v-if="pageType == 'channel'" prop="locationId"> -->
+                        <el-form-item label="关联计算资源">
                             <el-select v-model="detail.locationId" clearable placeholder="请选择">
                                 <el-option
                                 v-for="item in groupingOptions"
@@ -127,7 +128,7 @@
                                 :value="item.id">
                                 </el-option>
                             </el-select>
-                            </el-form-item>
+                        </el-form-item>
                     </div>
                     <div class="camera-right">
                         <el-form-item style="display: flex;flex-direction: column;" prop="algorithmvos">
@@ -363,8 +364,9 @@
         if(this.pageType == "channel"){
             this.$set(this.detail, 'rtspUrl', this.channelObj.rtspUrl);
             this.$set(this.detail, 'channelId', this.channelObj.channelId);
-            this.getTable();
+            // this.getTable();
         }
+        this.getTable();
         this.getSoundColumnList();
     },
     methods: {
