@@ -28,19 +28,23 @@
             </div>
         </div>
         <div class="mainCenter">
-            <Title name="系统管理" :isShow="true" />
+            <!-- <Title name="系统管理" :isShow="true" />
             <div class="sysBox">
                 <sysMage v-for="(item,index) in systemData" :key="index" :name="item.name" :url="item.src" :num="item.num"></sysMage>
             </div>
             <Title name="本日告警情况分析统计图" :isShow="true" />
             <div style="display: flex">
                 <div style="width: 50%;height: 340px;">
-                    <!-- <annular :dataArr="countAlgorithm1DayArr" :show="true"/> -->
+                    <annular :dataArr="countAlgorithm1DayArr" :show="true"/>
                     <annular v-if="countAlgorithm1DayArr.length>0" :dataArr="countAlgorithm1DayArr"/>
                 </div>
                 <div>
                     <Map />
                 </div>
+            </div> -->
+            <Title name="地图总览" :isShow="true" />
+            <div class="width:100%" style="display: flex"> 
+                <img width="100%" src="@/assets/img3/mapsvg.svg" alt="">
             </div>
             <Title name="违规行为截图记录" :isShow="true" />
             <div>
