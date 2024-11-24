@@ -44,7 +44,7 @@
             </div> -->
             <Title name="地图总览" :isShow="true" />
             <div class="width:100%" style="display: flex"> 
-                <img width="100%" src="@/assets/img3/mapsvg.jpg" alt="">
+                <img width="100%" src="@/assets/img3/mapjpg.jpg" alt="">
             </div>
             <Title name="违规行为截图记录" :isShow="true" />
             <div>
