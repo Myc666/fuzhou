@@ -39,3 +39,11 @@ export function listData2(data) {
       data
     })
   }
+// 验证
+export function ledCheck(data) {
+  return request({
+    url: '/led/device/check',
+    method: 'post',
+    data
+  })
+}
