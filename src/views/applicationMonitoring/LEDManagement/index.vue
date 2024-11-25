@@ -52,12 +52,12 @@ export default {
                 },
                 {
                     key: "name",
-                    title: "led名称",
+                    title: "LED名称",
                     align: "center",
                 },
                 {
                     key: "ipPort",
-                    title: "ip和端口号",
+                    title: "LED服务地址",
                     align: "center",
                 },
                 {
@@ -151,4 +151,3 @@ export default {
     }
 }
 </style>
-  
