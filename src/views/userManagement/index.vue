@@ -171,6 +171,8 @@ export default {
         // 点击tree节点
         handleNodeClick(node, data) {
             this.orgId = data.id;
+            this.pagination.currentPage = 1;
+            this.pagination.pageSize = 10;
             this.getTable()
         },
         // 获取用户列表
