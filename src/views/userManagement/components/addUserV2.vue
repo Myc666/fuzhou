@@ -50,7 +50,7 @@ export default {
     },
     async created() {
         Object.assign(this.params, this.data);
-        this.params.orgIdHi = this.data.orgId;
+        this.params.orgIdHi = (this.data && this.data.orgId) ? this.data.orgId : '';
         await this.getTree();
     },
     methods: {
