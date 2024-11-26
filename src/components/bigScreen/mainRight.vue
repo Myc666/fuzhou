@@ -84,7 +84,6 @@ export default {
                 // })
                 //this.cameraOptions = Arr;
                 this.cameraOptions = data
-                console.log('camera options', this.cameraOptions)
 
             })
         },

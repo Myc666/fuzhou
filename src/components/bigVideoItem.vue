@@ -61,7 +61,7 @@ export default {
   created() {
     let param = localStorage.getItem('playType'+this.index)
     if(param !=null){
-      this.playType = param
+      //this.playType = param
     }
     this.cameraId = this.Id
     const searchParams = new URL(document.location.href).searchParams;
@@ -90,7 +90,6 @@ export default {
       request
         .post("/stream/getBoxPlayUrl?cameraId=" + this.cameraId)
         .then(({ data }) => {
-          console.log()
           this.streamUrl = data;
           this.start();
         });
