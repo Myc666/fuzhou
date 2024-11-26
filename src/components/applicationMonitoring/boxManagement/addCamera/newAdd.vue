@@ -13,7 +13,7 @@
             <div ref="dialogCont">
                 <el-form :model="detail" :rules="rules" ref="detailForm" label-width="130px" class="camera-dialog">
                     <div class="camera-left">
-                        <el-form-item label="摄像头名称88" prop="name">
+                        <el-form-item label="摄像头名称" prop="name">
                             <el-input
                                 placeholder="请输入，建议以实际位置命名"
                                 v-model="detail.name"
@@ -41,7 +41,7 @@
                                         <div>rtsp://admin:admin@192.168.1.70:554/video1</div>
                                     </div>
                                     <div style="font-weight: bold;line-height: 22px;">其他摄像机品牌自行搜索填写规范。</div>
-                                    
+
                                 </div>
                                 <span class="el-icon-question" slot="reference"></span>
                                 </el-popover>
@@ -71,7 +71,7 @@
                                             <div>5.若您使用4G sim卡摄像机推流，请检查其网络状态是否稳定。</div>
                                         </div>
                                         <div>若一切正常，您也可以跳过“拍照取图”，直接提交使用。</div>
-                                        
+
                                     </div>
                                     <span class="el-icon-question" slot="reference"></span>
                                 </el-popover>
@@ -181,7 +181,7 @@
                                             <div style="line-height: 22px; margin: 10px 0px;">
                                                 高：无屏蔽，会出现较多识别对象。<br/> 中：推荐使用数值为0.65左右，可避免误报或漏报。<br/> 低：严格的识别判断机制，会大量减少告警数据。
                                             </div>
-    
+
                                         </div>
                                         <span class="el-icon-question" slot="reference"></span>
                                     </el-popover>
@@ -242,7 +242,7 @@
             <DrawDialog :detailObj="detail" :dataList="dataList" :nameEn="nameEn" :algorithmId="algorithmId" v-if="innerVisible" @close="closeHandle"/>
             <!-- 告警时段 -->
             <TimeInfo v-if="timeVisible" :alarmTimeList="alarmTimeList" :algorithmId="algorithmId"  @close="timeClose"/>
-    
+
             <span slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">取消</el-button>
             <el-button type="primary" @click="saveFun" :loading="btnLoading">提交</el-button>
@@ -372,7 +372,7 @@
     methods: {
         // 获取盒子列表
         async getTable(){
-            let obj = { 
+            let obj = {
                 limit: 999,
                 page: 1,
             }
@@ -405,7 +405,7 @@
                             ite.alarmTimes = item.alarmTimes;
                         }
                     })
-                    
+
                 })
             }
         },
@@ -467,7 +467,7 @@
                 this.dataListAll.push(obj)
             }
             });
-            
+
             this.tableData = data.data;
         },
         saveFun(){
@@ -510,7 +510,7 @@
                 this.btnLoading = false;
                 this.isError = true;
             });
-            
+
         },
         closeTip(type){
             this.dataVisible = false;
@@ -550,7 +550,7 @@
         clickClearMark() {
             this.$refs.markDetail.clear();
         },
-    
+
         // 关闭回调
         closed() {
             this.$emit("close");
@@ -667,7 +667,7 @@
   .camera-dialog {
     width: 100%;
     display: flex;
-  
+
     .camera-left {
       width: 650px;
       margin-right: 20px;
@@ -676,7 +676,7 @@
       border: 1px solid #E4E7ED;
       padding: 16px;
     }
-  
+
     .camera-right {
         flex: 1;
         border-radius: 4px;
@@ -716,7 +716,7 @@
         line-height: 20px;
     }
   }
-  
+
   .image-box {
     // width: 100%;
     min-height: 290px;
@@ -727,13 +727,13 @@
     text-align: center;
     padding: 24px 0px;
   }
-  
+
   .image {
     width: 100%;
     height: auto;
     display: block;
   }
-  
+
   .btn-list {
     display: flex;
     justify-content: space-between;
