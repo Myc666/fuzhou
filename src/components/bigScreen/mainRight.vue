@@ -78,11 +78,14 @@ export default {
     methods: {
         // 获取摄像头列表
         getCameraListData() {
-            request.post('/camera/listData').then(({data}) => {
-                let Arr = data.filter(item=>{
-                    return item.running == "1"
-                })
-                this.cameraOptions = Arr;
+            request.post('/camera/listData2').then(({data}) => {
+                // let Arr = data.filter(item=>{
+                //     return item.running == "1"
+                // })
+                //this.cameraOptions = Arr;
+                this.cameraOptions = data
+                console.log('camera options', this.cameraOptions)
+
             })
         },
         changeSreen(num) {
@@ -103,13 +106,13 @@ export default {
             }
             this.videoArr = arr.splice(0, index) // 截取数据
             this.refreshChild();
-            if(this.videoArr.length>0){//每10秒提交一次正在播放的摄像头
-                this.savePlayings();
-                let that =this;
-                this.timer = setInterval(function () {
-                    that.savePlayings();
-                }, 10000); 
-            }
+            // if(this.videoArr.length>0){//每10秒提交一次正在播放的摄像头
+            //     this.savePlayings();
+            //     let that =this;
+            //     this.timer = setInterval(function () {
+            //         that.savePlayings();
+            //     }, 10000);
+            // }
         },
         savePlayings(){
             let newArr = [];
@@ -121,7 +124,7 @@ export default {
                 })
             }
             request.post('/stream/playings',{cameraIds:newArr}).then(({data}) => {
-                
+
             }).catch(res => {
                 clearInterval(this.timerPlayings);
                 this.timerPlayings=''
@@ -142,7 +145,7 @@ export default {
                 }
             })
         },
-        
+
         getCountAlgorithm7Day() {
             request.get('/statistic/countAlgorithm7Day').then(({data}) => {
                 let resData = data.length > 10 ? data.slice(0,10) : data;
@@ -191,7 +194,7 @@ export default {
     .videoMain {
         padding: 6px;
         display: flex;
-        flex-wrap: wrap; 
+        flex-wrap: wrap;
         height: 300px;
         .video1 {
             // width: 100%;
@@ -249,6 +252,6 @@ export default {
             color: #19a9cd;
         }
     }
-    
+
 }
 </style>

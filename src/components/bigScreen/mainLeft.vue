@@ -1,6 +1,6 @@
 <template>
     <div class="main1">
-        <div class="mainLeft"> 
+        <div class="mainLeft">
             <Title name="摄像头管理" />
             <div class="creamBox">
                 <div class="numbg1">
@@ -43,7 +43,7 @@
                 </div>
             </div> -->
             <Title name="地图总览" :isShow="true" />
-            <div class="width:100%" style="display: flex"> 
+            <div class="width:100%" style="display: flex">
                 <img width="100%" src="@/assets/img3/maps.png" alt="">
             </div>
             <Title name="违规行为截图记录" :isShow="true" />
@@ -145,15 +145,15 @@ export default {
         }, 10000); // 每10秒请求一次接口
         this.getCountData();
         this.getCountAlgorithm1Day();
-        ScoketService.Instance.connect(
-            `${VUE_APP_WS_BASE_URL}/report/${this.guid()}`
-        );
-        ScoketService.Instance.send({
-            action: "REPORT_SHOW",
-        });
-        ScoketService.Instance.registerCallBack("REPORT_SHOW", (data) => {
-            this.warningList.push(data)
-        });
+        // ScoketService.Instance.connect(
+        //     `${VUE_APP_WS_BASE_URL}/report/${this.guid()}`
+        // );
+        // ScoketService.Instance.send({
+        //     action: "REPORT_SHOW",
+        // });
+        // ScoketService.Instance.registerCallBack("REPORT_SHOW", (data) => {
+        //     this.warningList.push(data)
+        // });
     },
     beforeDestroy() {
         // 在组件销毁前清除定时器
