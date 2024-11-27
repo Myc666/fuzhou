@@ -83,12 +83,12 @@
                         break
                     }
                 }
-                if (labelIndex !== -1) {
-                    console.log(e.path[labelIndex].innerText, ' =====> e.path[labelIndex].innerText')
-                    alert('labelIndex.id = ' + e.path[labelIndex].id + ',title： ' + this.listData[e.path[labelIndex].id].title)
-                } else {
-                    alert('未找到数据，请检查')
-                }
+                // if (labelIndex !== -1) {
+                //     console.log(e.path[labelIndex].innerText, ' =====> e.path[labelIndex].innerText')
+                //     alert('labelIndex.id = ' + e.path[labelIndex].id + ',title： ' + this.listData[e.path[labelIndex].id].title)
+                // } else {
+                //     alert('未找到数据，请检查')
+                // }
 
             }
         }
