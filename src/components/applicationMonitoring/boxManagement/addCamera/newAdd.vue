@@ -502,13 +502,19 @@
             this.detail.algorithms = arr;
             this.detail.locationId = this.detail.locationId ? this.detail.locationId : this.currentData.id
             submitCamera(this.detail).then((data)=>{
-                this.$message.success("保存成功");
-                this.dataVisible = false;
-                this.dialogVisible = false;
-                this.btnLoading = false;
+                if(data.data) {
+                    this.$message.success("保存成功");
+                    this.dataVisible = false;
+                    this.dialogVisible = false;
+                    this.btnLoading = false;
+                } else {
+                    this.btnLoading = false;
+                    this.isError = true;
+                }
             }).catch(() => {
                 this.btnLoading = false;
-                this.isError = true;
+                this.dataVisible = false;
+                //this.isError = true;
             });
 
         },
