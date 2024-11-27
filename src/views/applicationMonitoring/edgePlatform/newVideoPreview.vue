@@ -204,9 +204,10 @@
       // 获取摄像头列表
       async getCameraListData() {
         const data = await getCameraListData();
-        let Arr = data.data.filter(item=>{
-          return item.running == "1"
-        })
+        // let Arr = data.data.filter(item=>{
+        //   return item.running == "1"
+        // })
+        let Arr = data.data
         this.cameraOptions = Arr;
       },
       // 获取视频流并播放
