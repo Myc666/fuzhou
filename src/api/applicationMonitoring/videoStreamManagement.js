@@ -90,7 +90,7 @@ export function getCounter(params) {
 // 获取摄像头列表
 export function getCameraListData(params) {
   return request({
-    url: '/camera/listData',
+    url: '/camera/listData2',
     method: 'post',
     params
   })
