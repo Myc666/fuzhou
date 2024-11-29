@@ -2,7 +2,7 @@
   <div class="videoItem">
     <video v-if="Id" :id="'video' + index" controls autoplay muted width="100%" height="100%" :ref="'video' + index">
     </video>
-    <div class="dropdown"  v-if="Id">
+    <div class="dropdown" v-if="Id">
       <el-select
         placeholder="视频源"
         v-model="cameraId"
