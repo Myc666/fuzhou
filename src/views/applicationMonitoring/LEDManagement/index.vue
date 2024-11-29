@@ -18,6 +18,7 @@
                 <div slot="operate" slot-scope="{ row }">
                     <el-button type="text" @click="editData(row)">编辑</el-button>
                     <el-button type="text" style="color: #f56c6c !important" @click="delData(row.id)">删除</el-button>
+                    <el-button type="text" style="color: #E6A23C !important" @click="checkData(row.id)">验证</el-button>
                 </div>
             </Tables>
         </div>
@@ -26,7 +27,7 @@
     </div>
 </template>
 <script>
-import { ledList,ledDelete } from "./api"
+import { ledList,ledDelete,ledCheck } from "./api"
 import Tables from "@/components/Table/index.vue";
 import AddInfo from "./components/addInfo.vue";
 export default {
@@ -52,12 +53,12 @@ export default {
                 },
                 {
                     key: "name",
-                    title: "led名称",
+                    title: "LED名称",
                     align: "center",
                 },
                 {
                     key: "ipPort",
-                    title: "ip和端口号",
+                    title: "LED服务地址",
                     align: "center",
                 },
                 {
@@ -137,6 +138,14 @@ export default {
             }).catch(()=>{
 
             })
+        },
+        // 验证
+        checkData(id) {
+            let formData = new FormData();
+            formData.append("id", id);
+            ledCheck(formData).then(res=>{
+                this.$message.success('验证成功');
+            })
         }
     },
 };
@@ -151,4 +160,3 @@ export default {
     }
 }
 </style>
-  

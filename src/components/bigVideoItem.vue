@@ -1,6 +1,6 @@
 <template>
   <div class="videoItem">
-    <video v-if="Id" :id="'video' + index" controls autoplay muted width="100%" height="100%" :ref="'video' + index">
+    <video v-if="Id" :id="'video' + index" controls muted width="100%" height="100%" :ref="'video' + index">
     </video>
     <div class="dropdown" v-if="Id">
       <el-select
@@ -32,7 +32,7 @@ export default {
     return {
       recvOnly: true,
       player: null,
-      streamUrl: '', 
+      streamUrl: '',
       resolution: {
         height:1080,
         label:"1080p(FHD)",
@@ -61,7 +61,7 @@ export default {
   created() {
     let param = localStorage.getItem('playType'+this.index)
     if(param !=null){
-      this.playType = param
+      //this.playType = param
     }
     this.cameraId = this.Id
     const searchParams = new URL(document.location.href).searchParams;
@@ -80,6 +80,7 @@ export default {
   methods: {
     // 切换摄像头
     changeSelect() {
+      this.stop()
       this.getPlayUrl('changeSelect')
     },
     getPlayUrl(id, index) {
@@ -89,7 +90,6 @@ export default {
       request
         .post("/stream/getBoxPlayUrl?cameraId=" + this.cameraId)
         .then(({ data }) => {
-          console.log()
           this.streamUrl = data;
           this.start();
         });
@@ -138,19 +138,19 @@ export default {
           this.player.on(ZLMRTCClient.Events.WEBRTC_NOT_SUPPORT, function(e) {
             console.log('webrtc not support');
           });
-  
+
           this.player.on(ZLMRTCClient.Events.WEBRTC_ICE_CANDIDATE_ERROR,function(e)
           {
             // ICE 协商出错
             console.log('ICE 协商出错');
           });
-  
+
           this.player.on(ZLMRTCClient.Events.WEBRTC_ON_REMOTE_STREAMS,function(e)
           {
             //获取到了远端流，可以播放
             console.log('播放成功',e.streams);
           });
-  
+
           this.player.on(ZLMRTCClient.Events.WEBRTC_OFFER_ANWSER_EXCHANGE_FAILED,function(e)
           {
             // offer anwser 交换失败
@@ -160,10 +160,10 @@ export default {
             that.stop();
             setTimeout(that.getPlayUrl, 10000);
           });
-  
+
           this.player.on(ZLMRTCClient.Events.WEBRTC_ON_LOCAL_STREAM,function(s)
           {
-            // 获取到了本地流 
+            // 获取到了本地流
             // document.getElementById('selfVideo').srcObject=s;
             // document.getElementById('selfVideo').muted = true;
             //console.log('offer anwser 交换失败',e)

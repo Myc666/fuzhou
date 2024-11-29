@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div v-if="dataSource.length>0">
+        <div v-if="true">
             <Tables
             :pagination="pagination"
             :columns="columns"
@@ -76,7 +76,7 @@
           width="40%"
           title="编辑"
           :visible.sync="editVisible"
-          
+
         >
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="80px" size="mini">
                 <el-form-item label="盒子名称" prop="name">
@@ -120,7 +120,7 @@
 <script>
 import Tables from '@/components/Table/index.vue'
 import { getMyDate } from '@/utils/common.js'
-import { 
+import {
     listPage,
     detail,
     save,
@@ -288,7 +288,7 @@ export default {
             this.getTable();
         },
         async getTable(){
-            let obj = { 
+            let obj = {
                 ...this.formaData,
                 limit: this.pagination.pageSize,
                 page: this.pagination.currentPage,
@@ -339,7 +339,7 @@ export default {
                     departId:this.getFathersById(res.data.departId,this.depList)
                 }
                 this.editVisible = true;
-                
+
             }
         },
         // 保存
@@ -355,7 +355,7 @@ export default {
             });
         },
         async saveData(){
-            
+
             let obj ={
                 id:this.ruleForm.id,
                 name:this.ruleForm.name,
@@ -548,4 +548,3 @@ export default {
     margin: 0px 15px;
 }
 </style>
-  

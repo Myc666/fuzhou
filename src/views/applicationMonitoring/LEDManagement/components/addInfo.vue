@@ -8,10 +8,10 @@
             @close="closed"
         >
             <el-form ref="form" :model="params" :rules="rules" label-width="120px">
-                <el-form-item label="led名称" prop="name">
+                <el-form-item label="LED名称" prop="name">
                     <el-input v-model="params.name"></el-input>
                 </el-form-item>
-                <el-form-item label="ip和端口号" prop="ipPort">
+                <el-form-item label="LED服务地址" prop="ipPort">
                     <el-input v-model="params.ipPort"></el-input>
                 </el-form-item>
                 <el-form-item label="限额人数" prop="limitCount">
@@ -19,7 +19,7 @@
                 </el-form-item>
                 <el-form-item label="统计区间(天)" prop="zeroDay">
                     <el-input-number v-model="params.zeroDay" :controls="false" :precision="0" class="input-num"></el-input-number>
-                    <div style="font-size: 12px;color: #909399;">统计所有数据填0</div>
+                    <div style="font-size: 12px;color: #909399;">统计所有天数数据填0</div>
                 </el-form-item>
                 <el-form-item label="摄像头">
                     <el-select v-model="params.cameraIds" multiple placeholder="请选择"  style="width: 100%;">
@@ -55,13 +55,13 @@ export default {
             params:{
                 name:'',
                 ipPort:'',
-                limitCount:'',
-                zeroDay:'',
+                limitCount:'50',
+                zeroDay:'1',
                 cameraIds:[],
             },
             rules:{
-                name: [{ required: true, message: "请输入led名称", trigger: "blur" }],
-                ipPort: [{ required: true, message: "请输入ip和端口号", trigger: "blur" }],
+                name: [{ required: true, message: "请输入LED名称", trigger: "blur" }],
+                ipPort: [{ required: true, message: "请输入LED服务地址", trigger: "blur" }],
                 limitCount: [{ required: true, message: "请输入限额人数", trigger: "blur" }],
                 zeroDay: [{ required: true, message: "请输入统计区间(天)", trigger: "blur" }],
                 cameraIds: [{ required: true, message: "请选择摄像头", trigger: "change" }],

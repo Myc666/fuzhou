@@ -576,6 +576,7 @@ export default {
   border-top-right-radius: 8px;
   display:flex;
   width: 100%;
+  height: 40px;
   overflow-x: auto;
   .tab-item{
     flex-shrink: 0;
