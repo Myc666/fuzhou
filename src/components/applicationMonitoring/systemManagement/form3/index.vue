@@ -15,9 +15,9 @@
           accept=".jpg,.jpeg,.png,.gif"
           style="display: inline"
         >
-          <div v-if="(form3.logoUrl || logoUrl)&&!showUploadButton" class="file-img">
+          <div v-if="logoShowUrl && !showUploadButton" class="file-img">
             <img
-              :src="VUE_APP_API_BASE_URL + logoUrl"
+              :src="VUE_APP_API_BASE_URL + logoShowUrl"
               class="logo"
               @error="handleImageError" 
             />
@@ -49,9 +49,9 @@
             :src="VUE_APP_API_BASE_URL + screenLogoUrl"
             class="logo"
           /> -->
-          <div v-if="(form3.screenLogoUrl || screenLogoUrl)&&!showScreenButton" class="file-img">
+          <div v-if="screenLogoShowUrl && !showScreenButton" class="file-img">
             <img
-              :src="VUE_APP_API_BASE_URL + screenLogoUrl"
+              :src="VUE_APP_API_BASE_URL + screenLogoShowUrl"
               class="logo"
               @error="handleImageError1" 
             />
@@ -82,10 +82,13 @@ export default {
     },
   },
   data() {
+    // logoUrlAbUrl, screenLogoAbUrl 为相对路径
     return {
       VUE_APP_API_BASE_URL,
       logoUrl: "",
       screenLogoUrl: "",
+      logoShowUrl: "",
+      screenLogoShowUrl: "",
       showUploadButton:false,
       showScreenButton:false,
     };
@@ -93,11 +96,21 @@ export default {
   watch: {
     form3: {
       handler(val) {
-        console.info(val);
-        if(val.logoUrl){
-          this.logoUrl = "/config/upload/stream?file=" + val.logoUrl;
-        }
+        console.log('val', val);
+        // if(val.logoUrl){
+        //   this.logoUrlAbUrl = val.logoUrl;
+        //   this.logoUrl = "/config/upload/stream?file=" + val.logoUrl;
+        // }
+        this.logoUrl = val.logoUrl;
         this.screenLogoUrl = val.screenLogoUrl;
+        
+        if(this.logoUrl) {
+          this.logoShowUrl = "/config/upload/stream?file=" + val.logoUrl + '&_=' + (new Date()).getTime();
+        }
+        
+        if(this.screenLogoUrl) {
+          this.screenLogoShowUrl = "/config/upload/stream?file=" + val.screenLogoUrl + '&_=' + (new Date()).getTime();
+        }
       },
       deep: true,
       immediate: true,
@@ -119,7 +132,8 @@ export default {
       let formData = new FormData();
       formData.append("file", file);
       const data = await upload(formData);
-      this.logoUrl = "/config/upload/stream?file=" + data.data;
+      this.logoUrl = data.data;
+      this.logoShowUrl = "/config/upload/stream?file=" + data.data + '&_=' + (new Date()).getTime();
     },
     // 上传
     async handleUploadImg2(files) {
@@ -128,13 +142,14 @@ export default {
       let formData = new FormData();
       formData.append("file", file);
       const data = await upload(formData);
-      this.screenLogoUrl = "/config/upload/stream?file=" + data.data;
+      this.screenLogoUrl = data.data;
+      this.screenLogoShowUrl = "/config/upload/stream?file=" + data.data + '&_=' + (new Date()).getTime();
     },
     onSubmitForm(formName) {
       this.$refs[formName].validate(async (valid) => {
         if (valid) {
-          this.form3.logoUrl = this.logoUrl.substring(27, this.logoUrl.length);
-          this.form3.screenLogoUrl = this.screenLogoUrl.substring(27, this.screenLogoUrl.length);
+          this.form3.logoUrl = this.logoUrl; // this.logoUrl.substring(27, this.logoUrl.length);
+          this.form3.screenLogoUrl = this.screenLogoUrl; // this.screenLogoUrl.substring(27, this.screenLogoUrl.length);
           this.$emit("submitForm", "form3", this.form3);
         } else {
           console.log("error submit!!");
@@ -144,10 +159,12 @@ export default {
     },
     // 删除
     delFun(){
-      this.logoUrl = ""
+      this.logoUrl = "";
+      this.logoShowUrl = "";
     },
     delFun1(){
-      this.screenLogoUrl = ""
+      this.screenLogoUrl = "";
+      this.screenLogoShowUrl = "";
     }
   },
 };

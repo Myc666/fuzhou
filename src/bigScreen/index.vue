@@ -10,7 +10,7 @@
             padding-left: 30px;
           "
         >
-          <img
+          <img v-show="this.$store.state.appInfo.screenLogoUrl"
             :src="VUE_APP_API_BASE_URL + this.$store.state.appInfo.screenLogoUrl"
             style="max-height: 30px"
           />
