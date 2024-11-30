@@ -8,7 +8,7 @@
         v-model="cameraId"
         class="head-container-input"
         @change="changeSelect()"
-        style="width: 120px"
+        style="width: 100px;zoom: 0.8;"
       >
         <el-option
           v-for="(subItem, subIndex) in cameraOptions"

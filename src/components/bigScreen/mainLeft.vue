@@ -43,11 +43,11 @@
                 </div>
             </div> -->
             <Title name="地图总览" :isShow="true" />
-            <div class="width:100%" style="display: flex">
+            <div style="display: flex;width: 96%;height: 500px;margin-bottom: 10px;">
                 <img width="100%" src="@/assets/img3/maps.png" alt="">
             </div>
             <Title name="违规行为截图记录" :isShow="true" />
-            <div>
+            <div style="width: 96%;"> 
                 <alarmListPicture :dataList="warningList"/>
             </div>
         </div>
