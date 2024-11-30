@@ -9,15 +9,15 @@
         <!-- <el-tab-pane label="告警配置" name="second">
           <Form2 :form2="form2" @submitForm="onSubmitForm" />
         </el-tab-pane> -->
-        <el-tab-pane label="人脸配置" name="fifth">
+        <!-- <el-tab-pane label="人脸配置" name="fifth">
           <Form5 :form5="form5" @submitForm="onSubmitForm" />
-        </el-tab-pane>
+        </el-tab-pane> -->
         <el-tab-pane label="应用配置" name="third">
           <Form3 :form3="form3" @submitForm="onSubmitForm" />
         </el-tab-pane>
-        <el-tab-pane label="售后服务" name="fouth">
+        <!-- <el-tab-pane label="售后服务" name="fouth">
           <Form4 v-if="activeName=='fouth'"/>
-        </el-tab-pane>
+        </el-tab-pane> -->
       </el-tabs>
     </div>
   </div>

@@ -64,9 +64,9 @@
           <el-button size="mini" style="height: 34px;padding: 0px 15px;" type="primary" icon="el-icon-search" @click="getData()">查询</el-button>
           <el-button size="mini" style="height: 34px;padding: 0px 15px;" icon="el-icon-refresh" @click="refreshData">重置</el-button>
         </div>
-        <div class="clear-flex">
+        <div class="clear-flex1" style="display: flex; flex-direction: row; justify-content: space-between; margin-top: 5px;">
           <div>
-              <el-radio-group v-model="params.limit" style="margin-right: 10px;">
+            <el-radio-group v-model="params.limit" style="margin-right: 10px;">
               <el-radio-button label="12">12图</el-radio-button>
               <el-radio-button label="4">4图</el-radio-button>
             </el-radio-group>
@@ -288,6 +288,7 @@ export default {
         newArr.push(item.auth)
       })
       this.btnData = newArr;
+      console.log('btns', this.btnData)
     },
     getList(data){
       let arr = []
@@ -330,6 +331,7 @@ export default {
       let obj = {
         id:'',
         name:'全部',
+        isCheck: true
       }
       this.algorithmOptions.unshift(obj)
     },
@@ -391,6 +393,7 @@ export default {
         type: "",
         limit: len,
         page: 1,
+        departIds: []
       });
       this.getListData();
       this.getListTabs();

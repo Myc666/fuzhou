@@ -34,7 +34,7 @@
         <el-radio v-model="form1.streamType" label="algo">算法视频流</el-radio>
       </el-form-item>
       <el-divider></el-divider> -->
-      <el-form-item label="流媒体服务器地址">
+      <!-- <el-form-item label="流媒体服务器地址">
         <el-input v-model="form1.mediaUrl"></el-input>
         <div class="tip__text">
           流媒体服务器内网访问地址，例如：http://192.168.0.150:7088
@@ -54,7 +54,7 @@
       <el-form-item label="算法推流端口">
         <el-input v-model="form1.pushPort"></el-input>
         <div class="tip__text">流媒体服务器端口，例如：554</div>
-      </el-form-item>
+      </el-form-item> -->
 
       <el-form-item>
         <el-button type="primary" @click="onSubmitForm('form1')"
