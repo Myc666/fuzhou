@@ -421,14 +421,29 @@ export default {
       this.importDialog = true
     },
     closeImport(item){
-      if(item!=1){
-        this.isImportClose = item;
-        if(item){
+      // console.log('closeImport', item)
+      // if(item!=1){
+      //   this.isImportClose = item;
+      //   if(item){
+      //     this.importDialog = false;
+      //     this.getListData();
+      //   }
+      // }else{
+      //   this.isImportClose = true;
+      // }
+ 
+      if((typeof item) == 'number') {
+        if(item == 1) {
+          this.isImportClose = true;
+        }
+      } else if((typeof item) == 'boolean') {
+        if(item) {
+          this.isImportClose = true;
           this.importDialog = false;
           this.getListData();
+        } else {
+          this.isImportClose = true;
         }
-      }else{
-        this.isImportClose = true;
       }
     },
     handleDialogClose(){

@@ -17,7 +17,7 @@
             </el-form-item>
             <el-form-item label="配置密码项" prop="rules">
               <el-table
-                :data="rulesList"
+                :data="params.rules"
                 border
                 height="360"
               >
@@ -87,6 +87,15 @@ export default {
           item.isCheck = item.state==0?true:false;
         })
         this.rulesList = res.data;
+        this.params.rules = res.data;
+        if(this.params.rules && this.params.rules.length > 0) {
+          this.params.rules.forEach(item => {
+            item['isCheck'] = false;
+            if(item.state == 0) {
+              item['isCheck'] = true;
+            }
+          })
+        }
       }
     },
     // 获取详情
@@ -95,24 +104,25 @@ export default {
       Object.assign(this.params, {
           id: data.data.id,
           name: data.data.name,
-          code: data.data.code,
-          rules:[]
+          code: data.data.code
       });
-      this.changeFun();
+      //this.changeFun();
     },
     //勾选
     changeFun(){
-      console.log(this.rulesList)
-      let newArr = [];
-      this.rulesList.forEach(item=>{
-        newArr.push({
-          itemId:item.id,
-          code:item.code,
-          state:item.isCheck?0:1,
-          itemVal:item.itemVal
-        })
-      })
-      this.params.rules = newArr;
+      // console.log(this.rulesList)
+      // let newArr = [];
+      // this.rulesList.forEach(item=>{
+      //   newArr.push({
+      //     itemId:item.id,
+      //     code:item.code,
+      //     state:item.isCheck?0:1,
+      //     itemVal:item.itemVal
+      //   })
+      // })
+      // console.log('rules before ', this.params.rules)
+      // this.params.rules = newArr;
+      // console.log('changeFun ', this.params.rules)
     },
     // 保存账号
     saveData() {

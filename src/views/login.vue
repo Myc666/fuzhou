@@ -397,7 +397,7 @@ export default {
       this.$store.state.cookies = data.data.tokenValue;
       this.$message.success("登录成功");
       //this.$router.push("/");
-      localStorage.setItem("nickname", this.params.account);
+      localStorage.setItem("nickname", data.data.name);
       localStorage.setItem("pw", this.params.password);
       sessionStorage.setItem('VocieSwitch',true);
       const path = sessionStorage.getItem("path");

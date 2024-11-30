@@ -25,6 +25,7 @@ export default {
             request.post('/ivLoginUser?ivUser=' + isUser).then(({data}) => {
                 this.loading = false;
                 Cookies.set(data.tokenName, data.tokenValue);
+                localStorage.setItem("nickname", data.name);
                 this.$store.state.cookies = data.tokenValue;
                 this.$router.push({ path: '/bigScreen', query: { type: '1' }});
             }).catch(res=>{

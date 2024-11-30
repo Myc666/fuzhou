@@ -36,6 +36,7 @@
                 v-model="params.shareMode"
                 placeholder="请选择共享模式"
                 style="width: 100%"
+                disabled="true"
               >
                 <el-option
                   v-for="(item, index) in shareModeList"
@@ -45,7 +46,7 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="告警等级" prop="alarmLevelId">
+            <!-- <el-form-item label="告警等级" prop="alarmLevelId">
               <el-select
                 v-model="params.alarmLevelId"
                 placeholder="请选择告警等级"
@@ -58,7 +59,7 @@
                   :value="item.id"
                 ></el-option>
               </el-select>
-            </el-form-item>
+            </el-form-item> -->
             <!-- <el-form-item label="应用场景" prop="tagIds">
               <el-select
                 v-model="params.tagIds"
@@ -77,7 +78,7 @@
             </el-form-item> -->
           </el-form>
         </div>
-        <div style="margin-bottom: 16px;">
+        <!-- <div style="margin-bottom: 16px;">
           <el-button type="primary" @click="searchFun" :disabled="isExist" :icon="hasLocalFile?'el-icon-refresh':'el-icon-search'">{{ hasLocalFile?'版本更新':'搜索' }}</el-button>
         </div>
         <div>
@@ -102,7 +103,7 @@
               </template>
             </el-table-column>
           </el-table>
-        </div>
+        </div> -->
         <span slot="footer" class="dialog-footer">
           <el-button @click="closed">取消</el-button>
           <el-button type="primary" @click="saveData" :disabled="isExist">提交</el-button>
@@ -198,7 +199,7 @@
       if (this.currentId) {
         await this.getListDataDetail();
         if(this.hasLocalFile){
-          await this.searchFun();
+          // await this.searchFun();
         }
       }
     },
