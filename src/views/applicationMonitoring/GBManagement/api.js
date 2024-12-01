@@ -36,3 +36,21 @@ export function getConfigInfo(data) {
       data
     })
 }
+
+// 同步通道
+export function channelSync(data) {
+  return request({
+    url: '/wvp/device/sync',
+    method: 'post',
+    data
+  })
+}
+
+// 获取通道同步结果
+export function channelSyncStatus(data) {
+  return request({
+    url: '/wvp/device/syncStatus',
+    method: 'post',
+    data
+  })
+}

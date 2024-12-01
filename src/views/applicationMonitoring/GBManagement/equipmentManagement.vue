@@ -20,6 +20,7 @@
 
                 <div slot="operate" slot-scope="{ row }">
                     <el-button type="text" @click="channelFun(row)">通道信息</el-button>
+                    <el-button type="text" style="color: #67C23A !important" @click="startChannelSync(row)">同步通道</el-button>
                 </div>
             </Tables>
         </div>
@@ -27,10 +28,18 @@
         <ChannelManagement v-if="channelVisible" :currentId="currentId" @close="closeChannel"></ChannelManagement>
         <!-- 配置信息 -->
         <ConfigInfo v-if="configVisible" :currentId="channelId" @close="(configVisible = false)"/>
+
+        <el-dialog
+            title="同步进度"
+            :visible.sync="syncVisible"
+            width="240px"
+            :before-close="handleSyncClose">
+            <span style="display: flex; justify-content: center;"><el-progress type="circle" :percentage="syncNum" :status="syncStatus" :width=120></el-progress></span>
+        </el-dialog>
     </div>
 </template>
 <script>
-import { deviceList, getAccessInfo } from "./api"
+import { deviceList, getAccessInfo, channelSync, channelSyncStatus } from "./api"
 import Tables from "@/components/Table/index.vue";
 import ChannelManagement from "./components/channel.vue";
 import ConfigInfo from "./components/configInfo.vue";
@@ -119,10 +128,20 @@ export default {
             currentId:'',
             channelVisible:false,
             configVisible: false,
+            syncTimer: null,
+            syncVisible: false,
+            syncNum: 0,
+            syncStatus: '' // exception
         };
     },
     created() {
         this.getList()
+    },
+    beforeDestroy() {
+        if(this.syncTimer != null) {
+            clearInterval(this.syncTimer);
+            this.syncTimer = null;
+        }
     },
     methods: {
         // 获取数据
@@ -159,6 +178,69 @@ export default {
         showPlatform() {
             this.channelId = '';
             this.configVisible = true;
+        },
+        // 通道同步
+        startChannelSync(row) {
+            
+            // 发送国标同步请求
+            let formdata = new FormData();
+            formdata.append("id", row.id);
+            channelSync(formdata).then(res => {
+                console.log('sync', res)
+                this.syncVisible = true;
+                this.syncStatus = 'success';
+                this.syncNum = 0;
+                this.syncTimer = setInterval(() => {
+                    // 获取通道同步状态
+                    channelSyncStatus(formdata).then(res => {
+                        console.log('sync status', res)
+                        if(res.code == 0) {
+                            let data = res.data;
+                            if(data.code == 0) {
+                                if(data.syncIng) {
+                                    if((this.syncNum + 10) < 100) {
+                                        this.syncNum = this.syncNum + 10;
+                                    }
+                                } else {
+                                    this.syncNum = 100;
+                                    this.syncStatus = 'success';
+
+                                    this.$message.success(data.msg)
+
+                                    setTimeout(() => {
+                                        this.syncVisible = false;
+                                        this.syncNum = 0;
+                                        clearInterval(this.syncTimer);
+                                        this.syncTimer = null;
+                                    }, 1000);
+                                }
+                            } else {
+                                this.$message.error(data.msg);
+                                this.syncNum = 100;
+                                this.syncStatus = 'exception';
+                                setTimeout(() => {
+                                    this.syncVisible = false;
+                                    this.syncNum = 0;
+                                    clearInterval(this.syncTimer);
+                                    this.syncTimer = null;
+                                }, 1000);
+                            }
+                        }
+                    });
+                }, 3000);
+                // this.syncVisible.close();
+            }).catch(()=>{
+                this.syncVisible = false;
+                this.syncNum = 0;
+                clearInterval(this.syncTimer);
+                this.syncTimer = null;
+            })
+        },
+        handleSyncClose() {
+            this.syncVisible = false;
+            this.syncNum = 0;
+            clearInterval(this.syncTimer);
+            this.syncTimer = null;
         }
     },
 };
