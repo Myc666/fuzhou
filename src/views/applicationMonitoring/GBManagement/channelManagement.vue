@@ -20,12 +20,12 @@
             </div>
             <div slot="operate" slot-scope="{ row }">
                 <!-- <el-button type="text">播放</el-button> -->
-                <block v-if="row.accessCameraId == 0">
+                <template v-if="row.accessCameraId == 0">
                     <el-button type="text" @click="insertFun(row)">接入</el-button>
-                </block>
-                <block v-else>
+                </template>
+                <template v-else>
                     无操作
-                </block>
+                </template>
             </div>
         </Tables>
         <!-- 接入 -->

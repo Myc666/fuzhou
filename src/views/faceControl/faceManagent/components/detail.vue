@@ -333,12 +333,27 @@ export default {
       
 
       //console.log(this.formatData);
-      const { code, data } = await save(fd);
-      if (code == 0) {
+      // const { code, data } = await save(fd);
+      // console.log('face', code, data)
+      // if (code == 0) {
+      //   this.$message.success("添加成功");
+      //   this.addLoading = false;
+      //   this.closeDialog();
+      // }
+      // const { code, data } = await 
+      save(fd).then(res => {
         this.$message.success("添加成功");
         this.addLoading = false;
         this.closeDialog();
-      }
+      }).catch((err) => {
+        this.addLoading = false;
+      });
+      // console.log('face', code, data)
+      // if (code == 0) {
+      //   this.$message.success("添加成功");
+      //   this.addLoading = false;
+      //   this.closeDialog();
+      // }
     },
     beforeUpload(file){
       const isLt = file.size / 1024 / 1024 <= 2

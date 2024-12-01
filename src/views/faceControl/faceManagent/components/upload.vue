@@ -47,10 +47,10 @@
         <el-form-item label="Zip结构示例">
           <div style="font-size: 12px;color: #000;">
             <div style="line-height: 22px;">
-              文件夹1 (注册人脸1)<br/> + 图片1<br/> + 图片2<br/>  
+              文件夹1 (姓名, 如：李三)<br/> + 图片1<br/> + 图片2<br/>  
             </div>
-            <div style="line-height: 22px;margin-top: 15px;">文件夹2 (注册人脸2)<br/> + 图片1<br/> + 图片2</div>
-            <div style="line-height: 22px;margin-top: 15px;">文件夹3 (注册人脸3)<br/>  + 图片1<br/>  + 图片2<br/>  + 图片3</div>
+            <div style="line-height: 22px;margin-top: 15px;">文件夹2 (姓名)<br/> + 图片1<br/> + 图片2</div>
+            <div style="line-height: 22px;margin-top: 15px;">文件夹3 (姓名)<br/>  + 图片1<br/>  + 图片2<br/>  + 图片3</div>
             <div style="line-height: 22px;margin-top: 15px;"> ...更多人脸</div>
             <div style="color: #606266;line-height: 22px;margin-top: 15px;">Zip内可添加多个文件夹，每个文件夹的名称即人脸的名称，单个文件夹最多三张图片，支持JPG、JPEG、PNG图片格式，单张不大于2m。</div>
           </div>
@@ -123,7 +123,7 @@ export default {
         this.closeDialog()
       }else{
         this.isDisabled = false;
-        this.$message.erro(data.msg)
+        this.$message.error(data.msg)
       }
     }
   },

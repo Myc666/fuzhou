@@ -286,6 +286,7 @@
   import { listData } from "@/api/applicationMonitoring/soundColumnManagement"
   import { listPage } from '@/api/applicationMonitoring/casketManagement'
   export default {
+    name: 'AddCamera',
     components: {
         MarkDetail,
         DrawDialog,
