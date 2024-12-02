@@ -266,7 +266,7 @@
         @click="addBox"
         v-if="currentNode.type == 0 || currentNode.type == 1"
       >
-        新增盒子
+        新增计算设备
       </div>
       <div @click="editBox" v-if="currentNode.type == 2">编辑盒子</div>
       <div @click="deleteRegion" v-if="currentNode.type == 2 && isShow">删除盒子</div>

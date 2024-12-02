@@ -4,7 +4,7 @@
       <el-col :span="10">
         <el-card class="box-card">
           <div slot="header" class="clear-flex">
-            <div>关联盒子</div>
+            <div>关联计算设备</div>
             <div class="alg">{{ algorithmName }}</div>
           </div>
           <el-checkbox-group v-model="formatData.boxIds">

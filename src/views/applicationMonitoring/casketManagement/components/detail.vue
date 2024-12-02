@@ -11,7 +11,7 @@
             <el-form :model="ruleForm" ref="ruleForm" label-width="100px" size="mini" label-position="left">
                 <el-row>
                     <el-col :span="12">
-                        <el-form-item label="盒子名称">{{ ruleForm.name }}</el-form-item>
+                        <el-form-item label="计算设备名称">{{ ruleForm.name }}</el-form-item>
                         <el-form-item label="ip地址">{{ ruleForm.ipAddr }}</el-form-item>
                         <el-form-item label="CPU型号">{{ ruleForm.cpuVersion }}</el-form-item>
                         <el-form-item label="磁盘容量">{{ ruleForm.diskTotal }}</el-form-item>

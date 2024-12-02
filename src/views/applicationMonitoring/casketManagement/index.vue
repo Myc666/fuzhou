@@ -10,12 +10,12 @@
             :rowSelection="false"
             >
                 <div slot="header" class="head-container">
-                    <el-form label-position="left" style="display: flex;align-items: center;flex-wrap: wrap;" label-width="80px" size="mini">
-                        <el-form-item label="盒子名称:">
+                    <el-form label-position="right" style="display: flex;align-items: center;flex-wrap: wrap;" label-width="100px" size="mini">
+                        <el-form-item label="计算设备名称:">
                             <el-input
                             style="width: 200px"
                             v-model="formaData.name"
-                            placeholder="请输入盒子名称"
+                            placeholder="请输入计算设备名称"
                             ></el-input>
                         </el-form-item>
                         <el-form-item label="在线状态:" class="margin15">
@@ -30,7 +30,7 @@
                                 <el-option label="离线" value="0" > </el-option>
                             </el-select>
                         </el-form-item>
-                        <el-form-item label="所属组织" style="margin-right: 15px">
+                        <el-form-item label="所属组织:" style="margin-right: 15px; text-align: right;">
                             <el-cascader
                                 v-model="formaData.departIds"
                                 :options="depList"
@@ -44,7 +44,7 @@
                     </el-form>
                 </div>
                 <div slot="header-btn" style="margin-bottom: 16px;">
-                    <el-button type="primary" v-if="btnData.includes('caske-add')" @click="addData()">新增盒子</el-button>
+                    <el-button type="primary" v-if="btnData.includes('caske-add')" @click="addData()">新增计算设备</el-button>
                 </div>
                 <div slot="resourceMonitor" slot-scope="{ row }">
                     <el-button type="text" v-if="btnData.includes('caske-view')" @click="viewFun(row)">查看</el-button>
@@ -62,7 +62,7 @@
             </Tables>
         </div>
         <div v-else style="background: #FFF;border-radius: 6px;padding: 16px;height: calc(100vh - 180px);">
-            <el-button type="primary" v-if="btnData.includes('caske-add')" @click="addData()">新增盒子</el-button>
+            <el-button type="primary" v-if="btnData.includes('caske-add')" @click="addData()">新增计算设备</el-button>
             <div style="display: flex;align-items: center;justify-content: center;height: 100%;">
                 <div style="text-align: center;">
                     <img src="@/assets/images/empty-icon.png" style="width: 360px;"/>
@@ -78,16 +78,16 @@
           :visible.sync="editVisible"
 
         >
-            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="80px" size="mini">
-                <el-form-item label="盒子名称" prop="name">
-                    <el-input v-model="ruleForm.name"></el-input>
+            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="120px" size="mini">
+                <el-form-item label="设备名称" prop="name">
+                    <el-input v-model="ruleForm.name" placeholder="请输入计算设备名称"></el-input>
                 </el-form-item>
-                <el-form-item label="ip地址" prop="ipAddr">
-                    <el-input v-model="ruleForm.ipAddr" :disabled="!isAdd"></el-input>
+                <el-form-item label="设备IP地址" prop="ipAddr">
+                    <el-input v-model="ruleForm.ipAddr" :disabled="!isAdd" placeholder="请输入计算设备IP地址"></el-input>
                 </el-form-item>
-                <el-form-item label="盒子编号" prop="sn">
+                <el-form-item label="设备编号" prop="sn">
                     <el-input
-                        placeholder="请输入盒子编号"
+                        placeholder="请输入计算设备编号"
                         :disabled="!isAdd"
                         v-model="ruleForm.sn"
                     ></el-input>
@@ -151,13 +151,13 @@ export default {
         },
         rules:{
             name: [
-                { required: true, message: '请输入盒子名称', trigger: 'blur' },
+                { required: true, message: '请输入计算设备名称', trigger: 'blur' },
             ],
             ipAddr: [
-                { required: true, message: '请输入ip地址', trigger: 'blur' },
+                { required: true, message: '请输入计算设备IP地址', trigger: 'blur' },
             ],
             sn: [
-                { required: true, message: '请输入盒子编码', trigger: 'blur' },
+                { required: true, message: '请输入计算设备编码', trigger: 'blur' },
             ],
             departId: [
                 { required: true, message: '请选中所属组织', trigger: 'change' },
@@ -173,12 +173,12 @@ export default {
         columns: Object.freeze([
             {
                 key: "name",
-                title: "盒子名称",
+                title: "计算设备名称",
                 align: "center",
             },
             {
                 key: "boxNo",
-                title: "盒子编号",
+                title: "计算设备编号",
                 align: "center",
             },
             {

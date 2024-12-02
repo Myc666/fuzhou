@@ -11,9 +11,9 @@
         <el-form-item label="上级区域">
           {{ detail.parentName }}
         </el-form-item>
-        <el-form-item label="盒子名称">
+        <el-form-item label="计算设备名称">
           <el-input
-            placeholder="请输入盒子名称"
+            placeholder="请输入计算设备名称"
             v-model="detail.name"
           ></el-input>
         </el-form-item>
@@ -52,7 +52,7 @@ export default {
     return {
       loading: false,
       dialogVisible: true,
-      title: this.type == 'add' ? '新增盒子' : '编辑盒子',
+      title: this.type == 'add' ? '新增计算设备' : '编辑计算设备',
       detail: {},
     };
   },
