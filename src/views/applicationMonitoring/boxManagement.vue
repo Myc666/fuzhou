@@ -2,7 +2,7 @@
   <div>
     <div class="flex">
       <div class="flex-tree">
-        <div style="font-size: 16px;line-height: 22px;padding: 0px 0px 10px 10px;">盒子总览</div>
+        <div style="font-size: 16px;line-height: 22px;padding: 0px 0px 10px 10px;">计算设备总览</div>
         <div class="top-title" :style="{backgroundColor: isDefault?'#F5F7FA':''}" @click="allClick()">
           <div>全部</div>
         </div>
