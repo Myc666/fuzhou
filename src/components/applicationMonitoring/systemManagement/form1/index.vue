@@ -2,15 +2,6 @@
   <div>
     <el-form ref="form1" :model="form1" label-width="140px">
       <el-form-item
-        label="开启安全管理"
-        prop="loginControl"
-        :rules="[{ required: true, message: '请选择', trigger: 'change' }]"
-      >
-        <el-radio v-model="form1.loginControl" label="true">开启</el-radio>
-        <el-radio v-model="form1.loginControl" label="false">禁用</el-radio>
-      </el-form-item>
-      <el-divider></el-divider>
-      <el-form-item
         label="IP地址"
         prop="ipAddr"
         :rules="[{ required: true, message: '请输入IP地址', trigger: 'blur' }]"
@@ -21,7 +12,7 @@
           domain.com:8080, 不要加http/https
         </div>
       </el-form-item>
-      <el-divider></el-divider>
+
       <!-- <el-form-item label="推理地址">
         <el-input v-model="form1.algorithmUrl"></el-input>
         <div class="tip__text">

@@ -33,21 +33,6 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="人员密级" v-if="secret_adm" prop="passTemplateId">
-                <el-select
-                    style="width: 100%"
-                    v-model="params.passTemplateId"
-                    placeholder="请选择"
-                    clearable
-                >
-                    <el-option
-                    v-for="(item, index) in passTemplateList"
-                    :key="index"
-                    :label="item.name"
-                    :value="item.id"
-                    ></el-option>
-                </el-select>
-            </el-form-item>
             <div class="title">账号信息</div>
             <el-form-item  label="账号名称" prop="account">
                 <el-input v-model="params.account" :disabled="!rolesData"></el-input>
@@ -92,7 +77,6 @@ export default {
                 state: null,
                 departId: [],
                 roleIds: "",
-                passTemplateId:'',
             },
             rules: {
                 name: [{ required: true, message: "请输入人员名称", trigger: "blur" }],
@@ -115,43 +99,46 @@ export default {
                 state: [{ required: true, message: "请选择状态", trigger: "change" }],
                 departId: [{ required: true, message: "请选择所属组织", trigger: "change" }],
                 roleIds: [{ required: true, message: "请选择所属角色", trigger: "change" }],
-                passTemplateId: [{ required: true, message: "请选择密码模板", trigger: "blur" }],
-            },
-            passTemplateList:[],
+            }
         };
     },
     computed:{
         rolesData:()=>{
-            let role =  Cookies.get("roleCodes")
-            if(role&&role.length>0){
-                return (role.includes('plat_adm') || role.includes('sys_adm'))
-            }else{
-                return true;
-            }
+            return true;
         },
         secret_adm:()=>{
-            let role =  Cookies.get("roleCodes")
-            if(role&&role.length>0){
-                return role.includes('secret_adm')
-            }else{
-                return true;
-            }
+            return true;
         }
     },
     async created() {
         await this.getRole();
         await this.getTree();
-        await this.getTemplate();
         if(this.currentId){
+            console.log('hhhhhh')
+            this.rules.password = [
+                { required: false, message: "请输入密码", trigger: "blur" },
+                {
+                    validator: function(rule, value, callback) {
+                        if(value && value.length > 0) {
+                            const regex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[\W_]).{8,26}$/;
+                            if (!regex.test(value)) {
+                                callback(new Error('请输入正确格式的密码'));
+                            } else {
+                                callback();
+                            }
+                        } else {
+                            callback()
+                        }
+                    },
+                    trigger: 'blur',
+                },
+            ];
+            this.$refs.form.resetFields();
+
             await this.getDetail();
         }
     },
     methods: {
-        // 获取密码模板
-        async getTemplate(){
-            const res = await templateList();
-            this.passTemplateList = res.data
-        },
          // 获取详情
         async getDetail() {
             let formData = new FormData();
@@ -172,7 +159,6 @@ export default {
                 state: res.data.state,
                 departId: this.getFathersById(res.data.departId,this.depList),
                 roleIds: str,
-                passTemplateId:res.data.passTemplateId
             });
         },
         // 上级部门回显
@@ -232,8 +218,7 @@ export default {
                         password: this.params.password,
                         state: this.params.state,
                         departId: this.params.departId?this.params.departId[len]:'',
-                        roleIds: this.params.roleIds?this.params.roleIds.split(","):[],
-                        passTemplateId:this.params.passTemplateId
+                        roleIds: this.params.roleIds?this.params.roleIds.split(","):[]
                     }
                     if(this.currentId){
                         obj.id = this.params.id;

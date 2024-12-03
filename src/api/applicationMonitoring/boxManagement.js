@@ -26,3 +26,12 @@ export function listTree(data) {
         data
     })
 }
+
+// 获取组织机构树
+export function listTree2(data) {
+    return request({
+        url: '/ap/depart/listTree2',
+        method: 'post',
+        data
+    })
+}

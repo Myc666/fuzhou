@@ -76,6 +76,7 @@
           width="40%"
           title="编辑"
           :visible.sync="editVisible"
+          :show-close="false"
 
         >
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="120px" size="mini">
@@ -122,6 +123,7 @@ import Tables from '@/components/Table/index.vue'
 import { getMyDate } from '@/utils/common.js'
 import {
     listPage,
+    listPageV2,
     detail,
     save,
     restart,
@@ -130,7 +132,7 @@ import {
     upgrade,
     basicDelete
  } from '@/api/applicationMonitoring/casketManagement'
- import {saveBasic,listTree} from "@/api/applicationMonitoring/boxManagement";
+ import {saveBasic,listTree,listTree2} from "@/api/applicationMonitoring/boxManagement";
 import DetailInfo from './components/detail.vue';
 import ResourceMonitor from './components/resourceMonitor.vue';
 import Activation from "./components/activation.vue"
@@ -183,7 +185,7 @@ export default {
             },
             {
                 key: "ipAddr",
-                title: "IP地址",
+                title: "计算设备IP地址",
                 align: "center",
             },
             {
@@ -302,7 +304,7 @@ export default {
             }
             obj.departIds = arr.length>0?arr.join(','):''
             this.loading = true
-            const { data,count } = await listPage(obj)
+            const { data,count } = await listPageV2(obj)
             this.dataSource = data
             this.pagination.total = parseInt(count)
             this.loading = false
@@ -325,7 +327,7 @@ export default {
             this.getTree();
         },
         // 编辑
-        async editData(row){
+        async editData(row) {
             this.depList = [];
             this.isAdd = false;
             this.getTree();
@@ -344,8 +346,6 @@ export default {
         },
         // 保存
         submitForm(formName) {
-            console.log(this.ruleForm);
-            console.log(this.ruleForm.departId);
             this.$refs[formName].validate((valid) => {
             if (valid) {
                 this.saveData();
@@ -375,6 +375,7 @@ export default {
         },
         // 取消
         resetForm() {
+            this.$refs['ruleForm'].resetFields();
             this.editVisible = false;
             this.getTable();
         },
@@ -466,7 +467,7 @@ export default {
 
         // 获取部门树
         getTree(){
-            listTree().then(res=>{
+            listTree2().then(res=>{
                 if(res.data&&res.data.length>0){
                     this.depList = this.getData(res.data);
                 }

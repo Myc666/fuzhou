@@ -1,14 +1,14 @@
 <template>
     <div>
         <el-form ref="form" :model="params" :rules="rules" label-width="80px">
-            <el-form-item label="角色编码" prop="nameEn" v-if="rolesData">
+            <el-form-item label="角色编码" prop="nameEn">
                 <el-input v-model="params.nameEn" :disabled="pageType=='view'"></el-input>
                 <!-- <div style="font-size: 12px;color: #939393;">请输入4至26位字符，确保仅包含小写英文字母与数字，不包含任何特殊符号。</div> -->
             </el-form-item>
             <el-form-item label="角色名称" prop="nameCh" v-if="rolesData">
                 <el-input v-model="params.nameCh" :disabled="pageType=='view'"></el-input>
             </el-form-item>
-            <el-form-item label="关联菜单" prop="menusIds" v-if="secret_adm">
+            <el-form-item label="关联菜单" prop="menusIds">
                 <el-tree
                 ref="tree"
                 :data="menuOptions"
@@ -19,14 +19,14 @@
                 :props="defaultProps">
                 </el-tree>
             </el-form-item>
-            <el-form-item label="数据管理" prop="locationIds" v-if="secret_adm">
+            <!-- <el-form-item label="数据管理" prop="locationIds" v-if="secret_adm">
               <el-checkbox-group v-model="params.locationIds">
                 <div v-for="(item,inx) in locationList" :key="inx">
                   <div style="font-size: 14px;" v-if="item.locationList.length>0">{{ item.name }}</div>
                   <el-checkbox v-for="items in item.locationList" :label="items.id" :key="items.id" :disabled="pageType=='view'">{{ items.name }}</el-checkbox>
                 </div>
             </el-checkbox-group>
-            </el-form-item>
+            </el-form-item> -->
         </el-form>
         <div v-if="pageType!='view'" style="display: flex;justify-content: space-between;align-items: center;">
           <div>

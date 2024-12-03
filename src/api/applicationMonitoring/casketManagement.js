@@ -8,6 +8,14 @@ export function listPage(params) {
     params
   })
 }
+// 获取盒子列表
+export function listPageV2(params) {
+  return request({
+    url: '/location/listPageV2',
+    method: 'post',
+    params
+  })
+}
 // 获取详细信息
 export function detail(data) {
   return request({

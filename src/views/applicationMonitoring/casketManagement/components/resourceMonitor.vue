@@ -9,7 +9,7 @@
           @closed="closed"
           append-to-body>
             <div class="resource-cont">
-                <div class="title">基本信息</div>
+                <!-- <div class="title">基本信息</div>
                 <div class="top-cont">
                     <div class="card-item">device mode: {{ baseObj.deviceMode }}</div>
                     <div class="card-item">host CPU: {{ baseObj.cpuVersion }}</div>
@@ -17,7 +17,7 @@
                     <div class="card-item">LynDriver version: {{ baseObj.lyndriverVersion }}</div>
                     <div class="card-item">LynSDK version: {{ baseObj.lynsdkVersion }}</div>
                     <div class="card-item">OS version: {{ baseObj.osVersion }}</div>
-                </div>
+                </div> -->
                 <div class="title">主机侧信息</div>
                 <div class="chart-cont">
                     <el-row>
