@@ -21,13 +21,17 @@ export default {
     },
     methods: {
         loginFun() {
-            let isUser = this.$route.query['iv-user'] || ''
-            request.post('/ivLoginUser?ivUser=' + isUser).then(({data}) => {
-                this.loading = false;
-                Cookies.set(data.tokenName, data.tokenValue);
-                localStorage.setItem("nickname", data.name);
-                this.$store.state.cookies = data.tokenValue;
-                this.$router.push({ path: '/bigScreen', query: { type: '1' }});
+            let iamCode = this.$route.query['iamCode'] || ''
+            request.post('/loginByIamCode?iamCode=' + iamCode).then(({data}) => {
+                if(data.retCode == 100) {
+                    window.location.href = data.retUrl;
+                } else {
+                    this.loading = false;
+                    Cookies.set(data.retData.tokenName, data.retData.tokenValue);
+                    localStorage.setItem("nickname", data.retData.name);
+                    this.$store.state.cookies = data.retData.tokenValue;
+                    this.$router.push({ path: '/bigScreen', query: { type: '0' }});
+                }
             }).catch(res=>{
                 this.loading = false;
                 this.errorTip = res;
