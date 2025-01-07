@@ -139,7 +139,7 @@
     }
     .sn-container{
         // width: 600px;
-        height: 300px;
+        height: 390px;
         padding: 20px 30px;
         .seamless-warp{
             height: 310px;

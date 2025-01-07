@@ -3,7 +3,7 @@
     <div style="border: 1px solid #003c74;margin: 0 10px 10px;">
       <div class="header">
 
-          <div class="headerTitle">
+          <div class="headerTitle" style="position: relative">
             <Title name="视频轮询"/>
 
             <div class="oprBtn">
@@ -187,7 +187,8 @@ export default {
       width: 100px;
       height: 30px;
       position: absolute;
-      right: 0;
+      top: 5px;
+      right: 20px;
       border-radius: 25px;
       border: 1px solid transparent;
       background-clip: padding-box, border-box;

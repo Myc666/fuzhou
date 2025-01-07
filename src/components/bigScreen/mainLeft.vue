@@ -49,12 +49,12 @@
           </div>
       </div> -->
 
-      <div style="border: 1px solid #003c74;margin: 0 10px 10px;">
+      <div style="border: 1px solid #003c74;margin: 0 0 10px 10px;">
         <Title name="地图总览" :isShow="true" />
         <!--            <div style="display: flex;width: 100%;height: 500px;margin-bottom: 10px;">-->
         <img width="100%" src="@/assets/images/map.png" alt="" />
       </div>
-      <div style="border: 1px solid #003c74;margin: 0 10px;">
+      <div style="border: 1px solid #003c74;margin: 0 0 0 10px;">
         <Title name="违规行为截图记录" :isShow="true" />
         <div style="width: 100%;">
           <alarmListPicture :dataList="warningList"/>

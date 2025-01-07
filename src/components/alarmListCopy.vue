@@ -129,7 +129,9 @@
     }
     .sn-container{
         width: 100%;
-        height: 300px;
+        height: 320px;
+        overflow: hidden;
+
         %table-style{
             width: 100%;
             height: 35px;
