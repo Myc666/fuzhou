@@ -138,30 +138,18 @@
       return {
         platformList:[
           {
-            name:'超星',
-            id:'chaoxing',
-          },
-          {
-            name:'算能SE5',
-            id:'1684',
-          },
-          {
-            name:'算能SE7',
-            id:'1684x',
-          },
-          {
-            name:'算能SE9',
-            id:'1688',
-          },
+            name:'登临',
+            id:'denglin',
+          }
         ],
         shareModeList: [
           {
             name: '共享模式',
-            id: 0
+            id: 1
           },
           {
             name: '独享模式',
-            id: 1
+            id: 0
           }
         ],
         loading: false,
