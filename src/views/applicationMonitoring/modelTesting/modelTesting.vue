@@ -8,7 +8,7 @@
       </div>
     </div> -->
     <div class="head-cont">
-      <div class="head-txt">探索人工智能模型</div>
+      <div class="head-txt">探索人工智能模型XXX</div>
       <div style="display: flex;align-items: center;">
         <div style="font-size: 16px;">搜索场景:</div>
         <div style="margin: 0px 10px;">
@@ -359,12 +359,12 @@ export default {
       this.getListData()
     },
     detailFun(id){
-      this.$router.push({
-        path: '/algorithmManagement/modelDetail',
-        query: {
-          id: id,
-        }
-      })
+      // this.$router.push({
+      //   path: '/algorithmManagement/modelDetail',
+      //   query: {
+      //     id: id,
+      //   }
+      // })
     },
     // 删除文件
     async deleteData(item) {
