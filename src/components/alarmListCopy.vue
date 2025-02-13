@@ -128,8 +128,10 @@
         text-align: center;
     }
     .sn-container{
-        width: 454px;
-        height: 340px;
+        width: 100%;
+        height: 320px;
+        overflow: hidden;
+
         %table-style{
             width: 100%;
             height: 35px;

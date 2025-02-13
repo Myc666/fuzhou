@@ -1,5 +1,5 @@
 <template>
-  <div class="chart" id="lindeChart"></div>
+  <div class="chart" id="lindeChart2"></div>
 </template>
 <script>
 import * as echarts from "echarts";
@@ -35,7 +35,7 @@ export default {
   },
   methods:{
     getChart(){
-      const chartDom = document.getElementById("lindeChart");
+      const chartDom = document.getElementById("lindeChart2");
       const myChart = echarts.init(chartDom,'myTheme');
       myChart.clear();
       const option = {
