@@ -1,26 +1,37 @@
 <template>
   <div class="mainRight">
+<!--    <div style="border: 1px solid #003c74;margin: 0 10px 10px;">-->
+<!--      <div class="header">-->
+
+<!--          <div class="headerTitle" style="position: relative">-->
+<!--            <Title name="视频轮询"/>-->
+
+<!--            <div class="oprBtn">-->
+<!--              <div class="btn" @click="changeSreen(1)">一屏</div>-->
+<!--              <div class="btn" @click="changeSreen(4)">四屏</div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--      </div>-->
+<!--      <div class="videoMain">-->
+<!--        <div v-for="(item,key) in videoArr" :key="key"  :class="{ video4: screenNum == 4, video1: screenNum == 1, video6: screenNum == 6}" ref="videobg">-->
+<!--          <div class="video">-->
+<!--            <VideoItem :cameraOptions="cameraOptions" :Id="item.id" :index="key" :ref="'video'+key"></VideoItem>-->
+<!--          </div>-->
+<!--          <div class="videoName">-->
+<!--            {{ item.name }}-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+
     <div style="border: 1px solid #003c74;margin: 0 10px 10px;">
-      <div class="header">
-
-          <div class="headerTitle" style="position: relative">
-            <Title name="视频轮询"/>
-
-            <div class="oprBtn">
-              <div class="btn" @click="changeSreen(1)">一屏</div>
-              <div class="btn" @click="changeSreen(4)">四屏</div>
-            </div>
-          </div>
-      </div>
-      <div class="videoMain">
-        <div v-for="(item,key) in videoArr" :key="key"  :class="{ video4: screenNum == 4, video1: screenNum == 1, video6: screenNum == 6}" ref="videobg">
-          <div class="video">
-            <VideoItem :cameraOptions="cameraOptions" :Id="item.id" :index="key" :ref="'video'+key"></VideoItem>
-          </div>
-          <div class="videoName">
-            {{ item.name }}
-          </div>
-        </div>
+      <Title name="告警分析-近7日告警数量趋势分析图"></Title>
+      <div style="padding: 10px;">
+        <!--        <div class="status-title">-->
+        <!--            <div class="border-left-sm"></div>-->
+        <!--            <div class="title-font-sm">近7日告警数量趋势分析图</div>-->
+        <!--        </div>-->
+        <LineEchart2 v-if="xlabelArr.length>0" :xLabel="xlabelArr" :goToSchool="goToSchoolArr"/>
       </div>
     </div>
 
@@ -54,6 +65,7 @@
 import Title from './Title';
 import VideoItem from '@/components/bigVideoItem.vue';
 import LineEchart from "@/components/echart/line/newChart.vue";
+import LineEchart2 from "@/components/echart/line/newChart2.vue";
 import nightingale from '@/components/echart/nightingale/newChart.vue'
 import request from '@/utils/request.js'
 export default {
@@ -75,6 +87,7 @@ export default {
   components: {
     Title,
     VideoItem,
+    LineEchart2,
     LineEchart,
     nightingale,
   },
